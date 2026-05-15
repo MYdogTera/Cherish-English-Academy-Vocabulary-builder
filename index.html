@@ -1,0 +1,1533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vocabulary Builder</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0e0e11;
+  --bg2:#16161b;
+  --bg3:#1e1e25;
+  --bg4:#26262f;
+  --border:#2e2e38;
+  --border2:#3a3a48;
+  --text:#e8e8f0;
+  --text2:#9090a8;
+  --text3:#5a5a72;
+  --accent:#7c6af7;
+  --accent2:#5b4de0;
+  --accent-dim:#2a2452;
+  --green:#2ecc8a;
+  --green-dim:#0d3d28;
+  --red:#e05a5a;
+  --red-dim:#3d1515;
+  --gold:#f0c060;
+  --gold-dim:#3a2d08;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.app{max-width:740px;margin:0 auto;padding:2rem 1.25rem 5rem}
+.brand{display:flex;align-items:baseline;gap:10px;margin-bottom:2px}
+.brand h1{font-size:24px;font-weight:500;letter-spacing:-0.5px;color:var(--text)}
+.brand .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);display:inline-block;margin-bottom:1px}
+.sub{font-size:13px;color:var(--text3);margin-bottom:1.75rem;letter-spacing:.3px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:1.75rem}
+.stat{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center}
+.stat-n{font-size:22px;font-weight:500;color:var(--text)}
+.stat-n.accent{color:var(--accent)}
+.stat-l{font-size:11px;color:var(--text3);margin-top:3px;letter-spacing:.4px;text-transform:uppercase}
+.level-tabs{display:flex;gap:6px;margin-bottom:1.5rem;flex-wrap:wrap}
+.lvl-tab{padding:7px 16px;font-size:12px;letter-spacing:.5px;text-transform:uppercase;border:1px solid var(--border);border-radius:20px;cursor:pointer;background:transparent;color:var(--text2);transition:all .15s;font-weight:500}
+.lvl-tab:hover{border-color:var(--border2);color:var(--text)}
+.lvl-tab.lv0.active{background:var(--accent-dim);border-color:var(--accent);color:#c4bcff}
+.lvl-tab.lv1.active{background:#0d2a3d;border-color:#378add;color:#85c4f4}
+.lvl-tab.lv2.active{background:#0a2d1e;border-color:#1d9e75;color:#5dcaa5}
+.lvl-tab.lv3.active{background:#2d1508;border-color:#d85a30;color:#f09970}
+.level-badge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:20px;font-weight:500;letter-spacing:.4px;text-transform:uppercase}
+.lb0{background:var(--accent-dim);color:#c4bcff;border:1px solid var(--accent)}
+.lb1{background:#0d2a3d;color:#85c4f4;border:1px solid #378add}
+.lb2{background:#0a2d1e;color:#5dcaa5;border:1px solid #1d9e75}
+.lb3{background:#2d1508;color:#f09970;border:1px solid #d85a30}
+.search-row{margin-bottom:1.25rem}
+.search-row input{width:100%;padding:11px 16px;font-size:14px;border:1px solid var(--border);border-radius:10px;background:var(--bg2);color:var(--text);outline:none;transition:border-color .15s}
+.search-row input:focus{border-color:var(--accent)}
+.search-row input::placeholder{color:var(--text3)}
+.units{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:8px;margin-bottom:2rem}
+.unit-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:14px;cursor:pointer;transition:all .15s}
+.unit-card:hover{border-color:var(--border2);background:var(--bg3)}
+.unit-card.done{border-color:var(--green);background:#0a1f15}
+.unit-title{font-size:13px;font-weight:500;margin-bottom:6px}
+.unit-words{font-size:11px;color:var(--text3);line-height:1.6;margin-bottom:10px}
+.unit-badge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:20px;font-weight:500;letter-spacing:.3px;text-transform:uppercase}
+.unit-badge.mastered{background:var(--green-dim);color:var(--green);border:1px solid var(--green)}
+.unit-badge.inprog{background:#0d2a3d;color:#85c4f4;border:1px solid #378add}
+.unit-badge.todo{background:var(--bg3);color:var(--text3);border:1px solid var(--border)}
+.btn{display:inline-block;padding:9px 18px;font-size:13px;border:1px solid var(--border2);border-radius:9px;background:transparent;color:var(--text2);cursor:pointer;transition:all .15s;font-weight:500;letter-spacing:.2px}
+.btn:hover{background:var(--bg3);color:var(--text);border-color:var(--border2)}
+.btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn.primary:hover{background:var(--accent2)}
+.back{background:none;border:none;color:var(--text3);font-size:13px;cursor:pointer;padding:0 0 1.25rem;display:flex;align-items:center;gap:6px;letter-spacing:.2px;transition:color .15s}
+.back:hover{color:var(--text)}
+.screen{display:none}.screen.active{display:block}
+.mode-tabs{display:flex;gap:6px;margin-bottom:1.5rem;flex-wrap:wrap}
+.mode-tab{padding:7px 14px;font-size:12px;letter-spacing:.4px;text-transform:uppercase;border:1px solid var(--border);border-radius:8px;cursor:pointer;background:transparent;color:var(--text3);transition:all .15s;font-weight:500}
+.mode-tab:hover{color:var(--text);border-color:var(--border2)}
+.mode-tab.active{background:var(--bg3);color:var(--text);border-color:var(--border2)}
+.def-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:10px}
+.word-tag{display:inline-block;padding:4px 14px;border-radius:20px;font-size:14px;font-weight:500;margin-bottom:10px;letter-spacing:.3px}
+.meaning{font-size:14px;color:var(--text2);margin-bottom:8px;line-height:1.6}
+.example{font-size:13px;color:var(--text3);font-style:italic;border-left:2px solid var(--border2);padding-left:12px;margin-bottom:8px;line-height:1.6}
+.note{font-size:11px;color:var(--accent);background:var(--accent-dim);border-radius:20px;padding:3px 10px;display:inline-block;letter-spacing:.3px}
+.speak-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:8px}
+.speak-q{font-size:14px;color:var(--text2);line-height:1.7}
+.speak-word{font-weight:500;color:var(--accent)}
+.q-progress{display:flex;gap:3px;margin-bottom:1.5rem}
+.q-dot{height:3px;flex:1;border-radius:2px;background:var(--bg4)}
+.q-dot.correct{background:var(--green)}.q-dot.wrong{background:var(--red)}.q-dot.done{background:var(--border2)}
+.q-sentence{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:20px;font-size:15px;font-weight:500;margin-bottom:1.25rem;line-height:1.7;color:var(--text)}
+.q-options{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1rem}
+.q-opt{padding:12px;font-size:14px;font-weight:500;border:1px solid var(--border);border-radius:10px;cursor:pointer;background:var(--bg2);text-align:center;transition:all .15s;color:var(--text2)}
+.q-opt:hover:not(:disabled){background:var(--bg3);color:var(--text);border-color:var(--border2)}
+.q-opt.correct{background:var(--green-dim);border-color:var(--green);color:var(--green)}
+.q-opt.wrong{background:var(--red-dim);border-color:var(--red);color:var(--red)}
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1rem}
+.match-col{display:flex;flex-direction:column;gap:6px}
+.match-item{padding:10px 12px;font-size:12px;border:1px solid var(--border);border-radius:10px;background:var(--bg2);cursor:pointer;text-align:center;transition:all .15s;line-height:1.4;color:var(--text2)}
+.match-item:hover{border-color:var(--border2);color:var(--text)}
+.match-item.selected{border-color:var(--accent);background:var(--accent-dim);color:#c4bcff}
+.match-item.matched{border-color:var(--green);background:var(--green-dim);color:var(--green);cursor:default}
+.match-item.wrong-flash{border-color:var(--red);background:var(--red-dim);color:var(--red)}
+.write-area{width:100%;padding:12px 14px;font-size:14px;border:1px solid var(--border);border-radius:10px;min-height:80px;resize:vertical;font-family:inherit;margin-bottom:10px;background:var(--bg2);color:var(--text);transition:border-color .15s;outline:none}
+.write-area:focus{border-color:var(--accent)}
+.write-area::placeholder{color:var(--text3)}
+.ai-box{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:14px;margin-top:10px}
+.ai-label{font-size:10px;color:var(--accent);margin-bottom:8px;font-weight:500;letter-spacing:.5px;text-transform:uppercase}
+.ai-text{font-size:14px;color:var(--text2);line-height:1.7}
+.result-box{background:var(--bg2);border-radius:16px;border:1px solid var(--border);padding:2.5rem;text-align:center;margin:2rem 0}
+.result-score{font-size:44px;font-weight:500;margin:.5rem 0;color:var(--text)}
+.result-msg{font-size:14px;color:var(--text3);margin-bottom:1.5rem;letter-spacing:.2px}
+.result-emoji{font-size:48px;margin-bottom:.5rem}
+.divider{height:1px;background:var(--border);margin:1.25rem 0}
+.section-label{font-size:11px;color:var(--text3);letter-spacing:.6px;text-transform:uppercase;margin-bottom:.75rem}
+.empty{text-align:center;color:var(--text3);padding:2.5rem;font-size:14px}
+</style>
+</head>
+<body>
+<div class="app">
+
+<div id="screen-home" class="screen active">
+  <div class="brand"><div class="dot"></div><h1>Vocab Builder</h1></div>
+  <p class="sub">4 levels · 80 units · 640 words</p>
+  <div class="stats">
+    <div class="stat"><div class="stat-n accent" id="stat-mastered">0</div><div class="stat-l">mastered</div></div>
+    <div class="stat"><div class="stat-n" id="stat-studied">0</div><div class="stat-l">studied</div></div>
+    <div class="stat"><div class="stat-n" id="stat-total">0</div><div class="stat-l">words done</div></div>
+    <div class="stat"><div class="stat-n">640</div><div class="stat-l">total</div></div>
+  </div>
+  <div class="search-row"><input type="text" id="search" placeholder="Search a word or unit..." oninput="renderHome()"></div>
+  <div class="level-tabs">
+    <div class="lvl-tab lv0 active" onclick="setLevel(0,this)">⭐ Beginner</div>
+    <div class="lvl-tab lv1" onclick="setLevel(1,this)">⭐⭐ Pre-Advanced</div>
+    <div class="lvl-tab lv2" onclick="setLevel(2,this)">⭐⭐⭐ Business</div>
+    <div class="lvl-tab lv3" onclick="setLevel(3,this)">⭐⭐⭐⭐ Advanced</div>
+  </div>
+  <div class="units" id="unit-grid"></div>
+</div>
+
+<div id="screen-unit" class="screen">
+  <button class="back" onclick="showHome()">← back</button>
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
+    <h1 style="font-size:22px;font-weight:500;letter-spacing:-.3px" id="unit-title"></h1>
+    <span id="unit-level-badge" class="level-badge"></span>
+  </div>
+  <p class="sub" id="unit-subtitle"></p>
+  <div class="mode-tabs">
+    <div class="mode-tab active" onclick="switchMode('learn',this)">Learn</div>
+    <div class="mode-tab" onclick="switchMode('match',this)">Match</div>
+    <div class="mode-tab" onclick="switchMode('fill',this)">Fill in blank</div>
+    <div class="mode-tab" onclick="switchMode('write',this)">Write</div>
+    <div class="mode-tab" onclick="switchMode('speak',this)">Speaking</div>
+  </div>
+  <div id="mode-content"></div>
+</div>
+
+<div id="screen-result" class="screen">
+  <button class="back" onclick="backToUnit()">← back</button>
+  <div class="result-box">
+    <div class="result-emoji" id="result-emoji"></div>
+    <div class="result-score" id="result-score"></div>
+    <div class="result-msg" id="result-msg"></div>
+    <div style="display:flex;gap:8px;justify-content:center">
+      <button class="btn" onclick="retryMode()">Try again</button>
+      <button class="btn primary" onclick="backToUnit()">Back to unit</button>
+    </div>
+  </div>
+</div>
+
+</div>
+<script>
+const LEVELS=[
+  {id:0,name:"Beginner",short:"Beginner",badgeClass:"lb0",tabClass:"lv0",color:{bg:"#2a2452",text:"#c4bcff",border:"#7c6af7"}},
+  {id:1,name:"Pre-Advanced",short:"Pre-Adv",badgeClass:"lb1",tabClass:"lv1",color:{bg:"#0d2a3d",text:"#85c4f4",border:"#378add"}},
+  {id:2,name:"Business",short:"Business",badgeClass:"lb2",tabClass:"lv2",color:{bg:"#0a2d1e",text:"#5dcaa5",border:"#1d9e75"}},
+  {id:3,name:"Advanced",short:"Advanced",badgeClass:"lb3",tabClass:"lv3",color:{bg:"#2d1508",text:"#f09970",border:"#d85a30"}},
+];
+
+const ALL_UNITS=[
+{level:0,title:"Verb 1",words:[
+  {w:"cause",d:"To produce a result or make something happen",e:"Stress can cause health problems.",n:"cause → result"},
+  {w:"cancel",d:"To stop something that was planned",e:"They cancelled the flight due to the storm.",n:"planned → stopped"},
+  {w:"repair",d:"To fix something that is broken or damaged",e:"He repaired the broken chair.",n:"fix something broken"},
+  {w:"reduce",d:"To make something smaller or less in amount",e:"Exercise can reduce stress.",n:"make less"},
+  {w:"affect",d:"To influence or change something",e:"The weather affected our plans.",n:"influence something"},
+  {w:"raise",d:"To increase the level, amount, or price of something",e:"The company raised salaries.",n:"increase upward"},
+  {w:"contain",d:"To have something inside",e:"This box contains important files.",n:"have inside"},
+  {w:"offer",d:"To give or provide something for someone to accept or refuse",e:"She offered me a cup of tea.",n:"give to accept/refuse"},
+],blanks:[
+  {s:"This medicine may _____ your feelings in a bad way.",a:"affect"},
+  {s:"The teacher will _____ extra help after class.",a:"offer"},
+  {s:"This box may _____ important documents.",a:"contain"},
+  {s:"The storm may _____ serious damage.",a:"cause"},
+  {s:"The company plans to _____ salaries next year.",a:"raise"},
+  {s:"Lack of sleep can _____ your concentration.",a:"affect"},
+  {s:"They decided to _____ the event because of bad weather.",a:"cancel"},
+  {s:"The broken phone needs to be _____.",a:"repair"},
+]},
+{level:0,title:"Verb 2",words:[
+  {w:"remove",d:"To take something away or eliminate it",e:"Please remove your shoes at the door.",n:"take away"},
+  {w:"develop",d:"To improve or grow over time",e:"She developed her skills quickly.",n:"grow/improve"},
+  {w:"replace",d:"To put something new in the place of something else",e:"We replaced the old computer.",n:"swap with new"},
+  {w:"suggest",d:"To give an idea or advice about what someone should do",e:"I suggest you rest today.",n:"give an idea"},
+  {w:"invent",d:"To create something new for the first time",e:"Edison invented the light bulb.",n:"create first time"},
+  {w:"notice",d:"To see, hear, or become aware of something",e:"Did you notice the sign?",n:"become aware"},
+  {w:"damage",d:"To harm something physically",e:"The flood damaged many homes.",n:"physical harm"},
+  {w:"hire",d:"To give someone a job",e:"The company hired ten new staff.",n:"give a job"},
+],blanks:[
+  {s:"They decided to _____ a new manager last week.",a:"hire"},
+  {s:"Too much rain can _____ crops.",a:"damage"},
+  {s:"Please _____ the dirt on your shoes before entering.",a:"remove"},
+  {s:"Scientists are trying to _____ new technology.",a:"develop"},
+  {s:"Did you _____ the mistake in the report?",a:"notice"},
+  {s:"She will _____ a better method to solve the problem.",a:"suggest"},
+  {s:"We need to _____ the old computer with a new one.",a:"replace"},
+  {s:"Scientists are trying to _____ new technology.",a:"develop"},
+]},
+{level:0,title:"Verb 3",words:[
+  {w:"recommend",d:"To suggest something as good or suitable",e:"Can you recommend a good book?",n:"suggest something good"},
+  {w:"solve",d:"To find an answer to a problem",e:"She solved the math problem quickly.",n:"find an answer"},
+  {w:"increase",d:"To make something larger or greater in amount",e:"Exercise increases energy levels.",n:"make more/bigger"},
+  {w:"create",d:"To make something new",e:"He created a beautiful painting.",n:"make something new"},
+  {w:"include",d:"To add something as part of a whole",e:"The price includes breakfast.",n:"add as part of whole"},
+  {w:"borrow",d:"To take something and return it later",e:"Can I borrow your pen?",n:"take and return"},
+  {w:"complete",d:"To finish something",e:"She completed the report on time.",n:"finish something"},
+  {w:"rent",d:"To pay money to use something for a period of time",e:"They rented a car for the weekend.",n:"pay to use temporarily"},
+],blanks:[
+  {s:"The teacher asked us to _____ the project by Friday.",a:"complete"},
+  {s:"Can you _____ a good restaurant near here?",a:"recommend"},
+  {s:"I need to _____ some money from my friend.",a:"borrow"},
+  {s:"She forgot to _____ her name on the form.",a:"include"},
+  {s:"We need to _____ this problem quickly.",a:"solve"},
+  {s:"They decided to _____ an apartment in the city.",a:"rent"},
+  {s:"The company plans to _____ production next year.",a:"increase"},
+  {s:"She plans to _____ a new painting.",a:"create"},
+]},
+{level:0,title:"Verb 4",words:[
+  {w:"accept",d:"To agree to receive or take something",e:"She accepted the job offer.",n:"agree to receive"},
+  {w:"collect",d:"To bring together things from different places",e:"He collects stamps as a hobby.",n:"gather together"},
+  {w:"realize",d:"To become aware of something or understand it clearly",e:"I suddenly realized my mistake.",n:"become aware/understand"},
+  {w:"release",d:"To let something go free or make it available to the public",e:"The company released a new app.",n:"let go / make public"},
+  {w:"decrease",d:"To make something smaller or less in amount",e:"The temperature decreased overnight.",n:"make less/smaller"},
+  {w:"expect",d:"To believe that something will happen",e:"I expect it to rain tomorrow.",n:"believe will happen"},
+  {w:"serve",d:"To give food or drink to someone",e:"The restaurant serves dinner at 6.",n:"give food/drink"},
+  {w:"gain",d:"To get or obtain something",e:"She gained experience working abroad.",n:"get/obtain"},
+],blanks:[
+  {s:"The company will _____ a new product next month.",a:"release"},
+  {s:"She didn't _____ how serious the problem was.",a:"realize"},
+  {s:"I _____ to hear from you soon.",a:"expect"},
+  {s:"The restaurant will _____ dinner from 6 p.m.",a:"serve"},
+  {s:"He worked hard to _____ experience.",a:"gain"},
+  {s:"The temperature will _____ tonight.",a:"decrease"},
+  {s:"She loves to _____ old stamps.",a:"collect"},
+  {s:"She decided to _____ the job offer.",a:"accept"},
+]},
+{level:0,title:"Verb 5",words:[
+  {w:"avoid",d:"To stay away from something",e:"You should avoid junk food.",n:"stay away from"},
+  {w:"harm",d:"To damage or hurt someone or something",e:"Pollution harms the environment.",n:"damage/hurt"},
+  {w:"improve",d:"To make something better",e:"This new system will improve efficiency.",n:"make better"},
+  {w:"prevent",d:"To stop something from happening",e:"Vaccines prevent disease.",n:"stop from happening"},
+  {w:"treat",d:"To give medical care or deal with someone in a particular way",e:"The doctor treated the patient.",n:"give care/deal with"},
+  {w:"feed",d:"To give food to a person or animal",e:"She feeds the birds every morning.",n:"give food to"},
+  {w:"organize",d:"To arrange or plan something carefully",e:"She organized the school event.",n:"arrange carefully"},
+  {w:"promote",d:"To advertise or support something to help it succeed",e:"They promoted the new product online.",n:"advertise/support"},
+],blanks:[
+  {s:"She helped _____ the school festival.",a:"organize"},
+  {s:"The doctor will _____ the patient immediately.",a:"treat"},
+  {s:"The campaign aims to _____ safe driving.",a:"promote"},
+  {s:"Parents must _____ their babies properly.",a:"feed"},
+  {s:"Too much sun can _____ your skin.",a:"harm"},
+  {s:"We should _____ junk food to stay healthy.",a:"avoid"},
+  {s:"This new system will _____ efficiency.",a:"improve"},
+  {s:"The medicine can _____ infection.",a:"prevent"},
+]},
+{level:0,title:"Verb 6",words:[
+  {w:"spread",d:"To move or be moved over a larger area",e:"The news spread quickly online.",n:"move over larger area"},
+  {w:"quit",d:"To stop doing something, especially a job or habit",e:"He quit smoking last year.",n:"stop a job/habit"},
+  {w:"recognize",d:"To know someone because you have seen them before",e:"I didn't recognize him at first.",n:"know from before"},
+  {w:"run",d:"To manage or operate a company",e:"She runs a small business.",n:"manage/operate"},
+  {w:"measure",d:"To find the size, amount, or degree of something",e:"Please measure the length of the table.",n:"find size/amount"},
+  {w:"exchange",d:"To give something and receive something in return",e:"They exchanged gifts at the party.",n:"give and receive"},
+  {w:"arrange",d:"To prepare or organize something",e:"She arranged the meeting for Monday.",n:"prepare/organize"},
+  {w:"award",d:"To give a prize or official honor to someone",e:"The school awarded her a prize.",n:"give a prize"},
+],blanks:[
+  {s:"She decided to _____ her job last month.",a:"quit"},
+  {s:"The school will _____ a prize to the best student.",a:"award"},
+  {s:"She helped _____ the meeting.",a:"arrange"},
+  {s:"It is difficult to _____ a company successfully.",a:"run"},
+  {s:"Please _____ the length of the table.",a:"measure"},
+  {s:"They will _____ gifts at the party.",a:"exchange"},
+  {s:"The news began to _____ quickly online.",a:"spread"},
+  {s:"I didn't _____ him at first.",a:"recognize"},
+]},
+{level:0,title:"Verb 7",words:[
+  {w:"achieve",d:"To succeed in reaching a goal",e:"She achieved her dream of becoming a doctor.",n:"succeed in goal"},
+  {w:"destroy",d:"To damage something completely so it no longer exists",e:"The fire destroyed the building.",n:"damage completely"},
+  {w:"doubt",d:"To feel unsure about something",e:"I doubt that he is telling the truth.",n:"feel unsure"},
+  {w:"limit",d:"To keep something within a certain amount or level",e:"The government limited spending.",n:"keep within bounds"},
+  {w:"attract",d:"To make someone interested in something",e:"The ad attracted many customers.",n:"make interested"},
+  {w:"examine",d:"To carefully look at or check something",e:"The doctor examined the patient.",n:"look at carefully"},
+  {w:"lower",d:"To make something go down",e:"Prices are expected to lower next month.",n:"make go down"},
+  {w:"remain",d:"To stay in the same place or condition",e:"Please remain calm.",n:"stay same"},
+],blanks:[
+  {s:"The advertisement aims to _____ new customers.",a:"attract"},
+  {s:"Please _____ calm during the emergency.",a:"remain"},
+  {s:"She worked hard to _____ her goals.",a:"achieve"},
+  {s:"The fire may _____ the building.",a:"destroy"},
+  {s:"The government plans to _____ spending.",a:"limit"},
+  {s:"Prices are expected to _____ next month.",a:"lower"},
+  {s:"I _____ that he is telling the truth.",a:"doubt"},
+  {s:"The doctor will _____ the patient.",a:"examine"},
+]},
+{level:0,title:"Verb 8",words:[
+  {w:"consider",d:"To think carefully about something",e:"She considered changing her job.",n:"think carefully"},
+  {w:"contact",d:"To communicate with someone",e:"Please contact us by email.",n:"communicate with"},
+  {w:"fix",d:"To repair something",e:"The mechanic fixed my car.",n:"repair"},
+  {w:"follow",d:"To go after or obey instructions",e:"Please follow the instructions carefully.",n:"obey/go after"},
+  {w:"perform",d:"To do something, especially in front of people",e:"The band performed on stage.",n:"do in front of others"},
+  {w:"publish",d:"To officially print or make something available to the public",e:"The author published a new book.",n:"make public/print"},
+  {w:"request",d:"To ask for something politely or formally",e:"I'd like to request more information.",n:"ask formally"},
+  {w:"preserve",d:"To keep something in its original or good condition",e:"They want to preserve traditional culture.",n:"keep in good condition"},
+],blanks:[
+  {s:"Please _____ the instructions carefully.",a:"follow"},
+  {s:"The band will _____ on stage tonight.",a:"perform"},
+  {s:"They want to _____ traditional culture.",a:"preserve"},
+  {s:"She decided to _____ changing her job.",a:"consider"},
+  {s:"You should _____ the company by email.",a:"contact"},
+  {s:"The mechanic will _____ my car tomorrow.",a:"fix"},
+  {s:"The author plans to _____ a new book this year.",a:"publish"},
+  {s:"I would like to _____ more information.",a:"request"},
+]},
+{level:0,title:"Verb 9",words:[
+  {w:"require",d:"To need something",e:"This job requires patience.",n:"need"},
+  {w:"gather",d:"To bring things or people together in one place",e:"A crowd gathered in the park.",n:"bring together"},
+  {w:"lend",d:"To give something to someone expecting it back",e:"Can you lend me some money?",n:"give temporarily"},
+  {w:"survive",d:"To continue to live or exist",e:"Many animals can't survive in extreme heat.",n:"continue to live"},
+  {w:"announce",d:"To make something known publicly",e:"They announced the results.",n:"make known publicly"},
+  {w:"appreciate",d:"To feel thankful for something",e:"I really appreciate your help.",n:"feel thankful"},
+  {w:"estimate",d:"To guess the size, cost, or amount of something",e:"We need to estimate the total cost.",n:"guess amount/cost"},
+  {w:"introduce",d:"To present someone or something for the first time",e:"She introduced the new student.",n:"present for first time"},
+],blanks:[
+  {s:"The teacher will _____ the new student to the class.",a:"introduce"},
+  {s:"Many animals cannot _____ in extreme weather.",a:"survive"},
+  {s:"This job will _____ a lot of patience.",a:"require"},
+  {s:"He agreed to _____ me some money.",a:"lend"},
+  {s:"She really _____ his help.",a:"appreciate"},
+  {s:"They plan to _____ the results tomorrow.",a:"announce"},
+  {s:"A crowd began to _____ in the park.",a:"gather"},
+  {s:"We need to _____ the total cost of the project.",a:"estimate"},
+]},
+{level:0,title:"Verb 10",words:[
+  {w:"involve",d:"To include someone or something as a necessary part",e:"The job involves working weekends.",n:"include as necessary"},
+  {w:"continue",d:"To go on doing something",e:"He decided to continue studying abroad.",n:"go on doing"},
+  {w:"deliver",d:"To bring and give something to someone",e:"They deliver food within 30 minutes.",n:"bring and give"},
+  {w:"ignore",d:"To pay no attention to someone or something",e:"Please don't ignore my messages.",n:"pay no attention"},
+  {w:"manage",d:"To successfully do something difficult",e:"She managed to finish on time.",n:"succeed in difficult task"},
+  {w:"meet",d:"To satisfy or fulfill requirements",e:"The company must meet safety standards.",n:"satisfy requirements"},
+  {w:"predict",d:"To say what you think will happen in the future",e:"Experts cannot always predict the weather.",n:"say future will happen"},
+  {w:"prove",d:"To show that something is true",e:"The study may prove new evidence.",n:"show is true"},
+],blanks:[
+  {s:"The study may _____ new evidence.",a:"prove"},
+  {s:"This job will _____ working on weekends.",a:"involve"},
+  {s:"Please don't _____ my messages.",a:"ignore"},
+  {s:"The company must _____ safety standards.",a:"meet"},
+  {s:"Experts cannot always _____ the weather accurately.",a:"predict"},
+  {s:"The restaurant will _____ the food within 30 minutes.",a:"deliver"},
+  {s:"He decided to _____ studying abroad.",a:"continue"},
+  {s:"She tried to _____ her emotions during the meeting.",a:"manage"},
+]},
+{level:0,title:"Verb 11",words:[
+  {w:"adopt",d:"To take something as your own, such as an idea or method",e:"Many companies adopt new technologies.",n:"take as your own"},
+  {w:"analyze",d:"To study something carefully in detail",e:"The scientist analyzed the data.",n:"study carefully"},
+  {w:"explore",d:"To discover or learn about something by searching",e:"We plan to explore the city.",n:"discover by searching"},
+  {w:"generate",d:"To produce or create something",e:"This machine can generate electricity.",n:"produce/create"},
+  {w:"mention",d:"To talk about something briefly",e:"He mentioned her name in the report.",n:"talk about briefly"},
+  {w:"reserve",d:"To arrange something in advance",e:"I'd like to reserve a table for tonight.",n:"arrange in advance"},
+  {w:"respect",d:"To feel admiration for someone or something",e:"Students should respect their teachers.",n:"feel admiration"},
+  {w:"surprise",d:"To do something unexpected",e:"His decision surprised everyone.",n:"do unexpected"},
+],blanks:[
+  {s:"Students should _____ their teachers and classmates.",a:"respect"},
+  {s:"He forgot to _____ her name in the report.",a:"mention"},
+  {s:"Many companies _____ new technologies to improve efficiency.",a:"adopt"},
+  {s:"This machine can _____ electricity.",a:"generate"},
+  {s:"I'd like to _____ a table for tonight.",a:"reserve"},
+  {s:"The scientist will _____ the data to find patterns.",a:"analyze"},
+  {s:"We plan to _____ the city during our vacation.",a:"explore"},
+  {s:"His sudden decision may _____ everyone.",a:"surprise"},
+]},
+{level:0,title:"Verb 12",words:[
+  {w:"book",d:"To arrange to have something in advance",e:"Please book a room before you arrive.",n:"arrange in advance"},
+  {w:"describe",d:"To say what something or someone is like",e:"Can you describe the problem in detail?",n:"say what it is like"},
+  {w:"expand",d:"To make something larger or grow",e:"They plan to expand the business next year.",n:"make larger/grow"},
+  {w:"advertise",d:"To promote a product or service to the public",e:"She used social media to advertise her brand.",n:"promote to public"},
+  {w:"ban",d:"To officially say that something is not allowed",e:"The government banned smoking in public places.",n:"officially not allowed"},
+  {w:"heal",d:"To become healthy again or make something healthy",e:"He needs time to heal after the injury.",n:"become/make healthy"},
+  {w:"identify",d:"To recognize and name something",e:"Can you identify this person from the photo?",n:"recognize and name"},
+  {w:"manufacture",d:"To make or produce goods, especially in large quantities",e:"They manufacture cars in this factory.",n:"produce goods"},
+],blanks:[
+  {s:"The government decided to _____ smoking in public places.",a:"ban"},
+  {s:"They plan to _____ their business next year.",a:"expand"},
+  {s:"She used social media to _____ her new brand.",a:"advertise"},
+  {s:"He needs time to _____ after the injury.",a:"heal"},
+  {s:"Can you _____ this person from the photo?",a:"identify"},
+  {s:"Please _____ a room before you arrive.",a:"book"},
+  {s:"Can you _____ the problem in detail?",a:"describe"},
+  {s:"They _____ cars in this factory.",a:"manufacture"},
+]},
+{level:0,title:"Verb 13",words:[
+  {w:"oppose",d:"To be against something",e:"Many people opposed the new law.",n:"be against"},
+  {w:"overcome",d:"To successfully deal with or defeat a problem",e:"She worked hard to overcome her fears.",n:"defeat a problem"},
+  {w:"strengthen",d:"To make something stronger",e:"Exercise helps strengthen your muscles.",n:"make stronger"},
+  {w:"transfer",d:"To move something from one place to another",e:"The company will transfer the data.",n:"move to another place"},
+  {w:"conduct",d:"To organize or carry out an activity",e:"The school will conduct a survey next week.",n:"carry out activity"},
+  {w:"disturb",d:"To interrupt or bother someone",e:"Please don't disturb me while I'm studying.",n:"interrupt/bother"},
+  {w:"indicate",d:"To show or point out something",e:"The results indicate a clear improvement.",n:"show/point out"},
+  {w:"maintain",d:"To keep something in good condition or continue it",e:"It's important to maintain a healthy lifestyle.",n:"keep in good condition"},
+],blanks:[
+  {s:"The results _____ a clear improvement.",a:"indicate"},
+  {s:"Many people _____ the new law.",a:"oppose"},
+  {s:"Exercise helps _____ your muscles.",a:"strengthen"},
+  {s:"She worked hard to _____ her fears.",a:"overcome"},
+  {s:"Please don't _____ me while I'm studying.",a:"disturb"},
+  {s:"It's important to _____ a healthy lifestyle.",a:"maintain"},
+  {s:"The school will _____ a survey next week.",a:"conduct"},
+  {s:"The company will _____ the data to another system.",a:"transfer"},
+]},
+{level:0,title:"Verb 14",words:[
+  {w:"refuse",d:"To say no or not accept something",e:"He decided to refuse the offer.",n:"say no"},
+  {w:"represent",d:"To speak or act for someone or something",e:"She will represent her country.",n:"speak/act for"},
+  {w:"restore",d:"To bring something back to its original condition",e:"They plan to restore the old building.",n:"bring back to original"},
+  {w:"transport",d:"To move goods or people from one place to another",e:"The company transports goods by truck.",n:"move goods/people"},
+  {w:"compete",d:"To try to win against others",e:"Many teams will compete in the tournament.",n:"try to win"},
+  {w:"criticize",d:"To say what is wrong with something or someone",e:"It's easy to criticize others.",n:"say what is wrong"},
+  {w:"cure",d:"To make someone healthy again",e:"Doctors are trying to cure the disease.",n:"make healthy again"},
+  {w:"import",d:"To bring goods into a country from another country",e:"Japan imports some natural resources.",n:"bring goods in"},
+],blanks:[
+  {s:"The company will _____ goods by truck.",a:"transport"},
+  {s:"Doctors are trying to _____ the disease.",a:"cure"},
+  {s:"She will _____ her country in the competition.",a:"represent"},
+  {s:"He decided to _____ the offer.",a:"refuse"},
+  {s:"Japan needs to _____ some natural resources.",a:"import"},
+  {s:"Many teams will _____ in the tournament.",a:"compete"},
+  {s:"They plan to _____ the old building.",a:"restore"},
+  {s:"It's easy to _____ others.",a:"criticize"},
+]},
+{level:0,title:"Verb 15",words:[
+  {w:"occur",d:"To happen or take place",e:"The accident may occur at any time.",n:"happen/take place"},
+  {w:"operate",d:"To control or run a machine, system, or business",e:"He knows how to operate this machine.",n:"control/run"},
+  {w:"argue",d:"To speak angrily or disagree strongly",e:"They often argue about small issues.",n:"disagree strongly"},
+  {w:"cooperate",d:"To work together with others",e:"We need to cooperate to finish the project.",n:"work together"},
+  {w:"establish",d:"To set up or start something",e:"The company plans to establish a new branch.",n:"set up/start"},
+  {w:"face",d:"To deal with a difficult situation",e:"She must face many challenges.",n:"deal with difficulty"},
+  {w:"share",d:"To give part of something to others",e:"Let's share the work equally.",n:"give part to others"},
+  {w:"claim",d:"To say something is true without proof",e:"He continues to claim that he is right.",n:"say true without proof"},
+],blanks:[
+  {s:"He continues to _____ that he is right.",a:"claim"},
+  {s:"The accident may _____ at any time.",a:"occur"},
+  {s:"He knows how to _____ this machine.",a:"operate"},
+  {s:"She must _____ many challenges.",a:"face"},
+  {s:"We need to _____ to finish the project.",a:"cooperate"},
+  {s:"The company plans to _____ a new branch.",a:"establish"},
+  {s:"They often _____ about small issues.",a:"argue"},
+  {s:"Let's _____ the work equally.",a:"share"},
+]},
+{level:0,title:"Verb 16",words:[
+  {w:"emphasize",d:"To give special importance to something",e:"Teachers often emphasize the importance of study.",n:"give special importance"},
+  {w:"launch",d:"To start something new",e:"The company will launch a new product.",n:"start something new"},
+  {w:"retire",d:"To stop working permanently",e:"He plans to retire at 65.",n:"stop working permanently"},
+  {w:"vary",d:"To be different or change",e:"The price may vary depending on the market.",n:"be different/change"},
+  {w:"abandon",d:"To leave something completely",e:"They had to abandon the plan.",n:"leave completely"},
+  {w:"calculate",d:"To find an answer using numbers",e:"Can you calculate the cost?",n:"find answer with numbers"},
+  {w:"confuse",d:"To make someone confused",e:"These complex instructions may confuse users.",n:"make confused"},
+  {w:"consume",d:"To eat, drink, or use something",e:"People should not consume too much sugar.",n:"eat/drink/use"},
+],blanks:[
+  {s:"Can you _____ the cost?",a:"calculate"},
+  {s:"The company will _____ a new product.",a:"launch"},
+  {s:"People should not _____ too much sugar.",a:"consume"},
+  {s:"Teachers often _____ the importance of study.",a:"emphasize"},
+  {s:"These complex instructions may _____ users.",a:"confuse"},
+  {s:"They had to _____ the plan they made.",a:"abandon"},
+  {s:"The price may _____ depending on market trends.",a:"vary"},
+  {s:"He plans to _____ at 65.",a:"retire"},
+]},
+{level:0,title:"Verb 17",words:[
+  {w:"earn",d:"To get money for work",e:"She works to earn money.",n:"get money for work"},
+  {w:"employ",d:"To give someone a job",e:"The company will employ workers.",n:"give a job"},
+  {w:"encounter",d:"To meet unexpectedly",e:"We may encounter some problems.",n:"meet unexpectedly"},
+  {w:"install",d:"To set up equipment",e:"They will install software.",n:"set up equipment"},
+  {w:"monitor",d:"To check over time to be sure nothing bad happens",e:"The doctor monitored the patient's condition.",n:"check over time"},
+  {w:"observe",d:"To watch carefully",e:"Parents should observe their children carefully.",n:"watch carefully"},
+  {w:"pollute",d:"To make dirty or harmful",e:"Factories must not pollute the air.",n:"make dirty/harmful"},
+  {w:"display",d:"To show something",e:"The museum will display paintings.",n:"show something"},
+],blanks:[
+  {s:"Factories must not _____ the air.",a:"pollute"},
+  {s:"Parents should _____ their children's behaviors carefully.",a:"observe"},
+  {s:"She works to _____ money.",a:"earn"},
+  {s:"The company will _____ workers.",a:"employ"},
+  {s:"They will _____ software.",a:"install"},
+  {s:"The doctor had to _____ the patient's condition.",a:"monitor"},
+  {s:"The museum will _____ paintings.",a:"display"},
+  {s:"We may _____ some problems.",a:"encounter"},
+]},
+{level:0,title:"Verb 18",words:[
+  {w:"entertain",d:"To amuse someone",e:"The show will entertain the audience.",n:"amuse someone"},
+  {w:"extend",d:"To make something longer",e:"They extended the deadline.",n:"make longer"},
+  {w:"interrupt",d:"To stop someone while they are speaking or doing something",e:"Don't interrupt me while I'm studying.",n:"stop while doing"},
+  {w:"obtain",d:"To get or acquire something",e:"He worked hard to obtain good results.",n:"get/acquire"},
+  {w:"protest",d:"To show strong disagreement",e:"People protested against the law.",n:"show disagreement"},
+  {w:"reflect",d:"To think carefully or be a sign of something",e:"It took me a while to reflect on what happened.",n:"think carefully"},
+  {w:"resist",d:"To fight against something",e:"She tried to resist pressure.",n:"fight against"},
+  {w:"adjust",d:"To change slightly to make it fit or work better",e:"You need to adjust your schedule.",n:"change slightly to fit"},
+],blanks:[
+  {s:"He worked hard to _____ good results.",a:"obtain"},
+  {s:"The show will _____ the audience.",a:"entertain"},
+  {s:"I think they can _____ the deadline till next week.",a:"extend"},
+  {s:"You need to _____ your schedule to meet the deadline.",a:"adjust"},
+  {s:"Don't _____ me while I'm studying.",a:"interrupt"},
+  {s:"She tried to _____ pressure on the stage.",a:"resist"},
+  {s:"People _____ against the law.",a:"protest"},
+  {s:"It took me a while to _____ what happened.",a:"reflect"},
+]},
+{level:0,title:"Verb 19",words:[
+  {w:"admit",d:"To say that you have done something wrong",e:"He refused to admit his mistake.",n:"say you did wrong"},
+  {w:"assume",d:"To believe something without proof",e:"Don't assume you know the answer.",n:"believe without proof"},
+  {w:"celebrate",d:"To have a party because something good happened",e:"They will celebrate the holiday.",n:"have party for good event"},
+  {w:"communicate",d:"To talk or exchange information with others",e:"It's important to communicate clearly.",n:"exchange information"},
+  {w:"construct",d:"To build something",e:"They will construct a huge building.",n:"build something"},
+  {w:"detect",d:"To discover and find something hidden",e:"The system can detect errors.",n:"discover/find hidden"},
+  {w:"determine",d:"To decide firmly",e:"She strongly determined to go to the US.",n:"decide firmly"},
+  {w:"ruin",d:"To destroy completely",e:"The storm could severely ruin crops.",n:"destroy completely"},
+],blanks:[
+  {s:"He refused to _____ his mistake.",a:"admit"},
+  {s:"The storm could severely _____ crops.",a:"ruin"},
+  {s:"The system can _____ errors in financial reports.",a:"detect"},
+  {s:"They will _____ the holiday.",a:"celebrate"},
+  {s:"It's important to _____ clearly.",a:"communicate"},
+  {s:"They will _____ a huge building.",a:"construct"},
+  {s:"She strongly _____ to go to the US after graduation.",a:"determine"},
+  {s:"He _____ that he had failed the exam.",a:"assume"},
+]},
+{level:0,title:"Verb 20",words:[
+  {w:"bury",d:"To put something in the ground",e:"The construction workers buried some pipes.",n:"put in the ground"},
+  {w:"chase",d:"To run after something",e:"The dog is chasing the cat in the yard.",n:"run after"},
+  {w:"conclude",d:"To decide something after studying all the information",e:"The scientist concluded the experiment failed.",n:"decide after study"},
+  {w:"export",d:"To send goods abroad",e:"Those companies export many kinds of goods.",n:"send goods abroad"},
+  {w:"postpone",d:"To delay or put off something",e:"They are going to postpone the meeting.",n:"delay/put off"},
+  {w:"reverse",d:"To change to the opposite direction",e:"Please reverse the decision.",n:"change to opposite"},
+  {w:"spill",d:"To drop liquid accidentally",e:"Be careful not to spill your drink.",n:"drop liquid accidentally"},
+  {w:"afford",d:"To have enough money",e:"He cannot afford the car.",n:"have enough money"},
+],blanks:[
+  {s:"They are going to _____ the meeting till next Tuesday.",a:"postpone"},
+  {s:"Be careful not to _____ your drink.",a:"spill"},
+  {s:"Please _____ the decision to fire him.",a:"reverse"},
+  {s:"The dog is _____ the cat in the yard.",a:"chase"},
+  {s:"The scientist _____ that his experiment had been a failure.",a:"conclude"},
+  {s:"Those companies _____ many kinds of goods to the US.",a:"export"},
+  {s:"The construction workers _____ some pipes in the ground.",a:"bury"},
+  {s:"He cannot _____ the car because it's too expensive.",a:"afford"},
+]},
+{level:1,title:"Pre-Adv 1",words:[
+  {w:"suspend",d:"To officially stop something for a period of time",e:"The principal suspended the student.",n:"stop temporarily"},
+  {w:"exploit",d:"To use someone or something unfairly for personal advantage",e:"Some corporations exploit natural resources.",n:"use unfairly"},
+  {w:"guarantee",d:"To promise or assure that something will happen",e:"This contract guarantees satisfaction.",n:"promise/assure"},
+  {w:"preserve",d:"To protect something and keep it in good condition",e:"It's important to preserve cultural heritage.",n:"protect/keep"},
+  {w:"resist",d:"To fight against or refuse to give in to something",e:"She tried to resist the urge to interrupt.",n:"fight against"},
+  {w:"accommodate",d:"To provide enough space or adjust to someone's needs",e:"The stadium can accommodate 20,000 people.",n:"provide space/adjust"},
+  {w:"capture",d:"To catch, record, or successfully express something",e:"The journalist captured the public's attention.",n:"catch/record"},
+  {w:"cultivate",d:"To develop a skill, quality, or relationship over time",e:"Parents should cultivate creativity in children.",n:"develop over time"},
+],blanks:[
+  {s:"The journalist managed to _____ the public's attention.",a:"capture"},
+  {s:"The principal decided to _____ the student for cheating.",a:"suspend"},
+  {s:"Parents should _____ creativity in their children.",a:"cultivate"},
+  {s:"This contract _____ customer satisfaction.",a:"guarantee"},
+  {s:"She tried to _____ the urge to interrupt.",a:"resist"},
+  {s:"Some corporations _____ natural resources.",a:"exploit"},
+  {s:"The stadium can _____ more than 20,000 spectators.",a:"accommodate"},
+  {s:"It is important to _____ cultural heritage for future generations.",a:"preserve"},
+]},
+{level:1,title:"Pre-Adv 2",words:[
+  {w:"enhance",d:"To improve the quality, value, or appearance of something",e:"The new update enhances system performance.",n:"improve quality"},
+  {w:"expire",d:"To officially end after a fixed period of time",e:"My passport will expire in July.",n:"end after fixed time"},
+  {w:"invest",d:"To put money, time, or effort into something for a future benefit",e:"She decided to invest in real estate.",n:"put in for future benefit"},
+  {w:"launch",d:"To officially start or introduce something new",e:"The company plans to launch a new product.",n:"officially start"},
+  {w:"overtake",d:"To move ahead of someone or something by going faster",e:"He tried to overtake the car on the highway.",n:"move ahead of"},
+  {w:"register",d:"To officially record information or sign up for something",e:"You must register online before the seminar.",n:"officially record/sign up"},
+  {w:"shrink",d:"To become smaller in size or amount",e:"Sales began to shrink after the holiday season.",n:"become smaller"},
+  {w:"browse",d:"To look through something casually or without a specific purpose",e:"I like to browse through bookstores.",n:"look through casually"},
+],blanks:[
+  {s:"Sales began to _____ after the holiday season.",a:"shrink"},
+  {s:"I like to _____ through bookstores on weekends.",a:"browse"},
+  {s:"The company plans to _____ a new product next month.",a:"launch"},
+  {s:"He tried to _____ the car in front of him on the highway.",a:"overtake"},
+  {s:"She decided to _____ in real estate.",a:"invest"},
+  {s:"My passport will _____ in July.",a:"expire"},
+  {s:"You must _____ online before attending the seminar.",a:"register"},
+  {s:"The new software update will _____ system performance.",a:"enhance"},
+]},
+{level:1,title:"Pre-Adv 3",words:[
+  {w:"decay",d:"To gradually be destroyed or become worse over time",e:"Old buildings often begin to decay if not maintained.",n:"gradually get worse"},
+  {w:"devise",d:"To invent or create a plan, system, or solution",e:"The engineer tried to devise a new solution.",n:"invent/create a plan"},
+  {w:"escalate",d:"To increase in intensity, seriousness, or size",e:"The conflict began to escalate.",n:"increase in intensity"},
+  {w:"exceed",d:"To go beyond a limit or amount",e:"His spending began to exceed his income.",n:"go beyond a limit"},
+  {w:"manufacture",d:"To produce goods in large quantities, usually in factories",e:"The company manufactures electronic devices.",n:"produce in factories"},
+  {w:"pose",d:"To present or create a threat, problem, or difficulty",e:"Climate change may pose serious risks.",n:"present/create a risk"},
+  {w:"scan",d:"To look over something quickly or examine it using a device",e:"Please scan the document before sending it.",n:"look over quickly"},
+  {w:"storm",d:"To attack or enter a place suddenly and forcefully",e:"The crowd tried to storm the building.",n:"attack/enter forcefully"},
+],blanks:[
+  {s:"The conflict began to _____ after both sides refused to negotiate.",a:"escalate"},
+  {s:"Old buildings often begin to _____ if not maintained.",a:"decay"},
+  {s:"Please _____ the document before sending it by email.",a:"scan"},
+  {s:"The crowd tried to _____ the building during the protest.",a:"storm"},
+  {s:"His spending began to _____ his monthly income.",a:"exceed"},
+  {s:"The engineer tried to _____ a new solution to the problem.",a:"devise"},
+  {s:"Climate change may _____ serious risks to coastal cities.",a:"pose"},
+  {s:"The company _____ electronic devices in several factories.",a:"manufacture"},
+]},
+{level:1,title:"Pre-Adv 4",words:[
+  {w:"threaten",d:"To say that you will cause harm or trouble",e:"Pollution may threaten marine life.",n:"say will cause harm"},
+  {w:"thrive",d:"To grow strongly or be very successful",e:"Many plants thrive in warm environments.",n:"grow strongly/succeed"},
+  {w:"address",d:"To deal with a problem or speak to someone",e:"The speaker will address the audience's concerns.",n:"deal with / speak to"},
+  {w:"combat",d:"To try to stop or fight against something harmful",e:"The government introduced policies to combat crime.",n:"fight against"},
+  {w:"demonstrate",d:"To show clearly how something works or prove something",e:"The scientist demonstrated the experiment.",n:"show clearly/prove"},
+  {w:"exterminate",d:"To completely destroy a group of pests or animals",e:"Farmers use chemicals to exterminate harmful insects.",n:"destroy completely"},
+  {w:"obtain",d:"To get or gain something through effort",e:"She worked hard to obtain a scholarship.",n:"get through effort"},
+  {w:"resume",d:"To continue something after a pause or interruption",e:"After the break, the teacher resumed the lesson.",n:"continue after pause"},
+],blanks:[
+  {s:"The government introduced new policies to _____ crime.",a:"combat"},
+  {s:"Many plants _____ in warm and sunny environments.",a:"thrive"},
+  {s:"Pollution may _____ marine life in the ocean.",a:"threaten"},
+  {s:"The scientist will _____ the experiment to the students.",a:"demonstrate"},
+  {s:"Farmers sometimes use chemicals to _____ harmful insects.",a:"exterminate"},
+  {s:"The speaker will _____ the audience's concerns during the meeting.",a:"address"},
+  {s:"After the break, the teacher will _____ the lesson.",a:"resume"},
+  {s:"She worked hard to _____ a scholarship.",a:"obtain"},
+]},
+{level:1,title:"Pre-Adv 5",words:[
+  {w:"advocate",d:"To strongly support or recommend a particular idea or policy",e:"Many scientists advocate stronger environmental protection.",n:"strongly support"},
+  {w:"clarify",d:"To make something easier to understand",e:"The teacher tried to clarify the instructions.",n:"make easier to understand"},
+  {w:"compile",d:"To collect information and arrange it into a list, book, or report",e:"The author compiled stories from different cultures.",n:"collect and arrange"},
+  {w:"devastate",d:"To cause great damage or destruction",e:"The storm devastated several towns.",n:"cause great damage"},
+  {w:"disrupt",d:"To interrupt something and cause disorder or confusion",e:"Loud construction can disrupt classes.",n:"interrupt/cause disorder"},
+  {w:"embrace",d:"To accept something willingly or enthusiastically",e:"It is important to embrace new ideas.",n:"accept willingly"},
+  {w:"evaluate",d:"To judge or determine the value or quality of something",e:"The committee will evaluate the results.",n:"judge/determine value"},
+  {w:"exaggerate",d:"To describe something as larger or worse than it really is",e:"He tends to exaggerate his achievements.",n:"describe as more than true"},
+],blanks:[
+  {s:"The author _____ stories from different cultures into one book.",a:"compile"},
+  {s:"He tends to _____ his achievements when telling stories.",a:"exaggerate"},
+  {s:"The committee will _____ the results of the research.",a:"evaluate"},
+  {s:"The teacher tried to _____ the instructions for the assignment.",a:"clarify"},
+  {s:"Many scientists _____ stronger environmental protection laws.",a:"advocate"},
+  {s:"The storm _____ several towns along the coast.",a:"devastate"},
+  {s:"Loud construction work can _____ classes at the school.",a:"disrupt"},
+  {s:"It is important to _____ new ideas and perspectives.",a:"embrace"},
+]},
+{level:1,title:"Pre-Adv 6",words:[
+  {w:"implement",d:"To put a plan, decision, or system into action",e:"The government plans to implement new regulations.",n:"put into action"},
+  {w:"imply",d:"To suggest something indirectly without stating it clearly",e:"Her comment seemed to imply she was unhappy.",n:"suggest indirectly"},
+  {w:"migrate",d:"To move from one region or country to another",e:"Some birds migrate to warmer regions in winter.",n:"move to another place"},
+  {w:"predict",d:"To say what you think will happen in the future",e:"Experts try to predict economic trends.",n:"say future will happen"},
+  {w:"promote",d:"To support or encourage something to increase its success",e:"The advertisement helps promote the product.",n:"support to increase success"},
+  {w:"seize",d:"To take something suddenly and by force or opportunity",e:"He managed to seize the opportunity.",n:"take suddenly/by force"},
+  {w:"stray",d:"To move away from the correct place, path, or group",e:"The dog began to stray away from its owner.",n:"move away from correct path"},
+  {w:"transmit",d:"To send or pass something from one place or person to another",e:"The signal can transmit information across long distances.",n:"send/pass to another"},
+],blanks:[
+  {s:"The signal is strong enough to _____ information across long distances.",a:"transmit"},
+  {s:"He managed to _____ the opportunity before anyone else noticed.",a:"seize"},
+  {s:"The dog began to _____ away from its owner in the park.",a:"stray"},
+  {s:"The government plans to _____ new environmental regulations next year.",a:"implement"},
+  {s:"The advertisement helps _____ the company's new product.",a:"promote"},
+  {s:"Some birds _____ to warmer regions during the winter.",a:"migrate"},
+  {s:"Experts try to _____ economic trends using data.",a:"predict"},
+  {s:"Her comment seemed to _____ that she was unhappy with the decision.",a:"imply"},
+]},
+{level:1,title:"Pre-Adv 7",words:[
+  {w:"acknowledge",d:"To accept or admit that something is true or exists",e:"The manager refused to acknowledge his mistake.",n:"accept/admit true"},
+  {w:"analyze",d:"To examine something carefully in order to understand it",e:"The scientist carefully analyzed the data.",n:"examine carefully"},
+  {w:"cherish",d:"To love, protect, or value something deeply",e:"Parents often cherish memories with their children.",n:"love/value deeply"},
+  {w:"complicate",d:"To make a situation or problem more difficult",e:"Additional rules may complicate the situation.",n:"make more difficult"},
+  {w:"conclude",d:"To reach a final decision or judgment",e:"After discussing, the team concluded a new strategy was necessary.",n:"reach final decision"},
+  {w:"condemn",d:"To strongly express disapproval of something",e:"The judge decided to condemn the criminal's actions.",n:"strongly disapprove"},
+  {w:"emerge",d:"To appear or come into view",e:"New evidence may emerge during the investigation.",n:"appear/come into view"},
+  {w:"enforce",d:"To make sure that a law or rule is obeyed",e:"Police officers are responsible for enforcing the law.",n:"make law obeyed"},
+],blanks:[
+  {s:"The manager refused to _____ his mistake at first.",a:"acknowledge"},
+  {s:"Additional rules may _____ the situation further.",a:"complicate"},
+  {s:"The scientist carefully _____ the data from the experiment.",a:"analyze"},
+  {s:"After discussing the issue, the team _____ that a new strategy was necessary.",a:"conclude"},
+  {s:"The new evidence may _____ during the investigation.",a:"emerge"},
+  {s:"Parents often _____ the memories they have with their children.",a:"cherish"},
+  {s:"The judge decided to _____ the criminal's actions.",a:"condemn"},
+  {s:"Police officers are responsible for _____ the law.",a:"enforce"},
+]},
+{level:1,title:"Pre-Adv 8",words:[
+  {w:"envision",d:"To imagine or picture something that might happen in the future",e:"The teacher asked students to envision future cities.",n:"imagine the future"},
+  {w:"install",d:"To set up or put equipment or software in place so it can be used",e:"The company plans to install new security software.",n:"set up equipment/software"},
+  {w:"justify",d:"To give a good reason or explanation for something",e:"It is difficult to justify his behavior.",n:"give good reason for"},
+  {w:"mimic",d:"To copy the actions, speech, or behavior of someone or something",e:"The child tried to mimic his father's voice.",n:"copy behavior/speech"},
+  {w:"pacify",d:"To calm someone who is angry or upset",e:"She managed to pacify the angry customer.",n:"calm someone angry"},
+  {w:"surpass",d:"To do better than or go beyond someone or something",e:"Her performance managed to surpass everyone's expectations.",n:"do better than"},
+  {w:"tackle",d:"To try to deal with a difficult problem or situation",e:"The government is trying to tackle the problem of pollution.",n:"deal with difficulty"},
+  {w:"accumulate",d:"To gradually collect or gather over time",e:"Over the years, he managed to accumulate a large amount of wealth.",n:"collect gradually"},
+],blanks:[
+  {s:"Her performance managed to _____ everyone's expectations.",a:"surpass"},
+  {s:"Over the years, he managed to _____ a large amount of wealth.",a:"accumulate"},
+  {s:"The teacher asked students to _____ how cities might look in the future.",a:"envision"},
+  {s:"The company plans to _____ new security software on all computers.",a:"install"},
+  {s:"The government is trying to _____ the growing problem of pollution.",a:"tackle"},
+  {s:"She managed to _____ the angry customer by offering a refund.",a:"pacify"},
+  {s:"It is difficult to _____ his behavior during the meeting.",a:"justify"},
+  {s:"The child tried to _____ his father's voice as a joke.",a:"mimic"},
+]},
+{level:1,title:"Pre-Adv 9",words:[
+  {w:"assume",d:"To suppose something is true without having proof",e:"Don't assume you know the answer.",n:"suppose without proof"},
+  {w:"conserve",d:"To protect something from being wasted or used up",e:"Governments encourage people to conserve water.",n:"protect from waste"},
+  {w:"demote",d:"To move someone to a lower rank or position",e:"The company decided to demote the manager.",n:"move to lower rank"},
+  {w:"designate",d:"To officially choose someone or something for a particular role",e:"The city plans to designate the building as a landmark.",n:"officially choose for role"},
+  {w:"determine",d:"To discover or decide something after careful thought",e:"Scientists are trying to determine the cause of the disease.",n:"discover/decide carefully"},
+  {w:"dominate",d:"To have control or a powerful influence over something",e:"Large companies often dominate the global market.",n:"have control over"},
+  {w:"emphasize",d:"To give special importance or attention to something",e:"The speaker tried to emphasize the importance of education.",n:"give special importance"},
+  {w:"evacuate",d:"To move people from a dangerous place to a safer one",e:"Residents were told to evacuate the area.",n:"move from danger"},
+],blanks:[
+  {s:"Large companies often _____ the global market.",a:"dominate"},
+  {s:"The company decided to _____ the manager after several mistakes.",a:"demote"},
+  {s:"Residents were told to _____ the area before the storm arrived.",a:"evacuate"},
+  {s:"The city plans to _____ the building as a historical landmark.",a:"designate"},
+  {s:"The teacher asked students not to _____ the answer without checking the facts.",a:"assume"},
+  {s:"The speaker tried to _____ the importance of education.",a:"emphasize"},
+  {s:"Scientists are trying to _____ the cause of the disease.",a:"determine"},
+  {s:"Governments encourage people to _____ water during droughts.",a:"conserve"},
+]},
+{level:1,title:"Pre-Adv 10",words:[
+  {w:"extinguish",d:"To stop a fire, flame, or light from burning",e:"Firefighters worked quickly to extinguish the flames.",n:"stop fire/flame"},
+  {w:"grant",d:"To officially give or allow something such as permission or money",e:"The university decided to grant a scholarship to the student.",n:"officially give/allow"},
+  {w:"grasp",d:"To understand something clearly",e:"It took him a long time to grasp the concept.",n:"understand clearly"},
+  {w:"halt",d:"To stop something from continuing or moving",e:"The police tried to halt traffic after the accident.",n:"stop continuing/moving"},
+  {w:"impersonate",d:"To pretend to be another person, often for entertainment or deception",e:"The comedian likes to impersonate famous actors.",n:"pretend to be another"},
+  {w:"mingle",d:"To mix and socialize with other people",e:"At the party, guests were encouraged to mingle.",n:"mix and socialize"},
+  {w:"negotiate",d:"To discuss something in order to reach an agreement",e:"The two companies are trying to negotiate a new contract.",n:"discuss to reach agreement"},
+  {w:"overlook",d:"To fail to notice something or ignore it",e:"She accidentally overlooked an important detail.",n:"fail to notice"},
+],blanks:[
+  {s:"At the party, guests were encouraged to _____ and talk with each other.",a:"mingle"},
+  {s:"She accidentally _____ an important detail in the report.",a:"overlook"},
+  {s:"The university decided to _____ a scholarship to the student.",a:"grant"},
+  {s:"Firefighters worked quickly to _____ the flames.",a:"extinguish"},
+  {s:"The two companies are trying to _____ a new contract.",a:"negotiate"},
+  {s:"It took him a long time to _____ the concept.",a:"grasp"},
+  {s:"The police tried to _____ traffic after the accident.",a:"halt"},
+  {s:"The comedian likes to _____ famous actors.",a:"impersonate"},
+]},
+{level:2,title:"Business 1",words:[
+  {w:"expire",d:"To come to an end after a fixed period of time",e:"His contract will expire at the end of this quarter.",n:"end after fixed period"},
+  {w:"verify",d:"To confirm that something is true or accurate",e:"Please verify the customer's identity.",n:"confirm true/accurate"},
+  {w:"enhance",d:"To improve the quality, value, or effectiveness of something",e:"The new policy is designed to enhance communication.",n:"improve quality/effectiveness"},
+  {w:"renovate",d:"To repair and improve a building or office",e:"Our office will be renovated next year.",n:"repair and improve building"},
+  {w:"update",d:"To make something current or add the latest information",e:"The company needs to update its internal systems.",n:"make current"},
+  {w:"commute",d:"To travel regularly between home and workplace",e:"She spends two hours each day commuting to the office.",n:"travel home to work regularly"},
+  {w:"clarify",d:"To make something easier to understand",e:"Could you clarify your instructions so the team can proceed?",n:"make easier to understand"},
+  {w:"upgrade",d:"To improve something by adding better features or technology",e:"The company needs to upgrade its systems.",n:"improve with better features"},
+],blanks:[
+  {s:"Our office will be _____ next year to create a more modern environment.",a:"renovated"},
+  {s:"The company needs to _____ its internal systems to stay competitive.",a:"upgrade"},
+  {s:"Please _____ the customer's identity before processing the payment.",a:"verify"},
+  {s:"She spends two hours each day to _____ to the office.",a:"commute"},
+  {s:"Make sure to _____ the client on any changes to the project.",a:"update"},
+  {s:"Could you _____ your instructions so the team can proceed correctly?",a:"clarify"},
+  {s:"His contract will _____ at the end of this quarter.",a:"expire"},
+  {s:"The new policy is designed to _____ communication between departments.",a:"enhance"},
+]},
+{level:2,title:"Business 2",words:[
+  {w:"curb",d:"To limit or control something",e:"The company is trying to curb unnecessary expenses.",n:"limit/control"},
+  {w:"itemize",d:"To list things one by one, often in detail",e:"Please itemize all the charges on the invoice.",n:"list one by one"},
+  {w:"endorse",d:"To publicly support or approve something",e:"The CEO decided to endorse the new policy.",n:"publicly support/approve"},
+  {w:"incur",d:"To experience something unpleasant, such as costs or losses",e:"Late payments may incur additional fees.",n:"experience unpleasant costs"},
+  {w:"encounter",d:"To meet or face something, often unexpectedly",e:"We may encounter technical difficulties during the upgrade.",n:"meet unexpectedly"},
+  {w:"facilitate",d:"To make a process easier or more efficient",e:"The new software will facilitate communication between departments.",n:"make easier/efficient"},
+  {w:"terminate",d:"To officially end something",e:"The company decided to terminate the contract.",n:"officially end"},
+  {w:"emphasize",d:"To give special importance to something",e:"The manager will emphasize the importance of meeting deadlines.",n:"give special importance"},
+],blanks:[
+  {s:"Please _____ all the charges on the invoice for transparency.",a:"itemize"},
+  {s:"Late payments may _____ additional fees.",a:"incur"},
+  {s:"The CEO decided to _____ the new policy during the meeting.",a:"endorse"},
+  {s:"The company is trying to _____ unnecessary expenses.",a:"curb"},
+  {s:"The company decided to _____ the contract due to poor performance.",a:"terminate"},
+  {s:"We may _____ technical difficulties during the system upgrade.",a:"encounter"},
+  {s:"The manager will _____ the importance of meeting deadlines.",a:"emphasize"},
+  {s:"The new software will _____ communication between departments.",a:"facilitate"},
+]},
+{level:2,title:"Business 3",words:[
+  {w:"enlarge",d:"To make something bigger in size or scope",e:"The company plans to enlarge its operations into new markets.",n:"make bigger in scope"},
+  {w:"supervise",d:"To manage or be in charge of people or activities",e:"She was hired to supervise a team of junior employees.",n:"manage/be in charge"},
+  {w:"undertake",d:"To begin or take on a task or responsibility",e:"We will undertake a new project to improve customer satisfaction.",n:"begin/take on task"},
+  {w:"deteriorate",d:"To become worse in condition or quality",e:"If maintenance is ignored, the equipment may deteriorate.",n:"become worse"},
+  {w:"summarize",d:"To give a short and clear description of the main points",e:"Please summarize the report so the manager can quickly understand it.",n:"give short description"},
+  {w:"waive",d:"To officially choose not to enforce a rule or fee",e:"The bank agreed to waive the late payment fee.",n:"choose not to enforce"},
+  {w:"infer",d:"To form an opinion based on evidence rather than direct information",e:"From the data, we can infer that sales are increasing.",n:"form opinion from evidence"},
+  {w:"retrieve",d:"To get something back or bring it back",e:"He tried to retrieve the lost files from the system.",n:"get back/bring back"},
+],blanks:[
+  {s:"The bank agreed to _____ the late payment fee.",a:"waive"},
+  {s:"From the data, we can _____ that sales are increasing.",a:"infer"},
+  {s:"The company plans to _____ its operations into new markets next year.",a:"enlarge"},
+  {s:"He tried to _____ the lost files from the system.",a:"retrieve"},
+  {s:"Please _____ the report so the manager can quickly understand it.",a:"summarize"},
+  {s:"She was hired to _____ a team of junior employees.",a:"supervise"},
+  {s:"We will _____ a new project to improve customer satisfaction.",a:"undertake"},
+  {s:"If maintenance is ignored, the equipment may _____ over time.",a:"deteriorate"},
+]},
+{level:2,title:"Business 4",words:[
+  {w:"complement",d:"To complete or enhance something by adding to it",e:"His skills complement the team's strengths perfectly.",n:"complete/enhance by adding"},
+  {w:"embrace",d:"To accept or adopt something willingly",e:"The company encourages employees to embrace new technologies.",n:"accept/adopt willingly"},
+  {w:"activate",d:"To make something start working or become active",e:"The IT team will activate the new system tomorrow.",n:"make start working"},
+  {w:"compile",d:"To collect and arrange information into a list or report",e:"We need to compile all the data before presenting it.",n:"collect and arrange data"},
+  {w:"discontinue",d:"To stop producing or providing something",e:"The company decided to discontinue the old product.",n:"stop producing"},
+  {w:"violate",d:"To break a rule, law, or agreement",e:"If you violate company policies, you may face penalties.",n:"break a rule/law"},
+  {w:"administer",d:"To manage or be responsible for running something",e:"The manager will administer the new training program.",n:"manage/run something"},
+  {w:"tow",d:"To pull a vehicle or object using another vehicle",e:"The broken car had to be towed to the garage.",n:"pull using a vehicle"},
+],blanks:[
+  {s:"If you _____ company policies, you may face penalties.",a:"violate"},
+  {s:"The company decided to _____ the old product due to low demand.",a:"discontinue"},
+  {s:"The broken company car had to be _____ to the garage.",a:"tow"},
+  {s:"The manager will _____ the new training program.",a:"administer"},
+  {s:"His skills _____ the team's strengths perfectly.",a:"complement"},
+  {s:"We need to _____ all the data before presenting it to the client.",a:"compile"},
+  {s:"The company encourages employees to _____ new technologies.",a:"embrace"},
+  {s:"The IT team will _____ the new system tomorrow.",a:"activate"},
+]},
+{level:2,title:"Business 5",words:[
+  {w:"ease",d:"To make something less difficult, painful, or severe",e:"New policies were introduced to ease the workload.",n:"make less difficult"},
+  {w:"minimize",d:"To reduce something to the smallest possible amount",e:"The company is trying to minimize expenses.",n:"reduce to smallest amount"},
+  {w:"trim",d:"To cut down or reduce something, such as costs or staff",e:"The company decided to trim unnecessary costs.",n:"cut down/reduce"},
+  {w:"dispatch",d:"To send something, especially goods or messages",e:"The warehouse will dispatch the products once confirmed.",n:"send goods/messages"},
+  {w:"entail",d:"To involve something as a necessary part or result",e:"The job may entail long working hours.",n:"involve as necessary"},
+  {w:"amend",d:"To make changes or corrections to something",e:"We need to amend the contract before signing it.",n:"make changes/corrections"},
+  {w:"browse",d:"To look through information casually or quickly",e:"She likes to browse through reports before meetings.",n:"look through casually"},
+  {w:"remit",d:"To send money, especially as payment",e:"Please remit the payment by the end of the week.",n:"send money as payment"},
+],blanks:[
+  {s:"The warehouse will _____ the products once the order is confirmed.",a:"dispatch"},
+  {s:"The job may _____ long working hours and frequent travel.",a:"entail"},
+  {s:"The company is trying to _____ expenses during the economic slowdown.",a:"minimize"},
+  {s:"She likes to _____ through reports before meetings.",a:"browse"},
+  {s:"Please _____ the payment by the end of the week.",a:"remit"},
+  {s:"New policies were introduced to _____ the workload of employees.",a:"ease"},
+  {s:"The company decided to _____ unnecessary costs to increase profits.",a:"trim"},
+  {s:"We need to _____ the contract before signing it.",a:"amend"},
+]},
+{level:2,title:"Business 6",words:[
+  {w:"arise",d:"To happen or begin to exist",e:"Problems may arise if communication is poor.",n:"happen/begin to exist"},
+  {w:"outline",d:"To give a general description or main points of something",e:"Please outline the key points of your proposal.",n:"give main points"},
+  {w:"withhold",d:"To refuse to give or keep something back",e:"The company decided to withhold certain information.",n:"refuse to give/keep back"},
+  {w:"disrupt",d:"To interrupt or cause problems in a process or system",e:"Technical issues can disrupt business operations.",n:"interrupt/cause problems"},
+  {w:"reinforce",d:"To strengthen or support something",e:"The training program will reinforce employees' skills.",n:"strengthen/support"},
+  {w:"relieve",d:"To reduce pain, stress, or difficulty",e:"This new policy aims to relieve employee stress.",n:"reduce pain/stress"},
+  {w:"consolidate",d:"To combine things into a single, stronger unit",e:"The company plans to consolidate its departments.",n:"combine into stronger unit"},
+  {w:"expedite",d:"To make a process happen faster",e:"We need to expedite the delivery process.",n:"make happen faster"},
+],blanks:[
+  {s:"Problems may _____ if communication is poor.",a:"arise"},
+  {s:"The training program will _____ employees' skills.",a:"reinforce"},
+  {s:"Please _____ the key points of your proposal.",a:"outline"},
+  {s:"The company decided to _____ certain information from the public.",a:"withhold"},
+  {s:"We need to _____ the delivery process to meet the deadline.",a:"expedite"},
+  {s:"This new policy aims to _____ employee stress.",a:"relieve"},
+  {s:"Technical issues can _____ business operations.",a:"disrupt"},
+  {s:"The company plans to _____ its departments to improve efficiency.",a:"consolidate"},
+]},
+{level:2,title:"Business 7",words:[
+  {w:"transact",d:"To carry out business or financial dealings",e:"It is important to transact business carefully with international clients.",n:"carry out business dealings"},
+  {w:"unveil",d:"To introduce something new publicly for the first time",e:"The company plans to unveil a new product next month.",n:"introduce publicly first time"},
+  {w:"appraise",d:"To assess the value or quality of something",e:"The manager will appraise employee performance.",n:"assess value/quality"},
+  {w:"arouse",d:"To create a strong feeling or interest",e:"The advertisement is designed to arouse customer interest.",n:"create feeling/interest"},
+  {w:"commemorate",d:"To honor and remember an important event",e:"The company will commemorate its anniversary.",n:"honor/remember event"},
+  {w:"dilute",d:"To make something weaker by adding something else",e:"Adding too many features may dilute the original purpose.",n:"make weaker by adding"},
+  {w:"foresee",d:"To predict or expect something in the future",e:"It is difficult to foresee market trends.",n:"predict/expect future"},
+  {w:"innovate",d:"To introduce new ideas, methods, or products",e:"Successful companies continue to innovate.",n:"introduce new ideas"},
+],blanks:[
+  {s:"The company will _____ its anniversary with a special event.",a:"commemorate"},
+  {s:"Adding too many features may _____ the original purpose of the product.",a:"dilute"},
+  {s:"The company plans to _____ a new product next month.",a:"unveil"},
+  {s:"The advertisement is designed to _____ customer interest.",a:"arouse"},
+  {s:"It is important to _____ business carefully when dealing with international clients.",a:"transact"},
+  {s:"Successful companies continue to _____ new ideas and strategies.",a:"innovate"},
+  {s:"The manager will _____ employee performance at the end of the year.",a:"appraise"},
+  {s:"It is difficult to _____ market trends in uncertain times.",a:"foresee"},
+]},
+{level:2,title:"Business 8",words:[
+  {w:"liquidate",d:"To sell assets in order to close a business or pay debts",e:"The company may need to liquidate its assets.",n:"sell assets to pay debts"},
+  {w:"circulate",d:"To distribute or spread something, such as information",e:"The manager will circulate the report to all team members.",n:"distribute/spread"},
+  {w:"commend",d:"To praise someone formally for their achievements",e:"She was commended for her outstanding performance.",n:"praise formally"},
+  {w:"necessitate",d:"To make something necessary",e:"Changes in the market may necessitate a new business strategy.",n:"make something necessary"},
+  {w:"weave",d:"To combine ideas or elements together smoothly",e:"The company tries to weave innovation into its culture.",n:"combine smoothly"},
+  {w:"equalize",d:"To make things equal or balanced",e:"New policies aim to equalize opportunities for all employees.",n:"make equal/balanced"},
+  {w:"vend",d:"To sell goods or services",e:"Small vendors often vend their products online.",n:"sell goods/services"},
+  {w:"surpass",d:"To do better than or exceed something",e:"The company hopes to surpass its competitors.",n:"do better than/exceed"},
+],blanks:[
+  {s:"Small vendors often _____ their products online.",a:"vend"},
+  {s:"Changes in the market may _____ a new business strategy.",a:"necessitate"},
+  {s:"The company hopes to _____ its competitors this year.",a:"surpass"},
+  {s:"New policies aim to _____ opportunities for all employees.",a:"equalize"},
+  {s:"The company may need to _____ its assets due to financial difficulties.",a:"liquidate"},
+  {s:"The manager will _____ the report to all team members.",a:"circulate"},
+  {s:"She was _____ for her outstanding performance.",a:"commend"},
+  {s:"The company tries to _____ innovation into its culture.",a:"weave"},
+]},
+{level:2,title:"Business 9",words:[
+  {w:"deduct",d:"To take away an amount from a total",e:"Employees can deduct certain expenses from their taxes.",n:"take away from total"},
+  {w:"alleviate",d:"To make something less severe or serious",e:"The company introduced new policies to alleviate workplace stress.",n:"make less severe"},
+  {w:"collaborate",d:"To work together with others",e:"Teams need to collaborate effectively to complete projects.",n:"work together"},
+  {w:"demolish",d:"To completely destroy a building or structure",e:"The old factory will be demolished to make space for a new office.",n:"completely destroy building"},
+  {w:"fluctuate",d:"To change frequently in level or amount",e:"Prices tend to fluctuate depending on market demand.",n:"change frequently"},
+  {w:"mature",d:"To develop and become more advanced or responsible",e:"The business has started to mature and expand internationally.",n:"develop/become more advanced"},
+  {w:"proofread",d:"To check writing for errors before finalizing it",e:"Always proofread your emails before sending them to clients.",n:"check writing for errors"},
+  {w:"scrub",d:"To clean or remove unwanted data or information",e:"The IT team needs to scrub outdated data from the system.",n:"remove unwanted data"},
+],blanks:[
+  {s:"Always _____ your emails before sending them to clients.",a:"proofread"},
+  {s:"Prices tend to _____ depending on market demand.",a:"fluctuate"},
+  {s:"Employees can _____ certain expenses from their taxes.",a:"deduct"},
+  {s:"Teams need to _____ effectively to complete projects successfully.",a:"collaborate"},
+  {s:"The company introduced new policies to _____ workplace stress.",a:"alleviate"},
+  {s:"The IT team needs to _____ outdated data from the system.",a:"scrub"},
+  {s:"The old factory will be _____ to make space for a new office.",a:"demolish"},
+  {s:"The business has started to _____ and expand internationally.",a:"mature"},
+]},
+{level:2,title:"Business 10",words:[
+  {w:"streamline",d:"To make a process more efficient or simple",e:"The company wants to streamline its operations.",n:"make more efficient"},
+  {w:"convene",d:"To bring people together for a meeting",e:"The manager will convene a meeting to discuss the new strategy.",n:"bring together for meeting"},
+  {w:"disregard",d:"To ignore something intentionally",e:"Employees should not disregard safety regulations.",n:"ignore intentionally"},
+  {w:"bother",d:"To annoy or cause inconvenience",e:"I don't want to bother you, but I have a quick question.",n:"annoy/cause inconvenience"},
+  {w:"misplace",d:"To lose something by putting it in the wrong place",e:"He tends to misplace important documents.",n:"lose by wrong placement"},
+  {w:"mow",d:"To cut grass or maintain outdoor areas",e:"The staff needs to mow the company grounds regularly.",n:"cut grass"},
+  {w:"oversee",d:"To supervise or manage a project or activity",e:"She was hired to oversee the entire project.",n:"supervise/manage"},
+  {w:"publicize",d:"To make something known to the public",e:"The company plans to publicize its new product through social media.",n:"make known to public"},
+],blanks:[
+  {s:"The staff needs to _____ the company grounds regularly.",a:"mow"},
+  {s:"The company wants to _____ its operations to save time and costs.",a:"streamline"},
+  {s:"She was hired to _____ the entire project.",a:"oversee"},
+  {s:"The company plans to _____ its new product through social media.",a:"publicize"},
+  {s:"Employees should not _____ safety regulations.",a:"disregard"},
+  {s:"He tends to _____ important documents if he is not careful.",a:"misplace"},
+  {s:"I don't want to _____ you, but I have a quick question.",a:"bother"},
+  {s:"The manager will _____ a meeting to discuss the new strategy.",a:"convene"},
+]},
+{level:3,title:"Advanced 1",words:[
+  {w:"advocate",d:"To publicly support or recommend something",e:"Many scientists advocate stronger environmental protection policies.",n:"publicly support/recommend"},
+  {w:"manipulate",d:"To control or influence someone cleverly or unfairly",e:"The politician was accused of trying to manipulate public opinion.",n:"control/influence unfairly"},
+  {w:"diminish",d:"To make something smaller, weaker, or less important",e:"The economic crisis did not diminish his enthusiasm.",n:"make smaller/weaker"},
+  {w:"languish",d:"To suffer or remain in an unpleasant condition for a long time",e:"Without proper funding, the project began to languish.",n:"suffer/remain in poor condition"},
+  {w:"trigger",d:"To cause something to begin or happen",e:"Stress can trigger headaches and other health problems.",n:"cause to begin/happen"},
+  {w:"enhance",d:"To make something better or more attractive",e:"Technology can greatly enhance communication between people.",n:"make better/more attractive"},
+  {w:"alleviate",d:"To make pain, problems, or suffering less severe",e:"The new medicine helps alleviate the pain caused by arthritis.",n:"make pain/problems less severe"},
+  {w:"plague",d:"To cause constant trouble or difficulty for someone",e:"Technical issues continued to plague the company's progress.",n:"cause constant trouble"},
+],blanks:[
+  {s:"Without proper funding, the project began to _____.",a:"languish"},
+  {s:"The new medicine helps _____ the pain caused by arthritis.",a:"alleviate"},
+  {s:"Technical issues continued to _____ the company's progress.",a:"plague"},
+  {s:"Many scientists _____ stronger environmental protection policies.",a:"advocate"},
+  {s:"The economic crisis did not _____ his enthusiasm for the project.",a:"diminish"},
+  {s:"Technology can greatly _____ communication between people.",a:"enhance"},
+  {s:"Stress can _____ headaches and other health problems.",a:"trigger"},
+  {s:"The politician was accused of trying to _____ public opinion.",a:"manipulate"},
+]},
+{level:3,title:"Advanced 2",words:[
+  {w:"enforce",d:"To make sure a law or rule is obeyed",e:"The government must enforce strict environmental regulations.",n:"make law obeyed"},
+  {w:"disseminate",d:"To spread information widely",e:"The organization aims to disseminate important health information.",n:"spread widely"},
+  {w:"alienate",d:"To cause someone to feel isolated or unfriendly toward others",e:"His rude comments began to alienate his colleagues.",n:"cause to feel isolated"},
+  {w:"exploit",d:"To use something unfairly for personal gain",e:"Some companies exploit natural resources without considering damage.",n:"use unfairly for gain"},
+  {w:"undergo",d:"To experience something difficult or unpleasant",e:"She had to undergo surgery after the accident.",n:"experience difficult thing"},
+  {w:"contaminate",d:"To make something dirty, impure, or unsafe",e:"Industrial waste may contaminate nearby rivers.",n:"make dirty/impure/unsafe"},
+  {w:"wane",d:"To gradually decrease in strength, intensity, or importance",e:"Interest in the project began to wane over time.",n:"gradually decrease"},
+  {w:"substitute",d:"To replace one thing with another",e:"Butter can sometimes be used as a substitute for oil.",n:"replace with another"},
+],blanks:[
+  {s:"Interest in the project began to _____ over time.",a:"wane"},
+  {s:"His rude comments began to _____ his colleagues.",a:"alienate"},
+  {s:"The government must _____ strict environmental regulations.",a:"enforce"},
+  {s:"The organization aims to _____ important health information to the public.",a:"disseminate"},
+  {s:"She had to _____ surgery after the accident.",a:"undergo"},
+  {s:"Some companies _____ natural resources without considering environmental damage.",a:"exploit"},
+  {s:"Industrial waste may _____ nearby rivers.",a:"contaminate"},
+  {s:"Butter can sometimes be used as a _____ for oil in baking.",a:"substitute"},
+]},
+{level:3,title:"Advanced 3",words:[
+  {w:"constitute",d:"To form or make up something",e:"Twelve months constitute a full year.",n:"form/make up"},
+  {w:"surmise",d:"To guess or infer something without complete evidence",e:"From his expression, she could surmise that he was unhappy.",n:"guess without full evidence"},
+  {w:"circumvent",d:"To avoid or get around a rule or obstacle in a clever way",e:"Some drivers try to circumvent traffic laws.",n:"get around cleverly"},
+  {w:"weather",d:"To survive or endure a difficult situation",e:"The company managed to weather the economic crisis.",n:"survive/endure difficulty"},
+  {w:"placate",d:"To calm someone who is angry or upset",e:"The manager tried to placate the angry customer.",n:"calm angry person"},
+  {w:"clench",d:"To close something tightly, especially a fist or teeth",e:"He began to clench his fists as the argument intensified.",n:"close tightly"},
+  {w:"exacerbate",d:"To make a problem or negative situation worse",e:"Poor communication can exacerbate conflicts in the workplace.",n:"make problem worse"},
+  {w:"undermine",d:"To weaken something gradually",e:"Corruption can undermine public trust in government institutions.",n:"weaken gradually"},
+],blanks:[
+  {s:"Corruption can _____ public trust in government institutions.",a:"undermine"},
+  {s:"He began to _____ his fists as the argument intensified.",a:"clench"},
+  {s:"Some drivers try to _____ traffic laws by taking hidden side streets.",a:"circumvent"},
+  {s:"From his expression, she could _____ that he was unhappy.",a:"surmise"},
+  {s:"The company managed to _____ the economic crisis.",a:"weather"},
+  {s:"Twelve months _____ a full year.",a:"constitute"},
+  {s:"Poor communication can _____ conflicts in the workplace.",a:"exacerbate"},
+  {s:"The manager tried to _____ the angry customer with a refund.",a:"placate"},
+]},
+{level:3,title:"Advanced 4",words:[
+  {w:"ransack",d:"To search a place roughly and thoroughly, often causing damage",e:"The burglars ransacked the house looking for valuables.",n:"search roughly causing damage"},
+  {w:"sway",d:"To influence someone's opinions or decisions",e:"His powerful speech managed to sway public opinion.",n:"influence opinions/decisions"},
+  {w:"mandate",d:"To officially order or require something to be done",e:"The company mandated the installation of virus protection.",n:"officially order/require"},
+  {w:"epitomize",d:"To be the perfect example of something",e:"She seems to epitomize dedication and professionalism.",n:"be perfect example of"},
+  {w:"recoup",d:"To recover losses, especially money",e:"The company hopes to recoup its losses within a year.",n:"recover losses"},
+  {w:"eradicate",d:"To completely destroy or eliminate something",e:"Global efforts aim to eradicate certain infectious diseases.",n:"completely destroy/eliminate"},
+  {w:"plummet",d:"To fall suddenly and dramatically",e:"The company's stock price began to plummet after the scandal.",n:"fall suddenly/dramatically"},
+  {w:"augment",d:"To increase or make something greater",e:"The organization plans to augment its staff.",n:"increase/make greater"},
+],blanks:[
+  {s:"The organization plans to _____ its staff to handle the growing workload.",a:"augment"},
+  {s:"She seems to _____ dedication and professionalism.",a:"epitomize"},
+  {s:"His powerful speech managed to _____ public opinion.",a:"sway"},
+  {s:"The burglars _____ the house looking for valuables.",a:"ransack"},
+  {s:"The company hopes to _____ its losses within a year.",a:"recoup"},
+  {s:"Global efforts aim to _____ certain infectious diseases.",a:"eradicate"},
+  {s:"The company's stock price began to _____ after the scandal.",a:"plummet"},
+  {s:"The company _____ the installation of virus busters on their computers.",a:"mandate"},
+]},
+{level:3,title:"Advanced 5",words:[
+  {w:"procure",d:"To obtain or acquire something with effort",e:"She managed to procure the rare materials needed for the project.",n:"obtain with effort"},
+  {w:"vindicate",d:"To clear someone from blame or suspicion",e:"The evidence helped vindicate him after he was wrongly accused.",n:"clear from blame"},
+  {w:"muster",d:"To gather or summon something such as strength, courage, or support",e:"The coach encouraged the players to muster all their strength.",n:"gather/summon strength"},
+  {w:"repulse",d:"To drive back or repel an attack",e:"The soldiers fought bravely to repulse the enemy forces.",n:"drive back/repel"},
+  {w:"replicate",d:"To copy or reproduce something",e:"The scientist tried to replicate the results of the original experiment.",n:"copy/reproduce"},
+  {w:"extol",d:"To praise something enthusiastically",e:"Many critics extol the novel as a masterpiece.",n:"praise enthusiastically"},
+  {w:"liquidate",d:"To sell assets in order to pay debts or close a business",e:"The company was forced to liquidate its assets after declaring bankruptcy.",n:"sell assets to pay debts"},
+  {w:"elude",d:"To escape or avoid someone or something, especially cleverly",e:"He tried to elude the police by hiding in the crowded market.",n:"escape/avoid cleverly"},
+],blanks:[
+  {s:"He tried to _____ the police by hiding in the crowded market.",a:"elude"},
+  {s:"The scientist tried to _____ the results of the original experiment.",a:"replicate"},
+  {s:"She managed to _____ the rare materials needed for the project.",a:"procure"},
+  {s:"Many critics _____ the novel as a masterpiece.",a:"extol"},
+  {s:"The evidence helped _____ him after he was wrongly accused.",a:"vindicate"},
+  {s:"The coach encouraged the players to _____ all their strength for the final match.",a:"muster"},
+  {s:"The soldiers fought bravely to _____ the enemy forces.",a:"repulse"},
+  {s:"The company was forced to _____ its assets after declaring bankruptcy.",a:"liquidate"},
+]},
+{level:3,title:"Advanced 6",words:[
+  {w:"demean",d:"To insult or make someone feel less important or respected",e:"His rude remarks seemed intended to demean his colleagues.",n:"insult/make feel less respected"},
+  {w:"ostracize",d:"To exclude someone from a group or society",e:"Teachers should not ostracize students who make mistakes.",n:"exclude from group"},
+  {w:"frisk",d:"To search someone quickly, especially for weapons",e:"The police officer decided to frisk the suspect.",n:"search quickly for weapons"},
+  {w:"curtail",d:"To reduce or limit something",e:"Governments sometimes curtail spending during economic crises.",n:"reduce/limit"},
+  {w:"replenish",d:"To fill something again after it has been used or depleted",e:"After a long journey, hikers stopped to replenish their water supplies.",n:"fill again after depletion"},
+  {w:"soar",d:"To rise quickly to a high level",e:"Rising demand caused housing prices to soar rapidly.",n:"rise quickly to high level"},
+  {w:"stifle",d:"To suppress or hold back something such as an emotion or creativity",e:"Fear can sometimes stifle creativity and innovation.",n:"suppress/hold back"},
+  {w:"invoke",d:"To call upon something such as a law, rule, or authority for support",e:"The country decided to invoke an old treaty.",n:"call upon law/authority"},
+],blanks:[
+  {s:"The police officer decided to _____ the suspect for safety reasons.",a:"frisk"},
+  {s:"Rising demand caused housing prices to _____ rapidly.",a:"soar"},
+  {s:"The country decided to _____ an old treaty to justify its actions.",a:"invoke"},
+  {s:"Governments sometimes _____ spending during economic crises.",a:"curtail"},
+  {s:"His rude remarks seemed intended to _____ his colleagues.",a:"demean"},
+  {s:"Teachers should not _____ students who make mistakes.",a:"ostracize"},
+  {s:"After a long journey, hikers stopped to _____ their water supplies.",a:"replenish"},
+  {s:"Fear can sometimes _____ creativity and innovation.",a:"stifle"},
+]},
+{level:3,title:"Advanced 7",words:[
+  {w:"fluctuate",d:"To rise and fall irregularly in amount or level",e:"Prices tend to fluctuate depending on supply and demand.",n:"rise and fall irregularly"},
+  {w:"fuel",d:"To increase or intensify something such as a feeling or conflict",e:"Rumors on social media can fuel public fear.",n:"increase/intensify"},
+  {w:"verify",d:"To confirm that something is true or accurate",e:"Journalists must verify their sources before publishing a story.",n:"confirm true/accurate"},
+  {w:"oppress",d:"To treat people cruelly or unfairly, often by using power",e:"Some regimes continue to oppress minority groups.",n:"treat cruelly using power"},
+  {w:"feign",d:"To pretend to have a feeling or condition",e:"He tried to feign surprise when he heard the news.",n:"pretend to have feeling"},
+  {w:"berate",d:"To scold someone angrily",e:"The coach began to berate the players for their careless mistakes.",n:"scold angrily"},
+  {w:"lambaste",d:"To criticize someone very harshly",e:"Critics quickly lambasted the film for its weak storyline.",n:"criticize very harshly"},
+  {w:"contend",d:"To argue or claim that something is true",e:"Some experts contend that climate change will worsen.",n:"argue/claim true"},
+],blanks:[
+  {s:"Critics quickly _____ the film for its weak storyline.",a:"lambaste"},
+  {s:"He tried to _____ surprise when he heard the news.",a:"feign"},
+  {s:"Prices tend to _____ depending on supply and demand.",a:"fluctuate"},
+  {s:"Rumors on social media can _____ public fear.",a:"fuel"},
+  {s:"Some regimes continue to _____ minority groups.",a:"oppress"},
+  {s:"Some experts _____ that climate change will worsen in the coming decades.",a:"contend"},
+  {s:"Journalists must _____ their sources before publishing a story.",a:"verify"},
+  {s:"The coach began to _____ the players for their careless mistakes.",a:"berate"},
+]},
+{level:3,title:"Advanced 8",words:[
+  {w:"congregate",d:"To gather together in a group",e:"Large crowds began to congregate in the city square.",n:"gather together in group"},
+  {w:"quell",d:"To stop or calm something such as unrest or anger",e:"The government attempted to quell the protests.",n:"stop/calm unrest"},
+  {w:"linger",d:"To stay somewhere longer than expected",e:"The smell of coffee seemed to linger in the air.",n:"stay longer than expected"},
+  {w:"savor",d:"To enjoy something slowly and fully",e:"She tried to savor every moment of her vacation.",n:"enjoy slowly and fully"},
+  {w:"hamper",d:"To hinder or make progress difficult",e:"Poor communication can hamper teamwork.",n:"hinder/make difficult"},
+  {w:"denounce",d:"To publicly criticize or condemn something strongly",e:"The leader decided to denounce the violent acts publicly.",n:"publicly criticize/condemn"},
+  {w:"rebut",d:"To argue against a statement or claim",e:"The lawyer tried to rebut the accusations made by the opposing side.",n:"argue against claim"},
+  {w:"wince",d:"To make a slight facial expression of pain or discomfort",e:"He winced when he heard the painful news.",n:"expression of pain"},
+],blanks:[
+  {s:"The government attempted to _____ the protests.",a:"quell"},
+  {s:"She tried to _____ every moment of her vacation.",a:"savor"},
+  {s:"Poor communication can _____ teamwork.",a:"hamper"},
+  {s:"The smell of coffee seemed to _____ in the air.",a:"linger"},
+  {s:"The leader decided to _____ the violent acts publicly.",a:"denounce"},
+  {s:"Large crowds began to _____ in the city square.",a:"congregate"},
+  {s:"He _____ when he heard the painful news.",a:"wince"},
+  {s:"The lawyer tried to _____ the accusations made by the opposing side.",a:"rebut"},
+]},
+{level:3,title:"Advanced 9",words:[
+  {w:"aggregate",d:"To collect or combine several things into a whole",e:"Researchers often aggregate data from multiple studies.",n:"collect/combine into whole"},
+  {w:"pinpoint",d:"To identify something exactly or precisely",e:"Scientists tried to pinpoint the exact cause of the problem.",n:"identify exactly/precisely"},
+  {w:"infer",d:"To reach a conclusion based on evidence or reasoning",e:"From his tone of voice, she could infer that he was upset.",n:"conclude from evidence"},
+  {w:"deteriorate",d:"To become worse in condition or quality",e:"The building began to deteriorate after years without maintenance.",n:"become worse"},
+  {w:"upgrade",d:"To improve something to a higher standard",e:"The company plans to upgrade its computer systems.",n:"improve to higher standard"},
+  {w:"isolate",d:"To separate something from others",e:"Doctors sometimes isolate infected patients to prevent the spread of disease.",n:"separate from others"},
+  {w:"excavate",d:"To dig in the ground, especially to find ancient objects or structures",e:"Archaeologists plan to excavate the ancient ruins next year.",n:"dig to find ancient things"},
+  {w:"embellish",d:"To add details to a story, sometimes making it more interesting or exaggerated",e:"He tends to embellish stories to make them more exciting.",n:"add details to story"},
+],blanks:[
+  {s:"He tends to _____ stories to make them more exciting.",a:"embellish"},
+  {s:"The company plans to _____ its computer systems.",a:"upgrade"},
+  {s:"Researchers often _____ data from multiple studies to analyze trends.",a:"aggregate"},
+  {s:"From his tone of voice, she could _____ that he was upset.",a:"infer"},
+  {s:"Scientists tried to _____ the exact cause of the problem.",a:"pinpoint"},
+  {s:"Archaeologists plan to _____ the ancient ruins next year.",a:"excavate"},
+  {s:"The building began to _____ after years without maintenance.",a:"deteriorate"},
+  {s:"Doctors sometimes _____ infected patients to prevent the spread of disease.",a:"isolate"},
+]},
+{level:3,title:"Advanced 10",words:[
+  {w:"embody",d:"To represent or express an idea, quality, or feeling",e:"She seems to embody the values of honesty and dedication.",n:"represent/express idea/quality"},
+  {w:"abate",d:"To become less intense or severe",e:"The storm began to abate later in the evening.",n:"become less intense"},
+  {w:"hurtle",d:"To move very quickly and forcefully",e:"The car hurtled down the hill at high speed.",n:"move very quickly/forcefully"},
+  {w:"slam",d:"To shut something with great force or criticize strongly",e:"He slammed the door in anger.",n:"shut with force/criticize strongly"},
+  {w:"sprout",d:"To begin to grow or appear",e:"New ideas often sprout during creative discussions.",n:"begin to grow/appear"},
+  {w:"unravel",d:"To gradually fall apart or become undone",e:"Their carefully planned project began to unravel after several mistakes.",n:"gradually fall apart"},
+  {w:"scrawl",d:"To write something quickly or carelessly",e:"He quickly scrawled a note on a piece of paper.",n:"write quickly/carelessly"},
+  {w:"broach",d:"To introduce a sensitive or difficult topic",e:"She was hesitant to broach the subject of salary during the interview.",n:"introduce sensitive topic"},
+],blanks:[
+  {s:"The storm began to _____ later in the evening.",a:"abate"},
+  {s:"New ideas often _____ during creative discussions.",a:"sprout"},
+  {s:"She seems to _____ the values of honesty and dedication.",a:"embody"},
+  {s:"He quickly _____ a note on a piece of paper.",a:"scrawl"},
+  {s:"He _____ the door in anger.",a:"slam"},
+  {s:"She was hesitant to _____ the subject of salary during the interview.",a:"broach"},
+  {s:"The car _____ down the hill at high speed.",a:"hurtle"},
+  {s:"Their carefully planned project began to _____ after several mistakes.",a:"unravel"},
+]},
+{level:3,title:"Advanced 11",words:[
+  {w:"reinforce",d:"To strengthen or support something",e:"The coach tried to reinforce the team's confidence.",n:"strengthen/support"},
+  {w:"heave",d:"To lift or pull something heavy with effort",e:"He had to heave the heavy box onto the truck.",n:"lift/pull heavy with effort"},
+  {w:"tout",d:"To promote or praise something strongly",e:"The politician continued to tout his new policy.",n:"promote/praise strongly"},
+  {w:"expedite",d:"To make a process happen more quickly",e:"The manager wants to expedite the approval process.",n:"make happen more quickly"},
+  {w:"thwart",d:"To prevent something from happening",e:"Their plans were thwarted by unexpected problems.",n:"prevent from happening"},
+  {w:"bolster",d:"To support or improve something, especially confidence or strength",e:"The coach tried to bolster the team's confidence.",n:"support/improve confidence"},
+  {w:"torment",d:"To cause someone severe physical or mental suffering",e:"Guilt continued to torment him for years.",n:"cause severe suffering"},
+  {w:"confiscate",d:"To take something away officially, often by authority",e:"The police decided to confiscate illegal goods.",n:"take away officially"},
+],blanks:[
+  {s:"The coach tried to _____ the team's confidence before the match.",a:"bolster"},
+  {s:"The police decided to _____ illegal goods.",a:"confiscate"},
+  {s:"Guilt continued to _____ him for years.",a:"torment"},
+  {s:"The company tried to _____ its reputation through advertising.",a:"tout"},
+  {s:"He had to _____ the heavy box onto the truck.",a:"heave"},
+  {s:"The manager wants to _____ the approval process.",a:"expedite"},
+  {s:"Their plans were _____ by unexpected problems.",a:"thwart"},
+  {s:"The coach tried to _____ the team's confidence before the match.",a:"reinforce"},
+]},
+{level:3,title:"Advanced 12",words:[
+  {w:"recuperate",d:"To recover from illness or fatigue",e:"After the surgery, he needed time to recuperate fully.",n:"recover from illness/fatigue"},
+  {w:"evade",d:"To avoid or escape something, often cleverly",e:"The suspect tried to evade the police for several days.",n:"avoid/escape cleverly"},
+  {w:"petrify",d:"To frighten someone very much",e:"The loud noise seemed to petrify the small child.",n:"frighten very much"},
+  {w:"disperse",d:"To scatter or spread over a wide area",e:"The crowd began to disperse after the event ended.",n:"scatter/spread widely"},
+  {w:"garner",d:"To gather or collect something, such as support or information",e:"The campaign managed to garner widespread public support.",n:"gather/collect"},
+  {w:"perish",d:"To die, especially in a tragic or sudden way",e:"Many animals may perish if their habitats are destroyed.",n:"die tragically/suddenly"},
+  {w:"wreak",d:"To cause great damage or harm",e:"The storm continued to wreak havoc across the region.",n:"cause great damage/harm"},
+  {w:"deploy",d:"To position or arrange resources for effective use",e:"The military decided to deploy additional troops.",n:"position for effective use"},
+],blanks:[
+  {s:"The crowd began to _____ after the event ended.",a:"disperse"},
+  {s:"The campaign managed to _____ widespread public support.",a:"garner"},
+  {s:"The loud noise seemed to _____ the small child.",a:"petrify"},
+  {s:"After the surgery, he needed time to _____ fully.",a:"recuperate"},
+  {s:"The suspect tried to _____ the police for several days.",a:"evade"},
+  {s:"Many animals may _____ if their habitats are destroyed.",a:"perish"},
+  {s:"The military decided to _____ additional troops.",a:"deploy"},
+  {s:"The storm continued to _____ havoc across the region.",a:"wreak"},
+]},
+{level:3,title:"Advanced 13",words:[
+  {w:"stabilize",d:"To make something steady or stable",e:"The government took steps to stabilize the economy.",n:"make steady/stable"},
+  {w:"lament",d:"To express deep sadness or regret",e:"Many people lament the loss of cultural traditions.",n:"express deep sadness/regret"},
+  {w:"assail",d:"To attack suddenly or violently, physically or verbally",e:"The politician was assailed by reporters' difficult questions.",n:"attack suddenly/violently"},
+  {w:"confound",d:"To confuse or puzzle someone",e:"The complex instructions seemed to confound the new employees.",n:"confuse/puzzle"},
+  {w:"orchestrate",d:"To carefully plan and direct a complex activity",e:"The group tried to orchestrate a large international event.",n:"carefully plan/direct"},
+  {w:"stump",d:"To cause someone to be unable to answer or solve something",e:"The tricky question managed to stump even the best students.",n:"cause unable to answer"},
+  {w:"dissipate",d:"To gradually disappear or scatter",e:"The fog began to dissipate as the sun rose.",n:"gradually disappear/scatter"},
+  {w:"contemplate",d:"To think deeply about something",e:"She likes to contemplate her future before making big decisions.",n:"think deeply about"},
+],blanks:[
+  {s:"The group tried to _____ a large international event.",a:"orchestrate"},
+  {s:"The government took steps to _____ the economy.",a:"stabilize"},
+  {s:"The politician was _____ by difficult questions from reporters.",a:"assailed"},
+  {s:"Many people _____ the loss of cultural traditions.",a:"lament"},
+  {s:"She likes to _____ her future before making big decisions.",a:"contemplate"},
+  {s:"The fog began to _____ as the sun rose.",a:"dissipate"},
+  {s:"The complex instructions seemed to _____ the new employees.",a:"confound"},
+  {s:"The tricky question managed to _____ even the best students.",a:"stump"},
+]},
+{level:3,title:"Advanced 14",words:[
+  {w:"subvert",d:"To weaken or undermine something, especially authority or a system",e:"He was accused of trying to subvert the political system.",n:"weaken/undermine authority"},
+  {w:"galvanize",d:"To motivate or shock people into taking action",e:"The leader's speech helped galvanize the crowd into action.",n:"motivate/shock into action"},
+  {w:"stipulate",d:"To state something clearly as a condition or requirement",e:"The contract will stipulate the terms of the agreement.",n:"state clearly as condition"},
+  {w:"fabricate",d:"To invent or create something false, especially a story",e:"The witness was caught trying to fabricate evidence.",n:"invent/create false thing"},
+  {w:"demoralize",d:"To cause someone to lose confidence or hope",e:"Constant criticism can demoralize employees over time.",n:"cause to lose confidence"},
+  {w:"reiterate",d:"To repeat something for emphasis or clarity",e:"The teacher had to reiterate the instructions several times.",n:"repeat for emphasis"},
+  {w:"proliferate",d:"To increase rapidly in number",e:"New technologies continue to proliferate in today's market.",n:"increase rapidly in number"},
+  {w:"subsidize",d:"To support financially, often by a government",e:"The government decided to subsidize renewable energy projects.",n:"support financially"},
+],blanks:[
+  {s:"The contract will _____ the terms of the agreement.",a:"stipulate"},
+  {s:"Constant criticism can _____ employees over time.",a:"demoralize"},
+  {s:"The government decided to _____ renewable energy projects.",a:"subsidize"},
+  {s:"The leader's speech helped _____ the crowd into action.",a:"galvanize"},
+  {s:"The witness was caught trying to _____ evidence.",a:"fabricate"},
+  {s:"The teacher had to _____ the instructions several times.",a:"reiterate"},
+  {s:"New technologies continue to _____ in today's market.",a:"proliferate"},
+  {s:"He was accused of trying to _____ the political system.",a:"subvert"},
+]},
+{level:3,title:"Advanced 15",words:[
+  {w:"fetter",d:"To restrict or limit someone's freedom or actions",e:"Strict rules can fetter creativity and innovation.",n:"restrict/limit freedom"},
+  {w:"undertake",d:"To begin or take responsibility for something",e:"She decided to undertake a new and challenging project.",n:"begin/take responsibility"},
+  {w:"mollify",d:"To calm someone who is angry or upset",e:"The manager tried to mollify the angry customer.",n:"calm someone angry"},
+  {w:"avert",d:"To prevent something bad from happening",e:"Quick action helped avert a serious accident.",n:"prevent something bad"},
+  {w:"rectify",d:"To correct a mistake or problem",e:"The company worked hard to rectify the mistake.",n:"correct mistake/problem"},
+  {w:"adjourn",d:"To temporarily stop a meeting or session",e:"The meeting was adjourned until tomorrow morning.",n:"temporarily stop meeting"},
+  {w:"stem",d:"To stop or reduce the spread or flow of something",e:"Authorities are trying to stem the spread of misinformation.",n:"stop/reduce spread"},
+  {w:"refute",d:"To prove that something is false",e:"The scientist attempted to refute the false claims.",n:"prove something false"},
+],blanks:[
+  {s:"Quick action helped _____ a serious accident.",a:"avert"},
+  {s:"She decided to _____ a new and challenging project.",a:"undertake"},
+  {s:"Strict rules can _____ creativity and innovation.",a:"fetter"},
+  {s:"Authorities are trying to _____ the spread of misinformation.",a:"stem"},
+  {s:"The scientist attempted to _____ the false claims.",a:"refute"},
+  {s:"The manager tried to _____ the angry customer.",a:"mollify"},
+  {s:"The meeting was _____ until tomorrow morning.",a:"adjourn"},
+  {s:"The company worked hard to _____ the mistake.",a:"rectify"},
+]},
+{level:3,title:"Advanced 16",words:[
+  {w:"propagate",d:"To spread or promote something widely",e:"Social media can quickly propagate news around the world.",n:"spread/promote widely"},
+  {w:"flaunt",d:"To show off something in a proud or attention-seeking way",e:"He likes to flaunt his achievements in front of others.",n:"show off proudly"},
+  {w:"persist",d:"To continue doing something despite difficulties",e:"Despite many failures, she continued to persist in her efforts.",n:"continue despite difficulties"},
+  {w:"repeal",d:"To officially cancel a law",e:"The government plans to repeal the outdated regulation.",n:"officially cancel law"},
+  {w:"appease",d:"To calm someone who is angry or upset",e:"The manager tried to appease the angry customer.",n:"calm angry person"},
+  {w:"elicit",d:"To draw out a response or reaction from someone",e:"The teacher asked questions to elicit deeper thinking.",n:"draw out response/reaction"},
+  {w:"blur",d:"To make something unclear or less distinct",e:"Tears can blur your vision.",n:"make unclear/less distinct"},
+  {w:"fortify",d:"To strengthen or make something stronger",e:"The army worked to fortify its defenses.",n:"strengthen/make stronger"},
+],blanks:[
+  {s:"Despite many failures, she continued to _____ in her efforts.",a:"persist"},
+  {s:"Social media can quickly _____ news around the world.",a:"propagate"},
+  {s:"The army worked to _____ its defenses.",a:"fortify"},
+  {s:"The teacher asked questions to _____ deeper thinking.",a:"elicit"},
+  {s:"He likes to _____ his achievements in front of others.",a:"flaunt"},
+  {s:"The manager tried to _____ the angry customer.",a:"appease"},
+  {s:"The government plans to _____ the outdated regulation.",a:"repeal"},
+  {s:"Tears can _____ your vision.",a:"blur"},
+]},
+{level:3,title:"Advanced 17",words:[
+  {w:"tarnish",d:"To damage someone's reputation or image",e:"The scandal began to tarnish his public image.",n:"damage reputation/image"},
+  {w:"deride",d:"To mock or ridicule someone",e:"Some people tend to deride others for their mistakes.",n:"mock/ridicule"},
+  {w:"dwindle",d:"To gradually decrease in size, number, or importance",e:"Resources began to dwindle after months of heavy use.",n:"gradually decrease"},
+  {w:"surpass",d:"To go beyond or exceed something",e:"Her performance managed to surpass all expectations.",n:"go beyond/exceed"},
+  {w:"encompass",d:"To include or cover a wide range of things",e:"The course will encompass a wide variety of topics.",n:"include/cover wide range"},
+  {w:"waive",d:"To give up a right or claim voluntarily",e:"The company decided to waive the fee for new customers.",n:"give up right voluntarily"},
+  {w:"characterize",d:"To describe the typical qualities or features of something",e:"These traits characterize his leadership style.",n:"describe typical qualities"},
+  {w:"recur",d:"To happen repeatedly, especially something bad",e:"The same problem may recur if it is not properly solved.",n:"happen repeatedly"},
+],blanks:[
+  {s:"The company decided to _____ the fee for new customers.",a:"waive"},
+  {s:"Some people tend to _____ others for their mistakes.",a:"deride"},
+  {s:"The scandal began to _____ his public image.",a:"tarnish"},
+  {s:"The course will _____ a wide variety of topics.",a:"encompass"},
+  {s:"Resources began to _____ after months of heavy use.",a:"dwindle"},
+  {s:"The same problem may _____ if it is not properly solved.",a:"recur"},
+  {s:"Her performance managed to _____ all expectations.",a:"surpass"},
+  {s:"These traits _____ his leadership style.",a:"characterize"},
+]},
+];
+
+const SPEAK_QUESTIONS={
+  1:{
+    "Pre-Adv 1":["Why might schools suspend students for serious rule violations?","Why do some companies exploit workers or natural resources?","Do product guarantees influence your decision when buying something?","Why is it important to preserve historical buildings?","What strategies help people resist unhealthy habits?","How should cities accommodate people with disabilities?","Can photographs truly capture the emotions of a moment?","How can people cultivate good habits in their daily lives?"],
+    "Pre-Adv 2":["What are some ways technology can enhance education?","What problems can happen if important documents like passports expire?","Why do people choose to invest in stocks or real estate?","What factors are important when a company launches a new product?","In what situations is it dangerous to overtake another vehicle?","Why is it important to register for events in advance?","What causes some businesses to shrink instead of grow?","Do you prefer to browse in physical stores or online?"],
+  },
+  2:{
+    "Business 1":["Have you ever had an important document expire? What happened?","How do you usually verify information at work?","What are some ways companies can enhance employee productivity?","Have you ever worked in a renovated building? How was it different?","How often do you update your skills or knowledge?","Do you prefer a long or short commute? Explain your reasons.","Can you describe a time when you had to clarify a misunderstanding?","What kinds of technology do companies often upgrade?"],
+    "Business 2":["What are effective ways companies can curb unnecessary spending?","Do you prefer itemized bills or simple summaries? Why?","Have you ever endorsed a product or service?","What kinds of expenses do people usually incur in business?","Can you describe a challenge you encountered at work?","What tools or methods help facilitate teamwork?","Under what circumstances should a company terminate an employee?","What skills should managers emphasize in the workplace?"],
+  },
+  3:{
+    "Advanced 1":["What policies should governments advocate to improve education?","In what ways can advertising manipulate people's decisions?","What factors can diminish people's motivation at work?","Why do some talented people languish in jobs they dislike?","What kinds of events can trigger major changes in society?","What activities can enhance a person's creativity?","What are some effective ways to alleviate stress in everyday life?","What problems plague modern cities the most today?"],
+    "Advanced 2":["Why is it sometimes difficult for governments to enforce certain laws?","How can social media help disseminate information quickly?","What kinds of behavior can alienate friends or coworkers?","Do you think some companies exploit workers in modern economies?","What challenges do people often undergo when moving to another country?","What human activities can contaminate the environment the most?","Why does motivation sometimes wane over time?","What foods can people substitute for unhealthy ingredients?"],
+    "Advanced 3":["What qualities constitute a truly effective leader?","When people lack clear evidence, how do they usually surmise what happened?","Why do some people try to circumvent rules or regulations?","What helps people weather difficult periods in their lives?","What strategies can leaders use to placate an angry group?","In what situations do people tend to clench their fists or teeth?","What factors can exacerbate conflicts between countries?","What actions can undermine trust within a team or organization?"],
+  }
+};
+
+let mastered={},studied={};
+let currentUnit=0,currentMode="learn",lastMode="fill";
+let matchState={},fillState={},writeState={};
+let currentLevel=0;
+
+function setLevel(lv,el){
+  currentLevel=lv;
+  document.querySelectorAll(".lvl-tab").forEach(t=>t.classList.remove("active"));
+  el.classList.add("active");
+  renderHome();
+}
+
+function renderHome(){
+  const search=document.getElementById("search").value.toLowerCase();
+  const units=ALL_UNITS.filter(u=>{
+    if(u.level!==currentLevel)return false;
+    if(!search)return true;
+    return u.title.toLowerCase().includes(search)||u.words.some(w=>w.w.includes(search));
+  });
+  const grid=document.getElementById("unit-grid");
+  grid.innerHTML="";
+  if(units.length===0){grid.innerHTML=`<div class="empty" style="grid-column:1/-1">No units found.</div>`;return;}
+  const lv=LEVELS[currentLevel];
+  units.forEach(u=>{
+    const idx=ALL_UNITS.indexOf(u);
+    const done=mastered[idx];
+    const started=studied[idx];
+    const preview=u.words.slice(0,4).map(x=>x.w).join(", ")+"…";
+    grid.innerHTML+=`<div class="unit-card${done?" done":""}" onclick="openUnit(${idx})">
+      <div class="unit-title" style="color:${lv.color.text}">${u.title}</div>
+      <div class="unit-words">${preview}</div>
+      <span class="unit-badge${done?" mastered":started?" inprog":" todo"}">${done?"✓ mastered":started?"in progress":"not started"}</span>
+    </div>`;
+  });
+  document.getElementById("stat-mastered").textContent=Object.keys(mastered).length;
+  document.getElementById("stat-studied").textContent=Object.keys(studied).length;
+  document.getElementById("stat-total").textContent=Object.keys(studied).length*8;
+}
+
+function showHome(){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.getElementById("screen-home").classList.add("active");
+  renderHome();
+}
+
+function openUnit(idx){
+  currentUnit=idx;studied[idx]=true;
+  const u=ALL_UNITS[idx];
+  const lv=LEVELS[u.level];
+  document.getElementById("unit-title").textContent=u.title;
+  const badge=document.getElementById("unit-level-badge");
+  badge.textContent=lv.short;badge.className=`level-badge ${lv.badgeClass}`;
+  document.getElementById("unit-subtitle").textContent=u.words.map(x=>x.w).join(" · ");
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.getElementById("screen-unit").classList.add("active");
+  document.querySelectorAll(".mode-tab").forEach((t,i)=>t.classList.toggle("active",i===0));
+  currentMode="learn";renderMode("learn");
+}
+
+function switchMode(mode,el){
+  document.querySelectorAll(".mode-tab").forEach(t=>t.classList.remove("active"));
+  el.classList.add("active");currentMode=mode;renderMode(mode);
+}
+
+function switchModeByName(m){
+  const idx={learn:0,match:1,fill:2,write:3,speak:4}[m];
+  document.querySelectorAll(".mode-tab").forEach((t,i)=>t.classList.toggle("active",i===idx));
+  currentMode=m;renderMode(m);
+}
+
+function renderMode(mode){
+  const u=ALL_UNITS[currentUnit];
+  const c=LEVELS[u.level].color;
+  const el=document.getElementById("mode-content");
+  if(mode==="learn")renderLearn(u,c,el);
+  else if(mode==="match")renderMatch(u,c,el);
+  else if(mode==="fill")renderFill(u,c,el);
+  else if(mode==="write")renderWrite(u,c,el);
+  else if(mode==="speak")renderSpeak(u,c,el);
+}
+
+function renderLearn(u,c,el){
+  el.innerHTML=u.words.map(wd=>`
+    <div class="def-card">
+      <span class="word-tag" style="background:${c.bg};color:${c.text};border:1px solid ${c.border}">${wd.w}</span>
+      <div class="meaning">${wd.d}</div>
+      <div class="example">"${wd.e}"</div>
+      <span class="note">${wd.n}</span>
+    </div>`).join("")+
+  `<button class="btn primary" style="margin-top:.75rem" onclick="switchModeByName('match')">practice → match</button>`;
+}
+
+function renderSpeak(u,c,el){
+  const qs=SPEAK_QUESTIONS[u.level]?.[u.title];
+  if(!qs||!qs.length){
+    el.innerHTML=`<div class="empty">No speaking questions available for this unit yet.</div>`;return;
+  }
+  el.innerHTML=`<p style="font-size:13px;color:var(--text3);margin-bottom:1rem;letter-spacing:.2px">Practice speaking about these questions using the target words.</p>`+
+  qs.map((q,i)=>{
+    const word=u.words[i]?u.words[i].w:"";
+    const highlighted=q.replace(new RegExp(`\\b${word}\\b`,"gi"),m=>`<span class="speak-word">${m}</span>`);
+    return `<div class="speak-card"><div class="speak-q">${highlighted}</div></div>`;
+  }).join("")+
+  `<button class="btn primary" style="margin-top:.75rem" onclick="switchModeByName('write')">practice writing →</button>`;
+}
+
+function renderMatch(u,c,el){
+  const words=u.words.map(x=>x.w);
+  const defs=u.words.map(x=>x.d);
+  const shuffledDefs=[...defs].sort(()=>Math.random()-.5);
+  matchState={words,defs,shuffledDefs,selected:null,matched:[]};
+  el.innerHTML=`<p style="font-size:13px;color:var(--text3);margin-bottom:1rem">Tap a word, then tap its definition to match them.</p>
+  <div class="match-grid">
+    <div class="match-col" id="match-words">${words.map((w,i)=>`<div class="match-item" id="mw-${i}" onclick="matchClick('word',${i})">${w}</div>`).join("")}</div>
+    <div class="match-col" id="match-defs">${shuffledDefs.map((d,i)=>`<div class="match-item" id="md-${i}" onclick="matchClick('def',${i})">${d}</div>`).join("")}</div>
+  </div>
+  <div id="match-result"></div>`;
+}
+
+function matchClick(type,idx){
+  const s=matchState;
+  if(s.matched.includes(idx+"-word")&&type==="word")return;
+  if(s.matched.includes(idx+"-def")&&type==="def")return;
+  if(!s.selected){
+    s.selected={type,idx};
+    document.getElementById(type==="word"?`mw-${idx}`:`md-${idx}`).classList.add("selected");
+  } else if(s.selected.type===type){
+    document.getElementById(s.selected.type==="word"?`mw-${s.selected.idx}`:`md-${s.selected.idx}`).classList.remove("selected");
+    s.selected={type,idx};
+    document.getElementById(type==="word"?`mw-${idx}`:`md-${idx}`).classList.add("selected");
+  } else {
+    const wordIdx=type==="word"?idx:s.selected.idx;
+    const defIdx=type==="def"?idx:s.selected.idx;
+    const defText=s.shuffledDefs[defIdx];
+    const correctDef=s.defs[wordIdx];
+    const wid=`mw-${wordIdx}`,did=`md-${defIdx}`;
+    document.getElementById(wid).classList.remove("selected");
+    document.getElementById(did).classList.remove("selected");
+    if(defText===correctDef){
+      document.getElementById(wid).classList.add("matched");
+      document.getElementById(did).classList.add("matched");
+      s.matched.push(wordIdx+"-word",defIdx+"-def");
+      if(s.matched.length===s.words.length*2){
+        document.getElementById("match-result").innerHTML=`<p style="color:var(--green);font-size:14px;margin-top:1rem">✓ All matched! Great job.</p><button class="btn primary" style="margin-top:.75rem" onclick="switchModeByName('fill')">next: fill in blank →</button>`;
+      }
+    } else {
+      const wEl=document.getElementById(wid),dEl=document.getElementById(did);
+      wEl.classList.add("wrong-flash");dEl.classList.add("wrong-flash");
+      setTimeout(()=>{wEl.classList.remove("wrong-flash");dEl.classList.remove("wrong-flash");},500);
+    }
+    s.selected=null;
+  }
+}
+
+function renderFill(u,c,el){
+  fillState={blanks:u.blanks,idx:0,score:0,selected:null};
+  renderFillQ(el,c);
+}
+function renderFillQ(el,c){
+  if(!el)el=document.getElementById("mode-content");
+  if(!c)c=LEVELS[ALL_UNITS[currentUnit].level].color;
+  const s=fillState;
+  const q=s.blanks[s.idx];
+  const opts=generateOpts(q.a,ALL_UNITS[currentUnit].words.map(x=>x.w));
+  const dots=s.blanks.map((_,i)=>`<div class="q-dot${i<s.idx?" done":""}"></div>`).join("");
+  el.innerHTML=`<div class="q-progress">${dots}</div>
+  <div style="font-size:12px;color:var(--text3);margin-bottom:.75rem;letter-spacing:.4px;text-transform:uppercase">Question ${s.idx+1} of ${s.blanks.length}</div>
+  <div class="q-sentence">${q.s.replace("_____","<span style='border-bottom:1px solid var(--text3);display:inline-block;min-width:90px'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>")}</div>
+  <div class="q-options">${opts.map(o=>`<button class="q-opt" onclick="fillAnswer('${o.replace(/'/g,"\\'")}',this)">${o}</button>`).join("")}</div>`;
+}
+function fillAnswer(opt,btn){
+  const s=fillState;
+  if(s.selected)return;
+  s.selected=opt;
+  const correct=opt.toLowerCase()===s.blanks[s.idx].a.toLowerCase();
+  if(correct){btn.classList.add("correct");s.score++;}
+  else{btn.classList.add("wrong");document.querySelectorAll(".q-opt").forEach(b=>{if(b.textContent.toLowerCase()===s.blanks[s.idx].a.toLowerCase())b.classList.add("correct");});}
+  setTimeout(()=>{
+    s.idx++;s.selected=null;
+    if(s.idx>=s.blanks.length){
+      lastMode="fill";
+      if(s.score===s.blanks.length)mastered[currentUnit]=true;
+      showResult(s.score,s.blanks.length);
+    } else renderFillQ(null,null);
+  },900);
+}
+function generateOpts(answer,allWords){
+  const opts=[answer];
+  const pool=[...allWords].filter(w=>w.toLowerCase()!==answer.toLowerCase());
+  while(opts.length<4&&pool.length>0){const r=Math.floor(Math.random()*pool.length);opts.push(pool.splice(r,1)[0]);}
+  return opts.sort(()=>Math.random()-.5);
+}
+
+function renderWrite(u,c,el){
+  writeState={idx:0,words:u.words};
+  renderWriteQ(el,c);
+}
+function renderWriteQ(el,c){
+  if(!el)el=document.getElementById("mode-content");
+  if(!c)c=LEVELS[ALL_UNITS[currentUnit].level].color;
+  const s=writeState;
+  const wd=s.words[s.idx];
+  el.innerHTML=`<div style="font-size:12px;color:var(--text3);margin-bottom:.75rem;letter-spacing:.4px;text-transform:uppercase">Word ${s.idx+1} of ${s.words.length}</div>
+  <div class="def-card" style="margin-bottom:1rem">
+    <span class="word-tag" style="background:${c.bg};color:${c.text};border:1px solid ${c.border}">${wd.w}</span>
+    <div class="meaning">${wd.d}</div>
+    <div class="example">"${wd.e}"</div>
+  </div>
+  <p style="font-size:13px;color:var(--text2);margin-bottom:.5rem">Write your own sentence using <span style="color:${c.text};font-weight:500">"${wd.w}"</span>:</p>
+  <textarea class="write-area" id="write-input" placeholder="Type your sentence here..."></textarea>
+  <div style="display:flex;gap:8px">
+    <button class="btn primary" onclick="checkWrite('${wd.w.replace(/'/g,"\\'")}')">check with AI ↗</button>
+    <button class="btn" onclick="nextWrite()">${s.idx+1<s.words.length?"skip →":"finish →"}</button>
+  </div>
+  <div id="write-feedback"></div>`;
+}
+async function checkWrite(word){
+  const sentence=document.getElementById("write-input").value.trim();
+  if(!sentence){alert("Please write a sentence first.");return;}
+  const fb=document.getElementById("write-feedback");
+  fb.innerHTML=`<div class="ai-box"><div class="ai-label">AI teacher</div><div class="ai-text" style="color:var(--text3)">Checking your sentence...</div></div>`;
+  try{
+    const res=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
+      model:"claude-sonnet-4-20250514",max_tokens:1000,
+      system:"You are a friendly English teacher helping Japanese learners. Check the sentence for natural English usage of the target word. Give brief feedback: 1) Is the target word used correctly? 2) Is the sentence natural? 3) One tip if needed. Keep it under 80 words. Be encouraging.",
+      messages:[{role:"user",content:`Target word: "${word}"\nStudent's sentence: "${sentence}"\nPlease check this sentence.`}]
+    })});
+    const data=await res.json();
+    fb.innerHTML=`<div class="ai-box"><div class="ai-label">AI teacher</div><div class="ai-text">${data.content?.[0]?.text||"Could not get feedback."}</div></div>`;
+  }catch{fb.innerHTML=`<div class="ai-box"><div class="ai-text" style="color:var(--red)">Something went wrong. Please try again.</div></div>`;}
+}
+function nextWrite(){
+  const s=writeState;s.idx++;
+  if(s.idx>=s.words.length){studied[currentUnit]=true;renderMode("learn");}
+  else renderWriteQ(null,null);
+}
+
+function showResult(score,total){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.getElementById("screen-result").classList.add("active");
+  const pct=score/total;
+  document.getElementById("result-emoji").textContent=pct===1?"🎉":pct>=.7?"👍":"📖";
+  document.getElementById("result-score").textContent=`${score} / ${total}`;
+  document.getElementById("result-msg").textContent=pct===1?"Perfect — unit mastered.":pct>=.7?"Good work. Keep going.":"Keep practicing — you'll get it.";
+}
+function backToUnit(){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.getElementById("screen-unit").classList.add("active");
+}
+function retryMode(){backToUnit();setTimeout(()=>switchModeByName(lastMode),50);}
+
+renderHome();
+</script>
+</body>
+</html>
