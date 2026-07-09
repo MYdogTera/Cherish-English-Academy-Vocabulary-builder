@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vocabulary Builder</title>
+<title>Cherish English Academy — Vocabulary Builder: Verbs</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -37,6 +37,18 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .stat-n{font-size:22px;font-weight:500;color:var(--text)}
 .stat-n.accent{color:var(--accent)}
 .stat-l{font-size:11px;color:var(--text3);margin-top:3px;letter-spacing:.4px;text-transform:uppercase}
+.progress-log{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:1.25rem}
+.plog-title-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.plog-title{font-size:11px;color:var(--text3);letter-spacing:.5px;text-transform:uppercase}
+.plog-reset{background:none;border:1px solid var(--border);color:var(--text3);font-size:11px;padding:3px 11px;border-radius:20px;cursor:pointer;transition:all .15s;letter-spacing:.3px}
+.plog-reset:hover{color:var(--text);border-color:var(--border2)}
+.plog-row{margin-bottom:11px}
+.plog-row:last-child{margin-bottom:0}
+.plog-head{display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px;gap:8px}
+.plog-name{color:var(--text2)}
+.plog-count{color:var(--text3);white-space:nowrap}
+.plog-bar{height:6px;background:var(--bg4);border-radius:4px;overflow:hidden}
+.plog-fill{height:100%;border-radius:4px;transition:width .4s ease}
 .level-tabs{display:flex;gap:6px;margin-bottom:1.5rem;flex-wrap:wrap}
 .lvl-tab{padding:7px 16px;font-size:12px;letter-spacing:.5px;text-transform:uppercase;border:1px solid var(--border);border-radius:20px;cursor:pointer;background:transparent;color:var(--text2);transition:all .15s;font-weight:500}
 .lvl-tab:hover{border-color:var(--border2);color:var(--text)}
@@ -117,18 +129,20 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <div class="app">
 
 <div id="screen-home" class="screen active">
-  <div class="brand"><div class="dot"></div><h1>Vocab Builder</h1></div>
-  <p class="sub">4 levels · 80 units · 640 words</p>
+  <div class="brand"><div class="dot"></div><h1>Cherish English Academy</h1></div>
+  <p style="font-size:12px;color:var(--text3);margin-bottom:2px;letter-spacing:.4px">Vocabulary Builder: Verbs</p>
+  <p class="sub" id="home-sub">4 levels</p>
   <div class="stats">
     <div class="stat"><div class="stat-n accent" id="stat-mastered">0</div><div class="stat-l">mastered</div></div>
     <div class="stat"><div class="stat-n" id="stat-studied">0</div><div class="stat-l">studied</div></div>
     <div class="stat"><div class="stat-n" id="stat-total">0</div><div class="stat-l">words done</div></div>
-    <div class="stat"><div class="stat-n">640</div><div class="stat-l">total</div></div>
+    <div class="stat"><div class="stat-n" id="stat-total-all">0</div><div class="stat-l">total</div></div>
   </div>
+  <div class="progress-log" id="progress-log"></div>
   <div class="search-row"><input type="text" id="search" placeholder="Search a word or unit..." oninput="renderHome()"></div>
   <div class="level-tabs">
-    <div class="lvl-tab lv0 active" onclick="setLevel(0,this)">⭐ Beginner Intermediate</div>
-    <div class="lvl-tab lv1" onclick="setLevel(1,this)">⭐⭐ Pre-Advanced</div>
+    <div class="lvl-tab lv0 active" onclick="setLevel(0,this)">⭐ Beginner to Intermediate</div>
+    <div class="lvl-tab lv1" onclick="setLevel(1,this)">⭐⭐ Upper Intermediate to Pre-Advanced</div>
     <div class="lvl-tab lv2" onclick="setLevel(2,this)">⭐⭐⭐ Business</div>
     <div class="lvl-tab lv3" onclick="setLevel(3,this)">⭐⭐⭐⭐ Advanced</div>
   </div>
@@ -168,10 +182,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 </div>
 <script>
 const LEVELS=[
-  {id:0,name:"Beginner",short:"Beginner",badgeClass:"lb0",tabClass:"lv0",color:{bg:"#2a2452",text:"#c4bcff",border:"#7c6af7"}},
-  {id:1,name:"Pre-Advanced",short:"Pre-Adv",badgeClass:"lb1",tabClass:"lv1",color:{bg:"#0d2a3d",text:"#85c4f4",border:"#378add"}},
-  {id:2,name:"Business",short:"Business",badgeClass:"lb2",tabClass:"lv2",color:{bg:"#0a2d1e",text:"#5dcaa5",border:"#1d9e75"}},
-  {id:3,name:"Advanced",short:"Advanced",badgeClass:"lb3",tabClass:"lv3",color:{bg:"#2d1508",text:"#f09970",border:"#d85a30"}},
+  {id:0,name:"Beginner to Intermediate",short:"Beg–Int",badgeClass:"lb0",tabClass:"lv0",
+   color:{bg:"#2a2452",text:"#c4bcff",border:"#7c6af7"}},
+  {id:1,name:"Upper Intermediate to Pre-Advanced",short:"U.Int–Pre-Adv",badgeClass:"lb1",tabClass:"lv1",
+   color:{bg:"#0d2a3d",text:"#85c4f4",border:"#378add"}},
+  {id:2,name:"Business",short:"Business",badgeClass:"lb2",tabClass:"lv2",
+   color:{bg:"#0a2d1e",text:"#5dcaa5",border:"#1d9e75"}},
+  {id:3,name:"Advanced",short:"Advanced",badgeClass:"lb3",tabClass:"lv3",
+   color:{bg:"#2d1508",text:"#f09970",border:"#d85a30"}},
 ];
 
 const ALL_UNITS=[
@@ -190,9 +208,9 @@ const ALL_UNITS=[
   {s:"This box may _____ important documents.",a:"contain"},
   {s:"The storm may _____ serious damage.",a:"cause"},
   {s:"The company plans to _____ salaries next year.",a:"raise"},
-  {s:"Lack of sleep can _____ your concentration.",a:"affect"},
+  {s:"Lack of sleep can _____ your concentration.",a:"reduce"},
   {s:"They decided to _____ the event because of bad weather.",a:"cancel"},
-  {s:"The broken phone needs to be _____.",a:"repair"},
+  {s:"Someone needs to _____ the broken phone.",a:"repair"},
 ]},
 {level:0,title:"Verb 2",words:[
   {w:"remove",d:"To take something away or eliminate it",e:"Please remove your shoes at the door.",n:"take away"},
@@ -211,7 +229,7 @@ const ALL_UNITS=[
   {s:"Did you _____ the mistake in the report?",a:"notice"},
   {s:"She will _____ a better method to solve the problem.",a:"suggest"},
   {s:"We need to _____ the old computer with a new one.",a:"replace"},
-  {s:"Scientists are trying to _____ new technology.",a:"develop"},
+  {s:"Scientists hope to _____ a brand-new machine.",a:"invent"},
 ]},
 {level:0,title:"Verb 3",words:[
   {w:"recommend",d:"To suggest something as good or suitable",e:"Can you recommend a good book?",n:"suggest something good"},
@@ -341,7 +359,7 @@ const ALL_UNITS=[
   {s:"Many animals cannot _____ in extreme weather.",a:"survive"},
   {s:"This job will _____ a lot of patience.",a:"require"},
   {s:"He agreed to _____ me some money.",a:"lend"},
-  {s:"She really _____ his help.",a:"appreciate"},
+  {s:"I really _____ your kind help.",a:"appreciate"},
   {s:"They plan to _____ the results tomorrow.",a:"announce"},
   {s:"A crowd began to _____ in the park.",a:"gather"},
   {s:"We need to _____ the total cost of the project.",a:"estimate"},
@@ -533,8 +551,8 @@ const ALL_UNITS=[
   {s:"They will _____ the holiday.",a:"celebrate"},
   {s:"It's important to _____ clearly.",a:"communicate"},
   {s:"They will _____ a huge building.",a:"construct"},
-  {s:"She strongly _____ to go to the US after graduation.",a:"determine"},
-  {s:"He _____ that he had failed the exam.",a:"assume"},
+  {s:"We need to _____ the cause of the problem.",a:"determine"},
+  {s:"Please don't _____ that the meeting is cancelled.",a:"assume"},
 ]},
 {level:0,title:"Verb 20",words:[
   {w:"bury",d:"To put something in the ground",e:"The construction workers buried some pipes.",n:"put in the ground"},
@@ -549,10 +567,10 @@ const ALL_UNITS=[
   {s:"They are going to _____ the meeting till next Tuesday.",a:"postpone"},
   {s:"Be careful not to _____ your drink.",a:"spill"},
   {s:"Please _____ the decision to fire him.",a:"reverse"},
-  {s:"The dog is _____ the cat in the yard.",a:"chasing"},
-  {s:"The scientist _____ that his experiment had been a failure.",a:"conclude"},
+  {s:"Dogs often _____ cats in the park.",a:"chase"},
+  {s:"The scientists may _____ that the experiment was a failure.",a:"conclude"},
   {s:"Those companies _____ many kinds of goods to the US.",a:"export"},
-  {s:"The construction workers _____ some pipes in the ground.",a:"buried"},
+  {s:"The construction workers _____ some pipes in the ground.",a:"bury"},
   {s:"He cannot _____ the car because it's too expensive.",a:"afford"},
 ]},
 {level:1,title:"Pre-Adv 1",words:[
@@ -568,7 +586,7 @@ const ALL_UNITS=[
   {s:"The journalist managed to _____ the public's attention.",a:"capture"},
   {s:"The principal decided to _____ the student for cheating.",a:"suspend"},
   {s:"Parents should _____ creativity in their children.",a:"cultivate"},
-  {s:"This contract _____ customer satisfaction.",a:"guarantee"},
+  {s:"This contract can _____ customer satisfaction.",a:"guarantee"},
   {s:"She tried to _____ the urge to interrupt.",a:"resist"},
   {s:"Some corporations _____ natural resources.",a:"exploit"},
   {s:"The stadium can _____ more than 20,000 spectators.",a:"accommodate"},
@@ -610,7 +628,7 @@ const ALL_UNITS=[
   {s:"His spending began to _____ his monthly income.",a:"exceed"},
   {s:"The engineer tried to _____ a new solution to the problem.",a:"devise"},
   {s:"Climate change may _____ serious risks to coastal cities.",a:"pose"},
-  {s:"The company _____ electronic devices in several factories.",a:"manufacture"},
+  {s:"They _____ electronic devices in several factories.",a:"manufacture"},
 ]},
 {level:1,title:"Pre-Adv 4",words:[
   {w:"threaten",d:"To say that you will cause harm or trouble",e:"Pollution may threaten marine life.",n:"say will cause harm"},
@@ -641,12 +659,12 @@ const ALL_UNITS=[
   {w:"evaluate",d:"To judge or determine the value or quality of something",e:"The committee will evaluate the results.",n:"judge/determine value"},
   {w:"exaggerate",d:"To describe something as larger or worse than it really is",e:"He tends to exaggerate his achievements.",n:"describe as more than true"},
 ],blanks:[
-  {s:"The author _____ stories from different cultures into one book.",a:"compile"},
+  {s:"The author wants to _____ stories from different cultures into one book.",a:"compile"},
   {s:"He tends to _____ his achievements when telling stories.",a:"exaggerate"},
   {s:"The committee will _____ the results of the research.",a:"evaluate"},
   {s:"The teacher tried to _____ the instructions for the assignment.",a:"clarify"},
   {s:"Many scientists _____ stronger environmental protection laws.",a:"advocate"},
-  {s:"The storm _____ several towns along the coast.",a:"devastate"},
+  {s:"A powerful storm can _____ several towns along the coast.",a:"devastate"},
   {s:"Loud construction work can _____ classes at the school.",a:"disrupt"},
   {s:"It is important to _____ new ideas and perspectives.",a:"embrace"},
 ]},
@@ -681,12 +699,12 @@ const ALL_UNITS=[
 ],blanks:[
   {s:"The manager refused to _____ his mistake at first.",a:"acknowledge"},
   {s:"Additional rules may _____ the situation further.",a:"complicate"},
-  {s:"The scientist carefully _____ the data from the experiment.",a:"analyze"},
-  {s:"After discussing the issue, the team _____ that a new strategy was necessary.",a:"conclude"},
+  {s:"The scientist will carefully _____ the data from the experiment.",a:"analyze"},
+  {s:"After discussing the issue, they may _____ that a new strategy is necessary.",a:"conclude"},
   {s:"The new evidence may _____ during the investigation.",a:"emerge"},
   {s:"Parents often _____ the memories they have with their children.",a:"cherish"},
   {s:"The judge decided to _____ the criminal's actions.",a:"condemn"},
-  {s:"Police officers are responsible for _____ the law.",a:"enforce"},
+  {s:"Police officers must _____ the law.",a:"enforce"},
 ]},
 {level:1,title:"Pre-Adv 8",words:[
   {w:"envision",d:"To imagine or picture something that might happen in the future",e:"The teacher asked students to envision future cities.",n:"imagine the future"},
@@ -737,13 +755,203 @@ const ALL_UNITS=[
   {w:"overlook",d:"To fail to notice something or ignore it",e:"She accidentally overlooked an important detail.",n:"fail to notice"},
 ],blanks:[
   {s:"At the party, guests were encouraged to _____ and talk with each other.",a:"mingle"},
-  {s:"She accidentally _____ an important detail in the report.",a:"overlook"},
+  {s:"It is easy to _____ an important detail in a report.",a:"overlook"},
   {s:"The university decided to _____ a scholarship to the student.",a:"grant"},
   {s:"Firefighters worked quickly to _____ the flames.",a:"extinguish"},
   {s:"The two companies are trying to _____ a new contract.",a:"negotiate"},
   {s:"It took him a long time to _____ the concept.",a:"grasp"},
   {s:"The police tried to _____ traffic after the accident.",a:"halt"},
   {s:"The comedian likes to _____ famous actors.",a:"impersonate"},
+]},
+{level:1,title:"Pre-Adv 11",words:[
+  {w:"plunge",d:"To fall or move downward suddenly and quickly.",e:"Prices can plunge without warning.",n:"fall suddenly"},
+  {w:"restore",d:"To bring something back to its original or better condition.",e:"They plan to restore the old temple.",n:"bring back to good condition"},
+  {w:"retain",d:"To keep or continue to have something.",e:"Try to retain a copy for your records.",n:"keep"},
+  {w:"roam",d:"To move around freely without a fixed destination.",e:"The animals are free to roam the park.",n:"wander freely"},
+  {w:"shatter",d:"To break into many small pieces, or to destroy completely.",e:"A hard fall could shatter the glass.",n:"break into pieces"},
+  {w:"supervise",d:"To watch and manage the work or activities of others.",e:"A senior nurse will supervise the team.",n:"watch and manage"},
+  {w:"sustain",d:"To keep something going or maintain it over time.",e:"Good habits help sustain your health.",n:"keep going over time"},
+  {w:"update",d:"To make something more current by adding new information.",e:"Please update your details online.",n:"make current"},
+],blanks:[
+  {s:"The loud explosion seemed to _____ the windows of the nearby buildings.",a:"shatter"},
+  {s:"Regular exercise helps _____ good physical health.",a:"sustain"},
+  {s:"Wild animals are free to _____ across the national park.",a:"roam"},
+  {s:"Volunteers worked hard to _____ the old temple after the earthquake.",a:"restore"},
+  {s:"Stock prices began to _____ after the unexpected announcement.",a:"plunge"},
+  {s:"The manager will _____ the new employees during their first week.",a:"supervise"},
+  {s:"It is important to _____ key documents for future reference.",a:"retain"},
+  {s:"Please _____ your contact information before submitting the application.",a:"update"},
+]},
+{level:1,title:"Pre-Adv 12",words:[
+  {w:"verify",d:"To confirm that something is true, accurate, or genuine.",e:"Always verify the facts before sharing.",n:"confirm it's true"},
+  {w:"withhold",d:"To refuse to give something, or to keep it back.",e:"They chose to withhold the results.",n:"keep back / refuse to give"},
+  {w:"administer",d:"To manage or organize something, or to officially give it.",e:"A nurse will administer the medicine.",n:"manage / officially give"},
+  {w:"boast",d:"To speak too proudly about one's achievements or possessions.",e:"He likes to boast about his car.",n:"speak too proudly"},
+  {w:"capsize",d:"To turn over in the water, causing a boat to flip upside down.",e:"A big wave could capsize the boat.",n:"flip over in water"},
+  {w:"certify",d:"To officially state that someone or something meets standards.",e:"The school can certify your level.",n:"officially confirm standards"},
+  {w:"classify",d:"To arrange people or things into groups by shared features.",e:"Librarians classify books by subject.",n:"sort into groups"},
+  {w:"commence",d:"To begin or start something.",e:"The ceremony will commence at noon.",n:"begin"},
+],blanks:[
+  {s:"This organization is authorized to _____ language teachers who pass the examination.",a:"certify"},
+  {s:"The graduation ceremony will _____ at 10:00 a.m. sharp.",a:"commence"},
+  {s:"Please _____ your email address before creating an account.",a:"verify"},
+  {s:"Nurses are trained to _____ medication safely to patients.",a:"administer"},
+  {s:"The company decided to _____ some information until the investigation was complete.",a:"withhold"},
+  {s:"The small fishing boat could _____ during a powerful storm.",a:"capsize"},
+  {s:"He likes to _____ about running marathons, but he rarely mentions the training.",a:"boast"},
+  {s:"Scientists carefully _____ the collected samples into different categories.",a:"classify"},
+]},
+{level:1,title:"Pre-Adv 13",words:[
+  {w:"compromise",d:"To reach an agreement in which each side gives up something.",e:"Both sides had to compromise to agree.",n:"each side gives up something"},
+  {w:"contaminate",d:"To make something dirty, polluted, or unsafe with harmful substances.",e:"Waste can contaminate the water.",n:"make dirty / unsafe"},
+  {w:"define",d:"To explain the meaning or nature of something clearly.",e:"Can you define this word simply?",n:"explain the meaning"},
+  {w:"deflect",d:"To cause something to change direction or move away.",e:"He tried to deflect the question.",n:"turn aside"},
+  {w:"demolish",d:"To completely destroy a building or structure.",e:"They will demolish the old factory.",n:"destroy a building"},
+  {w:"endorse",d:"To publicly support, approve, or recommend someone or something.",e:"Stars often endorse new products.",n:"publicly support"},
+  {w:"forfeit",d:"To lose or give up something as a penalty or because of a rule.",e:"Break the rule and you forfeit the prize.",n:"give up as a penalty"},
+  {w:"hinder",d:"To make it difficult for someone or something to progress.",e:"Noise can hinder your focus.",n:"make progress hard"},
+],blanks:[
+  {s:"The city plans to _____ the abandoned warehouse and build a park.",a:"demolish"},
+  {s:"After a long discussion, both sides agreed to _____ and sign the contract.",a:"compromise"},
+  {s:"Heavy traffic can _____ emergency vehicles from reaching the hospital quickly.",a:"hinder"},
+  {s:"Chemicals from the factory could _____ the nearby river.",a:"contaminate"},
+  {s:"Many famous athletes _____ products on television and social media.",a:"endorse"},
+  {s:"Can you _____ the term \"artificial intelligence\" in your own words?",a:"define"},
+  {s:"The goalkeeper managed to _____ the ball away from the net.",a:"deflect"},
+  {s:"The team had to _____ the match because they did not have enough players.",a:"forfeit"},
+]},
+{level:1,title:"Pre-Adv 14",words:[
+  {w:"loiter",d:"To stand or walk around in a public place without a clear purpose.",e:"Please don't loiter near the entrance.",n:"linger with no purpose"},
+  {w:"modify",d:"To make small changes to improve or adjust something.",e:"We may modify the plan slightly.",n:"make small changes"},
+  {w:"prosper",d:"To become successful, especially financially or economically.",e:"Businesses prosper with steady demand.",n:"become successful"},
+  {w:"provoke",d:"To cause someone to feel angry, or to encourage a reaction.",e:"Rude remarks can provoke an argument.",n:"trigger a reaction"},
+  {w:"reciprocate",d:"To respond to a kind or unfriendly action with a similar action.",e:"She was kind, so I tried to reciprocate.",n:"respond in kind"},
+  {w:"relocate",d:"To move to a new place to live or work.",e:"The firm plans to relocate downtown.",n:"move to a new place"},
+  {w:"resent",d:"To feel bitterness or anger because of something unfair.",e:"He began to resent the extra work.",n:"feel bitter about"},
+  {w:"scrap",d:"To throw away, cancel, or abandon something no longer useful.",e:"They decided to scrap the old plan.",n:"throw away / cancel"},
+],blanks:[
+  {s:"His rude comments only served to _____ the audience.",a:"provoke"},
+  {s:"She always tries to _____ kindness by helping others whenever she can.",a:"reciprocate"},
+  {s:"Teenagers were asked not to _____ outside the store after closing time.",a:"loiter"},
+  {s:"The committee decided to _____ the outdated proposal and start over.",a:"scrap"},
+  {s:"The engineer decided to _____ the design to make it more efficient.",a:"modify"},
+  {s:"Small businesses often _____ when they receive strong community support.",a:"prosper"},
+  {s:"The company will _____ its headquarters to a larger office next year.",a:"relocate"},
+  {s:"He began to _____ his coworker after being passed over for a promotion.",a:"resent"},
+]},
+{level:1,title:"Pre-Adv 15",words:[
+  {w:"scrutinize",d:"To examine something very carefully and thoroughly.",e:"Auditors scrutinize every receipt.",n:"examine very closely"},
+  {w:"unearth",d:"To discover or reveal something hidden or forgotten.",e:"Diggers may unearth ancient coins.",n:"discover / dig up"},
+  {w:"whine",d:"To complain in an annoying or repeated way.",e:"Try not to whine about small things.",n:"complain annoyingly"},
+  {w:"accelerate",d:"To increase speed or make something happen more quickly.",e:"New tools can accelerate the work.",n:"speed up"},
+  {w:"criticize",d:"To express disapproval or point out faults.",e:"It's easy to criticize, harder to help.",n:"point out faults"},
+  {w:"dictate",d:"To give orders or control exactly what someone must do.",e:"A good boss won't dictate every step.",n:"control / give orders"},
+  {w:"discard",d:"To throw away or get rid of something no longer needed.",e:"Please discard any broken parts.",n:"throw away"},
+  {w:"discharge",d:"To release someone from duty or care, or to let a substance flow out.",e:"The hospital will discharge him today.",n:"release / let flow out"},
+],blanks:[
+  {s:"It is easy to _____ someone else's work, but much harder to improve it.",a:"criticize"},
+  {s:"New technology has helped _____ the production process.",a:"accelerate"},
+  {s:"Investigators carefully _____ the security footage for any suspicious activity.",a:"scrutinize"},
+  {s:"Please _____ any damaged materials before the meeting begins.",a:"discard"},
+  {s:"Archaeologists hope to _____ ancient artifacts buried beneath the site.",a:"unearth"},
+  {s:"The director tried to _____ every detail of the project, leaving little room for creativity.",a:"dictate"},
+  {s:"My little brother tends to _____ whenever he has to do homework.",a:"whine"},
+  {s:"The doctor decided to _____ the patient after confirming a full recovery.",a:"discharge"},
+]},
+{level:1,title:"Pre-Adv 16",words:[
+  {w:"dispatch",d:"To send someone or something to a place, especially quickly.",e:"We'll dispatch your order today.",n:"send off quickly"},
+  {w:"distort",d:"To twist or change the true meaning, shape, or appearance.",e:"Editing can distort the real story.",n:"twist the truth"},
+  {w:"dread",d:"To feel great fear or anxiety about something that may happen.",e:"Many people dread public speaking.",n:"fear greatly"},
+  {w:"duplicate",d:"To make an exact copy of something.",e:"Please duplicate this key for me.",n:"make an exact copy"},
+  {w:"lessen",d:"To reduce or make something smaller in amount or intensity.",e:"A short rest can lessen the pain.",n:"reduce"},
+  {w:"litter",d:"To leave trash or waste in a public place.",e:"Please don't litter on the beach.",n:"drop trash in public"},
+  {w:"monopolize",d:"To gain complete control so that others have little or no share.",e:"One firm should not monopolize the market.",n:"control completely"},
+  {w:"pamper",d:"To treat someone with excessive care, attention, or luxury.",e:"On weekends she likes to pamper herself.",n:"treat with luxury"},
+],blanks:[
+  {s:"The medicine should help _____ the pain within a few minutes.",a:"lessen"},
+  {s:"Visitors are reminded not to _____ in the park.",a:"litter"},
+  {s:"The warehouse will _____ the order within 24 hours.",a:"dispatch"},
+  {s:"Social media can sometimes _____ the facts and spread misinformation.",a:"distort"},
+  {s:"The grandparents love to _____ their grandchildren with gifts and treats.",a:"pamper"},
+  {s:"A single company should not _____ the entire market.",a:"monopolize"},
+  {s:"Many students _____ giving presentations in front of the class.",a:"dread"},
+  {s:"Please _____ this document and give one copy to each team member.",a:"duplicate"},
+]},
+{level:1,title:"Pre-Adv 17",words:[
+  {w:"populate",d:"To live in or fill an area with people, animals, or plants.",e:"Many birds populate the wetlands.",n:"fill an area with"},
+  {w:"retreat",d:"To move away from danger, or return to a safer place.",e:"The troops had to retreat.",n:"move back to safety"},
+  {w:"sacrifice",d:"To give up something valuable for the sake of something else.",e:"She had to sacrifice her weekends.",n:"give up something valued"},
+  {w:"scatter",d:"To throw or spread things over a wide area.",e:"The wind can scatter the papers.",n:"spread over a wide area"},
+  {w:"spoil",d:"To ruin something, or to treat someone too generously.",e:"Too many sweets can spoil dinner.",n:"ruin / over-indulge"},
+  {w:"sweep",d:"To clean or move across an area with a brushing motion.",e:"I sweep the floor every morning.",n:"clean with a brush"},
+  {w:"transplant",d:"To move a plant, organ, or tissue from one place to another.",e:"Doctors can transplant a kidney.",n:"move to another place"},
+  {w:"underestimate",d:"To think that someone or something is less capable than it is.",e:"Never underestimate a quiet rival.",n:"value too low"},
+],blanks:[
+  {s:"Every Saturday morning, I like to _____ the front porch.",a:"sweep"},
+  {s:"Many different species _____ the tropical rainforest.",a:"populate"},
+  {s:"The surgeons will _____ a healthy kidney into the patient.",a:"transplant"},
+  {s:"The soldiers were forced to _____ after running out of supplies.",a:"retreat"},
+  {s:"A strong wind can _____ leaves all over the yard.",a:"scatter"},
+  {s:"Never _____ your competitors because they may surprise you.",a:"underestimate"},
+  {s:"She decided to _____ her free time to help the local community.",a:"sacrifice"},
+  {s:"Eating too much candy can _____ your appetite before dinner.",a:"spoil"},
+]},
+{level:1,title:"Pre-Adv 18",words:[
+  {w:"waver",d:"To hesitate or become uncertain between different choices.",e:"Don't waver once you decide.",n:"hesitate / be uncertain"},
+  {w:"worsen",d:"To become more serious, severe, or unpleasant.",e:"The weather may worsen tonight.",n:"become more severe"},
+  {w:"accompany",d:"To go somewhere with someone, or to be present with them.",e:"A friend will accompany me there.",n:"go with someone"},
+  {w:"anticipate",d:"To expect or predict that something will happen.",e:"We anticipate a busy weekend.",n:"expect / predict"},
+  {w:"assess",d:"To evaluate or judge the quality, value, or condition of something.",e:"Teachers assess each student's work.",n:"evaluate the value"},
+  {w:"bargain",d:"To negotiate in order to get a better price or deal.",e:"You can bargain at the market.",n:"negotiate a price"},
+  {w:"cite",d:"To mention something as evidence or an example.",e:"Please cite your sources.",n:"mention as evidence"},
+  {w:"commit",d:"To promise or give your loyalty, time, or money to something.",e:"She's ready to commit to the plan.",n:"pledge time or loyalty"},
+],blanks:[
+  {s:"It's common to _____ with sellers at outdoor markets.",a:"bargain"},
+  {s:"Before buying the house, the inspector will _____ its condition.",a:"assess"},
+  {s:"She never seemed to _____ in her decision to become a doctor.",a:"waver"},
+  {s:"The team decided to _____ more time and resources to the new project.",a:"commit"},
+  {s:"Without proper treatment, the patient's condition could _____ quickly.",a:"worsen"},
+  {s:"My younger sister asked me to _____ her to the concert.",a:"accompany"},
+  {s:"We _____ heavy traffic because of the holiday weekend.",a:"anticipate"},
+  {s:"The professor asked students to _____ at least three reliable sources in their essays.",a:"cite"},
+]},
+{level:1,title:"Pre-Adv 19",words:[
+  {w:"contradict",d:"To say the opposite of something, or to prove a statement false.",e:"His answer seemed to contradict the facts.",n:"say the opposite"},
+  {w:"crawl",d:"To move slowly on hands and knees, or with the body close to the ground.",e:"The baby learned to crawl.",n:"move on hands and knees"},
+  {w:"disclose",d:"To make secret or private information known.",e:"They won't disclose the price.",n:"reveal private info"},
+  {w:"disguise",d:"To change the appearance of someone to hide their identity.",e:"He wore a hat to disguise himself.",n:"hide the identity"},
+  {w:"ease",d:"To reduce pain, difficulty, or worry.",e:"A short break can ease stress.",n:"reduce pain / worry"},
+  {w:"endure",d:"To suffer through or continue despite hardship or difficulty.",e:"Runners must endure the pain.",n:"suffer through"},
+  {w:"evolve",d:"To gradually develop or change over time.",e:"Languages slowly evolve over time.",n:"develop gradually"},
+  {w:"extract",d:"To remove or take out something from a larger whole.",e:"Dentists sometimes extract a tooth.",n:"take out"},
+],blanks:[
+  {s:"Many athletes must _____ pain while recovering from injuries.",a:"endure"},
+  {s:"The company will not _____ customer information without permission.",a:"disclose"},
+  {s:"The baby is learning to _____ across the living room floor.",a:"crawl"},
+  {s:"What the defendant said seemed to _____ the testimony.",a:"contradict"},
+  {s:"Languages naturally _____ as societies and cultures change.",a:"evolve"},
+  {s:"Scientists carefully _____ DNA from the ancient bones.",a:"extract"},
+  {s:"The actor wore a wig and glasses to _____ himself from fans.",a:"disguise"},
+  {s:"A short walk can help _____ stress after a busy day.",a:"ease"},
+]},
+{level:1,title:"Pre-Adv 20",words:[
+  {w:"forbid",d:"To officially or legally not allow someone to do something.",e:"The rules forbid phones in class.",n:"not allow"},
+  {w:"foster",d:"To encourage the growth or development of something.",e:"Good teachers foster curiosity.",n:"encourage growth"},
+  {w:"infect",d:"To spread a disease or harmful influence to someone or something.",e:"One sick child can infect the class.",n:"spread disease"},
+  {w:"liberate",d:"To set someone or something free from control or confinement.",e:"The mission helped liberate the animals.",n:"set free"},
+  {w:"offset",d:"To balance or reduce the effect of something with an opposite effect.",e:"Trees can help offset emissions.",n:"balance out"},
+  {w:"outsource",d:"To hire another company or organization to perform work.",e:"Some firms outsource their support.",n:"hire an outside company"},
+  {w:"overlap",d:"To partly cover the same area, or happen during the same period.",e:"The two events overlap on Friday.",n:"partly coincide"},
+  {w:"entail",d:"To involve or require something as a necessary part or result.",e:"The job may entail some travel.",n:"involve as necessary"},
+],blanks:[
+  {s:"The rescue mission helped _____ dozens of animals from unsafe conditions.",a:"liberate"},
+  {s:"A single mosquito can _____ several people with a dangerous virus.",a:"infect"},
+  {s:"The school rules _____ students from using their phones during exams.",a:"forbid"},
+  {s:"Good teachers _____ creativity and independent thinking in their classrooms.",a:"foster"},
+  {s:"Becoming a doctor can _____ years of study and training.",a:"entail"},
+  {s:"Planting more trees can help _____ some of the carbon emissions produced by factories.",a:"offset"},
+  {s:"Many businesses _____ their customer support services to reduce costs.",a:"outsource"},
+  {s:"The two meetings _____, so I have to choose which one to attend.",a:"overlap"},
 ]},
 {level:2,title:"Business 1",words:[
   {w:"expire",d:"To come to an end after a fixed period of time",e:"His contract will expire at the end of this quarter.",n:"end after fixed period"},
@@ -755,7 +963,7 @@ const ALL_UNITS=[
   {w:"clarify",d:"To make something easier to understand",e:"Could you clarify your instructions so the team can proceed?",n:"make easier to understand"},
   {w:"upgrade",d:"To improve something by adding better features or technology",e:"The company needs to upgrade its systems.",n:"improve with better features"},
 ],blanks:[
-  {s:"Our office will be _____ next year to create a more modern environment.",a:"renovated"},
+  {s:"They plan to _____ our office next year to create a more modern environment.",a:"renovate"},
   {s:"The company needs to _____ its internal systems to stay competitive.",a:"upgrade"},
   {s:"Please _____ the customer's identity before processing the payment.",a:"verify"},
   {s:"She spends two hours each day to _____ to the office.",a:"commute"},
@@ -814,7 +1022,7 @@ const ALL_UNITS=[
 ],blanks:[
   {s:"If you _____ company policies, you may face penalties.",a:"violate"},
   {s:"The company decided to _____ the old product due to low demand.",a:"discontinue"},
-  {s:"The broken company car had to be _____ to the garage.",a:"tow"},
+  {s:"They had to _____ the broken company car to the garage.",a:"tow"},
   {s:"The manager will _____ the new training program.",a:"administer"},
   {s:"His skills _____ the team's strengths perfectly.",a:"complement"},
   {s:"We need to _____ all the data before presenting it to the client.",a:"compile"},
@@ -894,7 +1102,7 @@ const ALL_UNITS=[
   {s:"New policies aim to _____ opportunities for all employees.",a:"equalize"},
   {s:"The company may need to _____ its assets due to financial difficulties.",a:"liquidate"},
   {s:"The manager will _____ the report to all team members.",a:"circulate"},
-  {s:"She was _____ for her outstanding performance.",a:"commend"},
+  {s:"The manager decided to _____ her for her outstanding performance.",a:"commend"},
   {s:"The company tries to _____ innovation into its culture.",a:"weave"},
 ]},
 {level:2,title:"Business 9",words:[
@@ -913,7 +1121,7 @@ const ALL_UNITS=[
   {s:"Teams need to _____ effectively to complete projects successfully.",a:"collaborate"},
   {s:"The company introduced new policies to _____ workplace stress.",a:"alleviate"},
   {s:"The IT team needs to _____ outdated data from the system.",a:"scrub"},
-  {s:"The old factory will be _____ to make space for a new office.",a:"demolish"},
+  {s:"They will _____ the old factory to make space for a new office.",a:"demolish"},
   {s:"The business has started to _____ and expand internationally.",a:"mature"},
 ]},
 {level:2,title:"Business 10",words:[
@@ -1009,7 +1217,7 @@ const ALL_UNITS=[
   {s:"The company hopes to _____ its losses within a year.",a:"recoup"},
   {s:"Global efforts aim to _____ certain infectious diseases.",a:"eradicate"},
   {s:"The company's stock price began to _____ after the scandal.",a:"plummet"},
-  {s:"The company _____ the installation of virus busters on their computers.",a:"mandate"},
+  {s:"The company decided to _____ the installation of virus protection on all computers.",a:"mandate"},
 ]},
 {level:3,title:"Advanced 5",words:[
   {w:"procure",d:"To obtain or acquire something with effort",e:"She managed to procure the rare materials needed for the project.",n:"obtain with effort"},
@@ -1084,7 +1292,7 @@ const ALL_UNITS=[
   {s:"The smell of coffee seemed to _____ in the air.",a:"linger"},
   {s:"The leader decided to _____ the violent acts publicly.",a:"denounce"},
   {s:"Large crowds began to _____ in the city square.",a:"congregate"},
-  {s:"He _____ when he heard the painful news.",a:"wince"},
+  {s:"People often _____ when they hear painful news.",a:"wince"},
   {s:"The lawyer tried to _____ the accusations made by the opposing side.",a:"rebut"},
 ]},
 {level:3,title:"Advanced 9",words:[
@@ -1119,10 +1327,10 @@ const ALL_UNITS=[
   {s:"The storm began to _____ later in the evening.",a:"abate"},
   {s:"New ideas often _____ during creative discussions.",a:"sprout"},
   {s:"She seems to _____ the values of honesty and dedication.",a:"embody"},
-  {s:"He quickly _____ a note on a piece of paper.",a:"scrawl"},
-  {s:"He _____ the door in anger.",a:"slam"},
+  {s:"He tried to _____ a quick note on a piece of paper.",a:"scrawl"},
+  {s:"He wanted to _____ the door in anger.",a:"slam"},
   {s:"She was hesitant to _____ the subject of salary during the interview.",a:"broach"},
-  {s:"The car _____ down the hill at high speed.",a:"hurtle"},
+  {s:"The car began to _____ down the hill at high speed.",a:"hurtle"},
   {s:"Their carefully planned project began to _____ after several mistakes.",a:"unravel"},
 ]},
 {level:3,title:"Advanced 11",words:[
@@ -1141,8 +1349,8 @@ const ALL_UNITS=[
   {s:"The company tried to _____ its reputation through advertising.",a:"tout"},
   {s:"He had to _____ the heavy box onto the truck.",a:"heave"},
   {s:"The manager wants to _____ the approval process.",a:"expedite"},
-  {s:"Their plans were _____ by unexpected problems.",a:"thwart"},
-  {s:"The coach tried to _____ the team's confidence before the match.",a:"reinforce"},
+  {s:"Unexpected problems may _____ their plans.",a:"thwart"},
+  {s:"Regular training helps _____ the players' basic skills.",a:"reinforce"},
 ]},
 {level:3,title:"Advanced 12",words:[
   {w:"recuperate",d:"To recover from illness or fatigue",e:"After the surgery, he needed time to recuperate fully.",n:"recover from illness/fatigue"},
@@ -1175,7 +1383,7 @@ const ALL_UNITS=[
 ],blanks:[
   {s:"The group tried to _____ a large international event.",a:"orchestrate"},
   {s:"The government took steps to _____ the economy.",a:"stabilize"},
-  {s:"The politician was _____ by difficult questions from reporters.",a:"assailed"},
+  {s:"Reporters began to _____ the politician with difficult questions.",a:"assail"},
   {s:"Many people _____ the loss of cultural traditions.",a:"lament"},
   {s:"She likes to _____ her future before making big decisions.",a:"contemplate"},
   {s:"The fog began to _____ as the sun rose.",a:"dissipate"},
@@ -1217,7 +1425,7 @@ const ALL_UNITS=[
   {s:"Authorities are trying to _____ the spread of misinformation.",a:"stem"},
   {s:"The scientist attempted to _____ the false claims.",a:"refute"},
   {s:"The manager tried to _____ the angry customer.",a:"mollify"},
-  {s:"The meeting was _____ until tomorrow morning.",a:"adjourn"},
+  {s:"They decided to _____ the meeting until tomorrow morning.",a:"adjourn"},
   {s:"The company worked hard to _____ the mistake.",a:"rectify"},
 ]},
 {level:3,title:"Advanced 16",words:[
@@ -1261,9 +1469,49 @@ const ALL_UNITS=[
 ];
 
 const SPEAK_QUESTIONS={
+  0:{
+    "Verb 1":["What things can cause stress in your daily life?","Have you ever had to cancel your plans at the last minute?","What is something in your home you need to repair?","What can people do to reduce waste at home?","How does the weather affect your mood?","If you could raise money for one good cause, what would it be?","What does your bag usually contain?","When a friend has a problem, what help do you usually offer?"],
+    "Verb 2":["What is one thing you would like to remove from your daily routine?","What skill would you like to develop this year?","Is there anything old at home you want to replace?","What restaurant would you suggest to a visitor?","If you could invent something new, what would it be?","What is the first thing you notice about a new place?","Have you ever accidentally damaged something important?","If you started a business, who would you hire first?"],
+    "Verb 3":["What book or movie would you recommend to a friend?","How do you usually solve a difficult problem?","What could you do to increase your English study time?","What do you like to create in your free time?","When you plan a trip, what do you always include?","What do you often borrow from friends or family?","What goal would you like to complete this month?","Would you rather rent or buy a home? Why?"],
+    "Verb 4":["When is it hard for you to accept help from others?","Do you collect anything? What is it?","Tell me about a time you suddenly realized something important.","How do you like to release stress after a long day?","What would you like to decrease in your life?","What do you expect to happen next year?","What food would you serve to guests at your home?","What is something new you hope to gain this year?"],
+    "Verb 5":["What kind of food do you try to avoid?","What everyday habits can harm your health?","What part of your English do you most want to improve?","What do you do to prevent getting sick in winter?","How do you like to treat yourself on a special day?","Do you feed any pets or animals? Tell me about it.","How do you organize your week?","If you had a small shop, how would you promote it?"],
+    "Verb 6":["How do you think good news should spread among friends?","Is there a habit you would like to quit?","Do people often recognize you in your neighborhood?","Would you like to run your own business someday? Why?","How do you measure a successful day?","What gifts do people exchange in your country?","How do you usually arrange a meeting with friends?","If you could give an award to someone you know, who would it be?"],
+    "Verb 7":["What is one thing you want to achieve this year?","What do you think can destroy a friendship?","When do you sometimes doubt yourself?","Do you limit your screen time? How?","What kind of places attract you when you travel?","When you buy something expensive, how do you examine it first?","What could help lower stress in your daily life?","What is something you hope will remain the same in your life?"],
+    "Verb 8":["What do you consider before making a big decision?","How do you usually contact your close friends?","What is something you recently had to fix?","Do you follow any daily routines? What are they?","Have you ever performed in front of people?","If you could publish a book, what would it be about?","When you visit a restaurant, what do you often request?","What tradition would you like to preserve?"],
+    "Verb 9":["What does a good friendship require?","When does your family usually gather together?","Do you find it easy to lend money to friends? Why?","What could you not survive a week without?","If you had big news, how would you announce it?","What are you most thankful for and appreciate in life?","How do you estimate how long a task will take?","How do you usually introduce yourself to new people?"],
+    "Verb 10":["What hobby would you like to get involved in?","What activity would you like to continue for many years?","Do you often order food to be delivered? What kind?","What kind of messages do you usually ignore?","How do you manage your time on busy days?","Where do you like to meet your friends?","Can you predict what your weekend will be like?","How can a person prove they are trustworthy?"],
+    "Verb 11":["What new habit would you like to adopt this year?","Do you like to analyze problems slowly or decide quickly?","What place would you love to explore one day?","How do you generate new ideas?","Is there anything you forgot to mention about yourself?","How far in advance do you reserve a table or ticket?","Who is a person you deeply respect? Why?","What is the best way to surprise a friend on their birthday?"],
+    "Verb 12":["How do you usually book your holidays?","Can you describe your hometown in three words?","If your home could expand, what room would you add?","How do local shops advertise in your area?","Is there anything you think we should ban? Why?","What helps you heal when you feel sad or tired?","How do you identify a good friend?","What products are manufactured in your country?"],
+    "Verb 13":["Is there an idea you strongly oppose?","Tell me about a challenge you managed to overcome.","What can strengthen a friendship over time?","Have you ever had to transfer to a new school or job?","If you could conduct a survey, what would you ask people?","What sounds disturb you when you are trying to focus?","What does a person's smile usually indicate?","How do you maintain a healthy lifestyle?"],
+    "Verb 14":["When is it important to refuse something politely?","In what activity would you like to represent your country?","Is there an old building in your city you would like to restore?","How do you usually transport yourself to work or school?","Do you like to compete with others, or prefer teamwork?","How do you feel when people criticize your work?","What food can cure a bad mood for you?","What products does your country import a lot?"],
+    "Verb 15":["What happy memory often occurs to you?","What machine at home do you operate every day?","What do people in your family sometimes argue about?","When do you have to cooperate with others?","If you could establish a club, what kind would it be?","What challenge do you face most often?","What do you like to share with your friends?","Do you believe people who claim they are always right?"],
+    "Verb 16":["What do teachers emphasize the most, in your experience?","If you could launch a new product, what would it be?","At what age would you like to retire?","Does your daily routine vary, or is it always the same?","Have you ever abandoned a hobby? Why?","When do you need to calculate things in daily life?","What English word often confuses you?","How much coffee or tea do you consume each day?"],
+    "Verb 17":["What is a good way for students to earn some money?","If you had a company, how many people would you employ?","Have you ever encountered a famous person?","What app did you recently install on your phone?","Do you monitor how much time you spend online?","What do you like to observe when you sit in a park?","What everyday actions pollute the environment?","What do you display in your room or home?"],
+    "Verb 18":["How do you entertain guests at home?","If you could extend your weekend, what would you do?","How do you feel when people interrupt you?","What is something you worked hard to obtain?","Would you ever join a protest for something you believe in?","When do you take time to reflect on your life?","What food is hard for you to resist?","How do you adjust when your plans suddenly change?"],
+    "Verb 19":["Is it easy for you to admit when you are wrong?","Do people sometimes assume the wrong thing about you?","How do you like to celebrate your birthday?","What is the best way to communicate with your family?","If you could construct anything, what would you build?","Can you easily detect when a friend is upset?","What helps you determine a good decision from a bad one?","What can quickly ruin a good day for you?"],
+    "Verb 20":["If you made a time capsule to bury, what would you put inside?","What dream do you want to chase right now?","How do you usually conclude a busy day?","What does your country export to the world?","Do you often postpone tasks, or do them right away?","If you could reverse one decision, what would it be?","Have you ever seen someone spill a drink at a bad moment?","What is something you are saving up to afford?"],
+  },
   1:{
     "Pre-Adv 1":["Why might schools suspend students for serious rule violations?","Why do some companies exploit workers or natural resources?","Do product guarantees influence your decision when buying something?","Why is it important to preserve historical buildings?","What strategies help people resist unhealthy habits?","How should cities accommodate people with disabilities?","Can photographs truly capture the emotions of a moment?","How can people cultivate good habits in their daily lives?"],
     "Pre-Adv 2":["What are some ways technology can enhance education?","What problems can happen if important documents like passports expire?","Why do people choose to invest in stocks or real estate?","What factors are important when a company launches a new product?","In what situations is it dangerous to overtake another vehicle?","Why is it important to register for events in advance?","What causes some businesses to shrink instead of grow?","Do you prefer to browse in physical stores or online?"],
+    "Pre-Adv 3":["What causes historical buildings or cities to decay over time?","What strategies can students devise to improve their study habits?","Why do some small disagreements escalate into serious conflicts?","What happens when a country's spending begins to exceed its income?","Why do many companies choose to manufacture products in other countries?","What kinds of risks does climate change pose to modern cities?","When you read an article, do you usually read carefully or scan it first?","Why do protesters sometimes try to storm government buildings?"],
+    "Pre-Adv 4":["What kinds of environmental problems threaten wildlife today?","What conditions help small businesses thrive?","What is the best way for governments to address social inequality?","What measures can cities take to combat crime?","Why is it important for teachers to demonstrate concepts clearly?","Is it ever acceptable to exterminate certain animals or insects? Why or why not?","What skills are important for students to obtain good job opportunities?","How difficult is it to resume work or studies after a long break?"],
+    "Pre-Adv 5":["What causes do you think people should advocate more strongly in society?","Why is it important for teachers or leaders to clarify their instructions?","What kinds of information might researchers need to compile for a study?","How can natural disasters devastate communities and economies?","How has technology disrupted traditional industries?","Why is it sometimes difficult for people to embrace change?","What factors should employers evaluate when hiring someone?","Why do people sometimes exaggerate stories when they tell them?"],
+    "Pre-Adv 6":["What challenges do governments face when they implement new policies?","Why do people sometimes imply things instead of saying them directly?","What are the main reasons people migrate to other countries?","How reliable is technology when scientists predict future events?","What are effective ways companies promote their products today?","Why is it important to seize opportunities when they appear?","Why do people sometimes stray from their original plans or goals?","How does technology transmit information around the world so quickly?"],
+    "Pre-Adv 7":["Why is it sometimes difficult for people to acknowledge their mistakes?","Why is it important to analyze information carefully before making decisions?","What memories or experiences do people usually cherish the most?","How can too many rules complicate a situation?","How do scientists usually conclude that a theory is correct?","When should society strongly condemn certain actions or behavior?","What kinds of new technologies might emerge in the next decade?","Why is it important for governments to enforce laws fairly?"],
+    "Pre-Adv 8":["How do you envision the world changing in the next 20 years?","What problems can happen if people install software without understanding it?","In what situations is it difficult to justify a decision?","Why do children often mimic the behavior of adults?","What are effective ways to pacify someone who is very angry?","What qualities help someone surpass others in their field?","What is the best way for governments to tackle major social problems?","Why do some people accumulate wealth more successfully than others?"],
+    "Pre-Adv 9":["Why can it be dangerous to assume things about other people?","What are some effective ways people can conserve natural resources?","Under what circumstances should a company demote an employee?","Why do governments sometimes designate certain areas as protected land?","What factors determine whether a person will succeed in their career?","Why do some companies dominate certain industries?","Why do teachers often emphasize the importance of critical thinking?","When should authorities decide to evacuate people from an area?"],
+    "Pre-Adv 10":["What steps should people take to extinguish a small fire safely?","In what situations should governments grant special permissions or rights?","Why do some people take longer to grasp difficult concepts?","What kinds of events might cause a government to halt public transportation?","Why do comedians often impersonate famous people?","Why is it important to mingle with others at social or professional events?","What skills are important when people negotiate a business deal?","Why do people sometimes overlook small but important details?"],
+    "Pre-Adv 11":["What could cause prices or markets to plunge suddenly?","Is there an old building in your town you would like to restore?","What helps you retain new vocabulary the longest?","If you could roam freely anywhere in the world, where would you go?","Have you ever accidentally shattered something valuable?","Would you enjoy a job where you supervise other people? Why?","What habits help you sustain your energy during a busy week?","How often do you update the apps on your phone?"],
+    "Pre-Adv 12":["What information do you always verify before making an important decision?","Do you think it is ever acceptable to withhold the truth from someone? Why or why not?","What qualities are necessary for someone who has to administer a school, business, or organization?","Do you know anyone who likes to boast about their achievements? How do people usually react?","If your boat suddenly began to capsize, what would you do first?","Is there a skill or qualification you would like to be officially certified in? Explain your choice.","If you had a huge collection of books or movies, how would you classify them?","If you could commence a new hobby or project this month, what would it be and why?"],
+    "Pre-Adv 13":["Tell us about a time when you had to compromise with someone. What was the result?","What are some common ways people accidentally contaminate the environment, and how can they prevent it?","How would you define success in your own life?","Have you ever tried to deflect a difficult question or an awkward conversation? What happened?","Do you think old buildings should always be preserved, or is it sometimes better to demolish them? Why?","Would you be willing to endorse a product or company on social media? Why or why not?","What is something you would never want to forfeit, even if you were offered a lot of money?","What habits or distractions hinder your productivity the most?"],
+    "Pre-Adv 14":["Why do you think some people loiter in public places for a long time instead of going somewhere specific.","If you could modify one thing about your daily routine, what would it be?","What factors help a business or community prosper?","What kinds of comments or behaviors are most likely to provoke an argument?","How do you usually reciprocate when someone does something kind for you?","If you had the opportunity to relocate to another country, where would you go and why?","Is it difficult to stop resenting someone after they have treated you unfairly? Why?","Have you ever decided to scrap a plan or project and start over? What happened?"],
+    "Pre-Adv 15":["What kinds of documents or information should people always scrutinize carefully before signing or accepting them?","If you could unearth one historical mystery or hidden treasure, what would you choose?","Do you think people who constantly whine about small problems make situations better or worse? Why?","What habits or technologies can accelerate the process of learning a new language?","How do you usually react when someone criticizes your work or ideas?","Do you prefer making your own decisions, or are you comfortable letting someone else dictate your schedule?","What is something you own that you should probably discard, but haven't yet?","What advice would you give to someone who has just been discharged from the hospital after a serious illness?"],
+    "Pre-Adv 16":["If you were in charge of a delivery company, how would you dispatch packages quickly and efficiently?","How can social media or news reports sometimes distort the truth?","Is there a task or event that you always dread? Why?","Have you ever accidentally duplicated a file or made multiple copies of something you didn't need?","What is one effective way to lessen stress during a busy week?","What should schools or communities do to discourage people from littering?","Have you ever met someone who tends to monopolize conversations? How did you respond?","How do you like to pamper yourself after a long or stressful day?"],
+    "Pre-Adv 17":["What kinds of animals or plants populate the area where you live?","When you feel stressed or overwhelmed, where do you usually retreat to relax?","What is something you have had to sacrifice in order to achieve a goal?","Have you ever accidentally scattered something important? What happened?","Do you think parents should be careful not to spoil their children? Why or why not?","What household chores do you do regularly, and how often do you sweep or clean your living space?","If you could transplant one tradition from another country into your own culture, what would it be?","Have you ever underestimated yourself or someone else? What was the result?"],
+    "Pre-Adv 18":["Have you ever wavered between two important decisions? What made the choice difficult?","What habits can worsen a person's physical or mental health?","Who do you enjoy having accompany you when you travel or attend events? Why?","What event or milestone are you most anticipating this year?","How do you assess whether a movie, restaurant, or product is worth trying?","Have you ever tried to bargain for a lower price? What happened?","Why is it important to cite reliable sources when writing reports or doing research?","What is one personal goal that you would like to commit yourself to over the next year?"],
+    "Pre-Adv 19":["Have you ever had to contradict someone in a meeting or discussion? How did you do it respectfully?","Can you remember a time when traffic was moving so slowly that cars seemed to crawl along the road?","What kinds of personal information should people avoid disclosing online?","If you could disguise yourself as anyone for a day, who would you choose and why?","What activities help ease your stress after a busy day?","What is the most difficult challenge you have had to endure, and what did you learn from it?","How do you think the way people communicate will evolve over the next twenty years?","If you could extract one lesson from your life experiences so far, what would it be?"],
+    "Pre-Adv 20":["Do you think schools should forbid students from using smartphones during class? Why or why not?","What activities or habits do you think can foster creativity and critical thinking?","Have you ever been infected with a cold or the flu because someone around you was sick? What happened?","If you could liberate yourself from one daily responsibility for a week, what would it be and how would you spend your time?","What are some good ways to offset the negative effects of sitting at a desk all day?","If you owned a small business, what tasks would you outsource, and which ones would you prefer to do yourself?","What skills or interests do you have that overlap with your work or studies?","What responsibilities do you think being a teacher or manager entails?"],
   },
   2:{
     "Business 1":["Have you ever had an important document expire? What happened?","How do you usually verify information at work?","What are some ways companies can enhance employee productivity?","Have you ever worked in a renovated building? How was it different?","How often do you update your skills or knowledge?","Do you prefer a long or short commute? Explain your reasons.","Can you describe a time when you had to clarify a misunderstanding?","What kinds of technology do companies often upgrade?"],
@@ -1277,6 +1525,10 @@ const SPEAK_QUESTIONS={
 };
 
 let mastered={},studied={};
+const STORE_M="cea_verbs_mastered",STORE_S="cea_verbs_studied";
+function loadProgress(){try{mastered=JSON.parse(localStorage.getItem(STORE_M))||{};studied=JSON.parse(localStorage.getItem(STORE_S))||{};}catch(e){mastered={};studied={};}}
+function saveProgress(){try{localStorage.setItem(STORE_M,JSON.stringify(mastered));localStorage.setItem(STORE_S,JSON.stringify(studied));}catch(e){}}
+function resetProgress(){if(!confirm("Reset all saved progress? This cannot be undone."))return;mastered={};studied={};saveProgress();renderHome();}
 let currentUnit=0,currentMode="learn",lastMode="fill";
 let matchState={},fillState={},writeState={};
 let currentLevel=0;
@@ -1313,6 +1565,25 @@ function renderHome(){
   document.getElementById("stat-mastered").textContent=Object.keys(mastered).length;
   document.getElementById("stat-studied").textContent=Object.keys(studied).length;
   document.getElementById("stat-total").textContent=Object.keys(studied).length*8;
+  document.getElementById("stat-total-all").textContent=ALL_UNITS.length*8;
+  document.getElementById("home-sub").textContent=`${LEVELS.length} levels · ${ALL_UNITS.length} units · ${ALL_UNITS.length*8} words`;
+  renderProgress();
+}
+
+function renderProgress(){
+  const el=document.getElementById("progress-log");
+  if(!el)return;
+  let rows="";
+  LEVELS.forEach(lv=>{
+    const units=ALL_UNITS.filter(u=>u.level===lv.id);
+    const total=units.length;
+    const done=units.filter(u=>mastered[ALL_UNITS.indexOf(u)]).length;
+    const started=units.filter(u=>studied[ALL_UNITS.indexOf(u)]).length;
+    const pct=total?Math.round(done/total*100):0;
+    const extra=started>done?` · ${started} started`:"";
+    rows+=`<div class="plog-row"><div class="plog-head"><span class="plog-name">${lv.name}</span><span class="plog-count">${done}/${total} mastered${extra}</span></div><div class="plog-bar"><div class="plog-fill" style="width:${pct}%;background:${lv.color.border}"></div></div></div>`;
+  });
+  el.innerHTML=`<div class="plog-title-row"><span class="plog-title">Your progress (saved on this device)</span><button class="plog-reset" onclick="resetProgress()">reset</button></div>${rows}`;
 }
 
 function showHome(){
@@ -1322,7 +1593,7 @@ function showHome(){
 }
 
 function openUnit(idx){
-  currentUnit=idx;studied[idx]=true;
+  currentUnit=idx;studied[idx]=true;saveProgress();
   const u=ALL_UNITS[idx];
   const lv=LEVELS[u.level];
   document.getElementById("unit-title").textContent=u.title;
@@ -1458,6 +1729,7 @@ function fillAnswer(opt,btn){
     if(s.idx>=s.blanks.length){
       lastMode="fill";
       if(s.score===s.blanks.length)mastered[currentUnit]=true;
+      saveProgress();
       showResult(s.score,s.blanks.length);
     } else renderFillQ(null,null);
   },900);
@@ -1509,7 +1781,7 @@ async function checkWrite(word){
 }
 function nextWrite(){
   const s=writeState;s.idx++;
-  if(s.idx>=s.words.length){studied[currentUnit]=true;renderMode("learn");}
+  if(s.idx>=s.words.length){studied[currentUnit]=true;saveProgress();renderMode("learn");}
   else renderWriteQ(null,null);
 }
 
@@ -1527,7 +1799,7 @@ function backToUnit(){
 }
 function retryMode(){backToUnit();setTimeout(()=>switchModeByName(lastMode),50);}
 
-renderHome();
+loadProgress();renderHome();
 </script>
 </body>
 </html>
