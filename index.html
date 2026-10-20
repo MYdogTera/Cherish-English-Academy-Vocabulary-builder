@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cherish English Academy — Vocabulary Builder: Verbs</title>
+<title>Cherish English Academy — Vocabulary Builder</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -123,6 +123,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .divider{height:1px;background:var(--border);margin:1.25rem 0}
 .section-label{font-size:11px;color:var(--text3);letter-spacing:.6px;text-transform:uppercase;margin-bottom:.75rem}
 .empty{text-align:center;color:var(--text3);padding:2.5rem;font-size:14px}
+.pos-tabs{display:flex;gap:6px;margin-bottom:1.25rem}
+.pos-tab{padding:8px 20px;font-size:13px;letter-spacing:.4px;border:1px solid var(--border);border-radius:24px;cursor:pointer;background:transparent;color:var(--text2);transition:all .15s;font-weight:500}
+.pos-tab:hover{border-color:var(--border2);color:var(--text)}
+.pos-tab.active{background:var(--accent);border-color:var(--accent);color:#fff}
 </style>
 </head>
 <body>
@@ -130,8 +134,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 <div id="screen-home" class="screen active">
   <div class="brand"><div class="dot"></div><h1>Cherish English Academy</h1></div>
-  <p style="font-size:12px;color:var(--text3);margin-bottom:2px;letter-spacing:.4px">Vocabulary Builder: Verbs</p>
-  <p class="sub" id="home-sub">4 levels</p>
+  <p style="font-size:12px;color:var(--text3);margin-bottom:2px;letter-spacing:.4px">Vocabulary Builder</p>
+  <p class="sub" id="home-sub">Verbs · Adjectives · Nouns</p>
+  <div class="pos-tabs">
+    <button class="pos-tab active" onclick="setPos('verb',this)">Verbs</button>
+    <button class="pos-tab" onclick="setPos('adj',this)">Adjectives</button>
+    <button class="pos-tab" onclick="setPos('noun',this)">Nouns</button>
+  </div>
   <div class="stats">
     <div class="stat"><div class="stat-n accent" id="stat-mastered">0</div><div class="stat-l">mastered</div></div>
     <div class="stat"><div class="stat-n" id="stat-studied">0</div><div class="stat-l">studied</div></div>
@@ -181,6 +190,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 </div>
 <script>
+let currentPos='verb'; // 'verb', 'adj', 'noun'
+
 const LEVELS=[
   {id:0,name:"Beginner to Intermediate",short:"Beg–Int",badgeClass:"lb0",tabClass:"lv0",
    color:{bg:"#2a2452",text:"#c4bcff",border:"#7c6af7"}},
@@ -1468,6 +1479,580 @@ const ALL_UNITS=[
 ]},
 ];
 
+const ADJ_UNITS=[
+{level:0,title:"Adj 1",words:[
+  {w:"own",d:"Belonging to a particular person or thing",e:"We each have our own responsibilities.",n:"adj."},
+  {w:"various",d:"Several different types or kinds of something",e:"The store sells various kinds of products.",n:"adj."},
+  {w:"traditional",d:"Connected with customs and practices that have existed for a long time",e:"We enjoyed a traditional Japanese meal.",n:"adj."},
+  {w:"medical",d:"Connected with medicine, doctors, or the treatment of illness",e:"She went to the hospital for a medical examination.",n:"adj."},
+  {w:"successful",d:"Achieving the result or goal that you wanted",e:"The company became very successful after launching its new product.",n:"adj."},
+  {w:"nearby",d:"Located close to a particular place or person",e:"Is there a supermarket nearby?",n:"adj."},
+  {w:"extra",d:"More than what is normally needed, expected, or included",e:"Would you like an extra chair for the conference room?",n:"adj."},
+  {w:"serious",d:"Important, dangerous, or requiring careful attention",e:"The doctor said that his condition was quite serious.",n:"adj."},
+],blanks:[
+  {s:"We each have our _____ responsibilities.",a:"own"},
+  {s:"The doctor said that his condition was quite _____.",a:"serious"},
+  {s:"Would you like an _____ chair for the conference room?",a:"extra"},
+  {s:"The company became very _____ after launching its new product.",a:"successful"},
+  {s:"We enjoyed a _____ Japanese meal at a local restaurant.",a:"traditional"},
+  {s:"The store sells _____ kinds of products from around the world.",a:"various"},
+  {s:"She went to the hospital for a _____ examination.",a:"medical"},
+  {s:"Is there a supermarket _____?",a:"nearby"},
+]},
+{level:0,title:"Adj 2",words:[
+  {w:"convenient",d:"Easy to use, reach, or do; suitable for a particular situation",e:"Online shopping is very convenient.",n:"adj."},
+  {w:"average",d:"Typical or usual when compared with other people or things",e:"The average temperature in July is around 30°C.",n:"adj."},
+  {w:"cooperative",d:"Willing to work with other people and help achieve a common goal",e:"The students were very cooperative and worked well together.",n:"adj."},
+  {w:"effective",d:"Producing the result that is wanted or intended",e:"This medicine is highly effective at treating the infection.",n:"adj."},
+  {w:"huge",d:"Extremely large in size or amount",e:"They live in a huge house with eight bedrooms.",n:"adj."},
+  {w:"local",d:"Connected with or belonging to a particular area or neighborhood",e:"We prefer to support local businesses.",n:"adj."},
+  {w:"ordinary",d:"Normal or not special, unusual, or different",e:"He wore an ordinary black suit to the interview.",n:"adj."},
+  {w:"artificial",d:"Made by people rather than occurring naturally",e:"Some drinks contain artificial flavors and colors.",n:"adj."},
+],blanks:[
+  {s:"Some drinks contain _____ flavors and colors.",a:"artificial"},
+  {s:"He wore an _____ black suit to the interview.",a:"ordinary"},
+  {s:"We prefer to support _____ businesses in our neighborhood.",a:"local"},
+  {s:"This medicine is highly _____ at treating the infection.",a:"effective"},
+  {s:"Online shopping is very _____ because you can order things from home.",a:"convenient"},
+  {s:"The _____ temperature in July is around 30°C in this area.",a:"average"},
+  {s:"The students were very _____ and worked well together.",a:"cooperative"},
+  {s:"They live in a _____ house with eight bedrooms.",a:"huge"},
+]},
+{level:0,title:"Adj 3",words:[
+  {w:"individual",d:"A single person or thing, considered separately from others",e:"Each individual student will receive a certificate.",n:"adj."},
+  {w:"valuable",d:"Worth a lot of money, importance, or usefulness",e:"This painting is extremely valuable.",n:"adj."},
+  {w:"unusual",d:"Different from what is normal, usual, or expected",e:"It is unusual to see snow in this part of the country.",n:"adj."},
+  {w:"modern",d:"Relating to the present time or recent times, rather than the past",e:"The building has a very modern design.",n:"adj."},
+  {w:"recent",d:"Having happened or appeared not long ago",e:"You can see her recent paintings in this room.",n:"adj."},
+  {w:"available",d:"Able to be used, obtained, or reached",e:"Are there any tickets available for tonight's concert?",n:"adj."},
+  {w:"common",d:"Happening often or found in many places or among many people",e:"It is common for people to use smartphones every day.",n:"adj."},
+  {w:"environmental",d:"Relating to the natural world and the conditions in which people live",e:"The company is working on several environmental projects.",n:"adj."},
+],blanks:[
+  {s:"It is _____ for people to use smartphones every day.",a:"common"},
+  {s:"The building has a very _____ design.",a:"modern"},
+  {s:"Are there any tickets _____ for tonight's concert?",a:"available"},
+  {s:"It is _____ to see snow in this part of the country.",a:"unusual"},
+  {s:"Each _____ student will receive a certificate.",a:"individual"},
+  {s:"This painting is extremely _____ and is worth millions of dollars.",a:"valuable"},
+  {s:"The company is working on several _____ projects to reduce waste.",a:"environmental"},
+  {s:"You can see her _____ paintings in this room.",a:"recent"},
+]},
+{level:0,title:"Adj 4",words:[
+  {w:"certain",d:"Sure or having no doubt about something",e:"I'm certain that we will finish the project on time.",n:"adj."},
+  {w:"attractive",d:"Pleasant or interesting in a way that makes people like or want something",e:"The hotel has an attractive view of the ocean.",n:"adj."},
+  {w:"disappointed",d:"Feeling unhappy because something was not as good as expected",e:"She was disappointed with the results of her exam.",n:"adj."},
+  {w:"harmful",d:"Causing damage or injury to people, animals, or the environment",e:"Smoking can be extremely harmful to your health.",n:"adj."},
+  {w:"normal",d:"Usual, expected, or not unusual",e:"It's perfectly normal to feel nervous before an interview.",n:"adj."},
+  {w:"current",d:"Happening or existing now; belonging to the present time",e:"We need to check the current price before making a decision.",n:"adj."},
+  {w:"rare",d:"Not common or difficult to find or see",e:"This species of bird is very rare.",n:"adj."},
+  {w:"amateur",d:"A person who does something as a hobby rather than as a profession",e:"He is an amateur photographer who takes pictures in his free time.",n:"adj."},
+],blanks:[
+  {s:"It's perfectly _____ to feel nervous before an interview.",a:"normal"},
+  {s:"He is an _____ photographer who takes pictures in his free time.",a:"amateur"},
+  {s:"We need to check the _____ price before making a decision.",a:"current"},
+  {s:"This species of bird is very _____ and difficult to find.",a:"rare"},
+  {s:"I'm _____ that we will finish the project on time.",a:"certain"},
+  {s:"The hotel has an _____ view of the ocean.",a:"attractive"},
+  {s:"She was _____ with the results of her exam.",a:"disappointed"},
+  {s:"Smoking can be extremely _____ to your health.",a:"harmful"},
+]},
+{level:0,title:"Adj 5",words:[
+  {w:"comfortable",d:"Feeling physically relaxed and free from pain or discomfort",e:"These shoes are very comfortable.",n:"adj."},
+  {w:"regular",d:"Happening repeatedly or according to a fixed pattern or schedule",e:"I have regular meetings with my manager every Monday.",n:"adj."},
+  {w:"strict",d:"Requiring rules to be followed carefully and exactly",e:"Our teacher is very strict about students being late.",n:"adj."},
+  {w:"accurate",d:"Correct and free from mistakes",e:"Please make sure that the information in the report is accurate.",n:"adj."},
+  {w:"crowded",d:"Containing too many people or things in a small space",e:"The train was so crowded that I couldn't find a seat.",n:"adj."},
+  {w:"positive",d:"Showing confidence, hope, or a good attitude about something",e:"She has a very positive attitude toward learning.",n:"adj."},
+  {w:"upset",d:"Feeling unhappy, worried, or angry about something",e:"He was upset because his flight was canceled.",n:"adj."},
+  {w:"wealthy",d:"Having a lot of money or valuable possessions",e:"The area is popular with wealthy tourists.",n:"adj."},
+],blanks:[
+  {s:"She has a very _____ attitude toward learning English.",a:"positive"},
+  {s:"The area is popular with _____ tourists who spend a lot of money.",a:"wealthy"},
+  {s:"He was _____ because his flight was canceled.",a:"upset"},
+  {s:"The train was so _____ that I couldn't find a seat.",a:"crowded"},
+  {s:"I have _____ meetings with my manager every Monday.",a:"regular"},
+  {s:"These shoes are very _____, even after walking for several hours.",a:"comfortable"},
+  {s:"Our teacher is very _____ about students being late for class.",a:"strict"},
+  {s:"Please make sure that the information in the report is _____.",a:"accurate"},
+]},
+{level:0,title:"Adj 6",words:[
+  {w:"opposite",d:"Completely different from or contrary to something else",e:"The opposite of hot is cold.",n:"adj."},
+  {w:"actual",d:"Real or existing in fact, rather than imagined or believed",e:"The movie was based on an actual historical event.",n:"adj."},
+  {w:"alternative",d:"Another choice or possibility that can be used instead of something else",e:"We need to find an alternative solution.",n:"adj."},
+  {w:"physical",d:"Relating to the body rather than the mind",e:"Regular exercise is important for good physical health.",n:"adj."},
+  {w:"reliable",d:"Able to be trusted to work well or behave as expected",e:"She is a very reliable employee.",n:"adj."},
+  {w:"academic",d:"Relating to education, studying, or schools and universities",e:"Students often face pressure to achieve high academic results.",n:"adj."},
+  {w:"ancient",d:"Belonging to a very distant period in history",e:"The museum contains many ancient objects from thousands of years ago.",n:"adj."},
+  {w:"complicated",d:"Difficult to understand because it has many parts",e:"The instructions are too complicated for beginners.",n:"adj."},
+],blanks:[
+  {s:"Students often face pressure to achieve high _____ results.",a:"academic"},
+  {s:"The museum contains many _____ objects from thousands of years ago.",a:"ancient"},
+  {s:"She is a very _____ employee who always finishes her work on time.",a:"reliable"},
+  {s:"The _____ of 'hot' is 'cold'.",a:"opposite"},
+  {s:"The movie was based on an _____ historical event.",a:"actual"},
+  {s:"We need to find an _____ solution because the original plan is too expensive.",a:"alternative"},
+  {s:"The instructions are too _____ for beginners to understand.",a:"complicated"},
+  {s:"Regular exercise is important for maintaining good _____ health.",a:"physical"},
+]},
+{level:0,title:"Adj 7",words:[
+  {w:"general",d:"Relating to most or all people, things, or situations rather than a specific one",e:"The speaker gave a general explanation of the situation.",n:"adj."},
+  {w:"similar",d:"Almost the same, but not exactly the same",e:"The two products are very similar in quality and price.",n:"adj."},
+  {w:"financial",d:"Relating to money, income, spending, or business finances",e:"She works in the financial department of the company.",n:"adj."},
+  {w:"negative",d:"Expressing disagreement, refusal, or a lack of something positive",e:"The customer left a negative review of the restaurant.",n:"adj."},
+  {w:"nervous",d:"Worried, anxious, or slightly afraid about something",e:"I always feel nervous before giving a presentation.",n:"adj."},
+  {w:"rural",d:"Relating to the countryside rather than cities or towns",e:"Many people in rural areas work in agriculture.",n:"adj."},
+  {w:"complex",d:"Consisting of many connected parts and therefore difficult to understand",e:"The human brain is an extremely complex system.",n:"adj."},
+  {w:"efficient",d:"Working well without wasting time, energy, or resources",e:"We need a more efficient way to manage our time.",n:"adj."},
+],blanks:[
+  {s:"The customer left a _____ review of the restaurant.",a:"negative"},
+  {s:"The speaker gave a _____ explanation of the situation.",a:"general"},
+  {s:"We need a more _____ way to manage our time.",a:"efficient"},
+  {s:"The human brain is an extremely _____ system.",a:"complex"},
+  {s:"The two products are very _____ in terms of quality and price.",a:"similar"},
+  {s:"I always feel _____ before giving a presentation.",a:"nervous"},
+  {s:"Many people in _____ areas work in agriculture.",a:"rural"},
+  {s:"She works in the _____ department of the company.",a:"financial"},
+]},
+{level:0,title:"Adj 8",words:[
+  {w:"essential",d:"Completely necessary or very important",e:"Water is essential for all living things.",n:"adj."},
+  {w:"extreme",d:"Very great in degree, amount, or intensity",e:"The weather conditions were extreme, with temperatures reaching 40°C.",n:"adj."},
+  {w:"practical",d:"Useful and suitable for real situations rather than just theoretical",e:"This is a very practical solution that we can use immediately.",n:"adj."},
+  {w:"previous",d:"Happening or existing before the present time or event",e:"I couldn't attend the previous meeting because I was sick.",n:"adj."},
+  {w:"secondhand",d:"Previously owned or used by someone else",e:"She bought a secondhand car to save money.",n:"adj."},
+  {w:"advanced",d:"Having a high level of skill, knowledge, or development",e:"This course is designed for advanced English learners.",n:"adj."},
+  {w:"flexible",d:"Able to change or adapt easily to different situations",e:"My schedule is quite flexible, so I can meet you anytime.",n:"adj."},
+  {w:"invisible",d:"Impossible to see with the eyes",e:"Some bacteria are completely invisible without a microscope.",n:"adj."},
+],blanks:[
+  {s:"This course is designed for _____ English learners.",a:"advanced"},
+  {s:"I couldn't attend the _____ meeting because I was sick.",a:"previous"},
+  {s:"Water is _____ for all living things.",a:"essential"},
+  {s:"This is a very _____ solution that we can use immediately.",a:"practical"},
+  {s:"Some bacteria are completely _____ without a microscope.",a:"invisible"},
+  {s:"The weather conditions were _____, with temperatures reaching 40°C.",a:"extreme"},
+  {s:"She bought a _____ car to save money.",a:"secondhand"},
+  {s:"My schedule is quite _____, so I can meet you whenever you're free.",a:"flexible"},
+]},
+{level:0,title:"Adj 9",words:[
+  {w:"steady",d:"Continuing at a regular and stable rate without sudden changes",e:"The company has shown steady growth over the past five years.",n:"adj."},
+  {w:"ambitious",d:"Having a strong desire to succeed or become successful",e:"She is very ambitious and hopes to become the CEO someday.",n:"adj."},
+  {w:"developing",d:"Growing, changing, or becoming more advanced",e:"Japan is a highly developing country with a rapidly changing economy.",n:"adj."},
+  {w:"dramatic",d:"Very noticeable, exciting, or sudden in effect or change",e:"The new policy had a dramatic effect on the company's profits.",n:"adj."},
+  {w:"fake",d:"Not real or genuine; made to look like something real",e:"The website was selling fake designer products.",n:"adj."},
+  {w:"obvious",d:"Easy to see, understand, or recognize",e:"It was obvious that he was nervous because he kept looking at the clock.",n:"adj."},
+  {w:"poisonous",d:"Containing a substance that can cause illness or death",e:"Some mushrooms are extremely poisonous and should never be eaten.",n:"adj."},
+  {w:"typical",d:"Having the usual qualities or characteristics of a particular person or group",e:"It's typical for people to remove their shoes before entering a Japanese home.",n:"adj."},
+],blanks:[
+  {s:"It's _____ for people to remove their shoes before entering a Japanese home.",a:"typical"},
+  {s:"The new policy had a _____ effect on the company's profits.",a:"dramatic"},
+  {s:"Japan is a highly _____ country with a rapidly changing economy.",a:"developing"},
+  {s:"The company has shown _____ growth over the past five years.",a:"steady"},
+  {s:"It was _____ that he was nervous because he kept looking at the clock.",a:"obvious"},
+  {s:"Some mushrooms are extremely _____ and should never be eaten.",a:"poisonous"},
+  {s:"She is very _____ and hopes to become the CEO someday.",a:"ambitious"},
+  {s:"The website was selling _____ designer products.",a:"fake"},
+]},
+{level:0,title:"Adj 10",words:[
+  {w:"vague",d:"Not clear or specific enough to be understood easily",e:"His answer was too vague, so I wasn't sure what he meant.",n:"adj."},
+  {w:"economical",d:"Using money, time, fuel, or other resources carefully without waste",e:"This car is very economical and doesn't use much fuel.",n:"adj."},
+  {w:"exact",d:"Completely correct and accurate in every detail",e:"Please give me the exact address so I can send the package.",n:"adj."},
+  {w:"particular",d:"Specific or relating to one specific person, thing, or situation",e:"Is there a particular reason why you chose this university?",n:"adj."},
+  {w:"economic",d:"Relating to the production, use, or management of money, goods, and services",e:"The country is facing serious economic problems.",n:"adj."},
+  {w:"false",d:"Not true or correct",e:"The information in the report was completely false.",n:"adj."},
+  {w:"pleasant",d:"Enjoyable, comfortable, or nice",e:"We had a very pleasant evening at the restaurant.",n:"adj."},
+  {w:"severe",d:"Very serious, intense, or causing a lot of difficulty or damage",e:"The area was hit by a severe storm last night.",n:"adj."},
+],blanks:[
+  {s:"We had a very _____ evening at the restaurant.",a:"pleasant"},
+  {s:"The information in the report was completely _____.",a:"false"},
+  {s:"His answer was too _____, so I wasn't sure what he meant.",a:"vague"},
+  {s:"This car is very _____ and doesn't use much fuel.",a:"economical"},
+  {s:"The area was hit by a _____ storm last night.",a:"severe"},
+  {s:"Is there a _____ reason why you chose this university?",a:"particular"},
+  {s:"The country is facing serious _____ problems.",a:"economic"},
+  {s:"Please give me the _____ address so I can send the package.",a:"exact"},
+]},
+];
+
+const NOUN_UNITS=[
+{level:0,title:"Noun 1",words:[
+  {w:"presentation",d:"A talk, speech, or display of information given to an audience",e:"She gave an excellent presentation about climate change.",n:"n."},
+  {w:"environment",d:"The natural world or the surroundings in which people, animals, and plants live",e:"Recycling helps protect the environment.",n:"n."},
+  {w:"advantage",d:"Something that gives you a better chance of succeeding than others",e:"Speaking English fluently is an important advantage.",n:"n."},
+  {w:"skill",d:"An ability that you learn through practice or experience",e:"Learning to manage your time is a valuable skill.",n:"n."},
+  {w:"charity",d:"An organization or activity that helps people in need",e:"The school organized a charity event to raise money.",n:"n."},
+  {w:"waste",d:"The unnecessary use or loss of something valuable, such as time or money",e:"It is a waste of money to buy things you never use.",n:"n."},
+  {w:"item",d:"An individual object or thing, especially one in a list or collection",e:"Please check every item on your shopping list before leaving.",n:"n."},
+  {w:"result",d:"The final outcome of an action, event, or process",e:"The experiment produced an unexpected result.",n:"n."},
+],blanks:[
+  {s:"Speaking English fluently is an important _____ in many international companies.",a:"advantage"},
+  {s:"It is a _____ of money to buy things you never use.",a:"waste"},
+  {s:"Recycling helps protect the _____.",a:"environment"},
+  {s:"The school organized a _____ event to raise money for local families.",a:"charity"},
+  {s:"She gave an excellent _____ about climate change at the conference.",a:"presentation"},
+  {s:"Please check every _____ on your shopping list before leaving the store.",a:"item"},
+  {s:"Learning to manage your time is a valuable _____.",a:"skill"},
+  {s:"The experiment produced an unexpected _____.",a:"result"},
+]},
+{level:0,title:"Noun 2",words:[
+  {w:"employee",d:"A person who is paid to work for a company or organization",e:"Every new employee must complete a training program.",n:"n."},
+  {w:"method",d:"A way of doing something, especially one that is planned or organized",e:"The teacher introduced a new method for learning vocabulary.",n:"n."},
+  {w:"document",d:"A written or printed paper that provides information or serves as an official record",e:"Please sign the document before submitting your application.",n:"n."},
+  {w:"traffic",d:"The movement of vehicles on roads",e:"Heavy traffic caused us to arrive nearly an hour late.",n:"n."},
+  {w:"benefit",d:"An advantage or something that improves your situation",e:"One major benefit of exercising regularly is better overall health.",n:"n."},
+  {w:"solution",d:"An answer to a problem or a way of dealing with a difficult situation",e:"The engineers finally found a solution to the technical problem.",n:"n."},
+  {w:"expert",d:"A person who has a great deal of knowledge or skill in a particular field",e:"She is considered an expert in cybersecurity.",n:"n."},
+  {w:"medicine",d:"A substance used to treat or prevent illness",e:"The doctor prescribed medicine to relieve the patient's symptoms.",n:"n."},
+],blanks:[
+  {s:"Heavy _____ caused us to arrive nearly an hour late.",a:"traffic"},
+  {s:"She is considered as an _____ in cybersecurity.",a:"expert"},
+  {s:"Please sign the _____ before submitting your application.",a:"document"},
+  {s:"The engineers finally found a _____ to the technical problem.",a:"solution"},
+  {s:"The doctor prescribed _____ to relieve the patient's symptoms.",a:"medicine"},
+  {s:"Every new _____ must complete a training program during the first week.",a:"employee"},
+  {s:"The teacher introduced a new _____ for learning vocabulary more effectively.",a:"method"},
+  {s:"One major _____ of exercising regularly is better overall health.",a:"benefit"},
+]},
+{level:0,title:"Noun 3",words:[
+  {w:"research",d:"A careful study carried out to discover new facts or information",e:"Scientists are conducting research to develop a more effective vaccine.",n:"n."},
+  {w:"approach",d:"A particular way of dealing with a person, situation, or problem",e:"The teacher used a different approach to explain the difficult concept.",n:"n."},
+  {w:"chemical",d:"A substance produced by or used in a chemical process",e:"Always read the safety instructions before using any chemical.",n:"n."},
+  {w:"equipment",d:"The tools, machines, or other items needed for a particular activity",e:"The laboratory purchased new equipment for its experiments.",n:"n."},
+  {w:"client",d:"A person or company that receives professional services from another",e:"The lawyer met with her client to discuss the case.",n:"n."},
+  {w:"disease",d:"An illness that affects people, animals, or plants",e:"Regular exercise can reduce the risk of heart disease.",n:"n."},
+  {w:"technique",d:"A special method or skill used to perform a task effectively",e:"The artist demonstrated a unique painting technique.",n:"n."},
+  {w:"evidence",d:"Facts, objects, or information that help prove whether something is true",e:"The police collected enough evidence to identify the suspect.",n:"n."},
+],blanks:[
+  {s:"The laboratory purchased new _____ for its experiments.",a:"equipment"},
+  {s:"The artist demonstrated a unique painting _____.",a:"technique"},
+  {s:"The police collected enough _____ to identify the suspect.",a:"evidence"},
+  {s:"Regular exercise can reduce the risk of heart _____.",a:"disease"},
+  {s:"The teacher used a different _____ to explain the difficult concept.",a:"approach"},
+  {s:"Scientists are conducting _____ to develop a more effective vaccine.",a:"research"},
+  {s:"Always read the safety instructions before using any _____.",a:"chemical"},
+  {s:"The lawyer met with her _____ to discuss the case.",a:"client"},
+]},
+{level:0,title:"Noun 4",words:[
+  {w:"charge",d:"The amount of money asked for a product or service",e:"The hotel does not charge an extra fee for children under twelve.",n:"n."},
+  {w:"experiment",d:"A scientific test carried out to discover or prove something",e:"The students conducted an experiment to test their hypothesis.",n:"n."},
+  {w:"delay",d:"A situation in which something happens later than expected",e:"Bad weather caused a significant delay in train services.",n:"n."},
+  {w:"influence",d:"The power to affect the way someone thinks or behaves",e:"Parents often have a strong influence on their children's decisions.",n:"n."},
+  {w:"site",d:"A place where a particular activity happens or is planned to happen",e:"The construction site of the new office is surprisingly big.",n:"n."},
+  {w:"electricity",d:"A type of energy used to power lights, machines, and electronic devices",e:"We lost electricity during the storm last night.",n:"n."},
+  {w:"form",d:"An official document that you complete by writing information in the spaces provided",e:"Please complete this form before your appointment.",n:"n."},
+  {w:"survey",d:"A set of questions used to collect information or opinions from people",e:"More than 1,000 people responded to the online survey.",n:"n."},
+],blanks:[
+  {s:"More than 1,000 people responded to the online _____.",a:"survey"},
+  {s:"We lost _____ during the storm last night.",a:"electricity"},
+  {s:"The construction _____ of the new office is surprisingly big.",a:"site"},
+  {s:"The students conducted an _____ to test their hypothesis.",a:"experiment"},
+  {s:"The hotel does not _____ an extra fee for children under twelve.",a:"charge"},
+  {s:"Bad weather caused a significant _____ in train services.",a:"delay"},
+  {s:"Parents often have a strong _____ on their children's decisions.",a:"influence"},
+  {s:"Please complete this _____ before your appointment.",a:"form"},
+]},
+{level:0,title:"Noun 5",words:[
+  {w:"creature",d:"A living thing, especially an animal",e:"The strange creature disappeared into the forest.",n:"n."},
+  {w:"customer",d:"A person who buys goods or services from a business",e:"Every customer received a discount during the holiday sale.",n:"n."},
+  {w:"source",d:"The place, person, or thing that something comes from",e:"Solar energy is a clean source of power.",n:"n."},
+  {w:"reason",d:"The cause or explanation for why something happens",e:"What was the main reason for canceling the meeting?",n:"n."},
+  {w:"advertisement",d:"A notice, picture, or video that promotes a product, service, or event",e:"I saw an interesting advertisement for a new smartphone on television.",n:"n."},
+  {w:"decision",d:"A choice that is made after thinking carefully",e:"She made the difficult decision to change careers.",n:"n."},
+  {w:"income",d:"The money that a person or business earns",e:"His monthly income increased after he was promoted.",n:"n."},
+  {w:"policy",d:"A set of rules or guidelines followed by an organization or government",e:"The company introduced a new policy on remote work.",n:"n."},
+],blanks:[
+  {s:"I saw an interesting _____ for a new smartphone on television.",a:"advertisement"},
+  {s:"She made the difficult _____ to change careers.",a:"decision"},
+  {s:"His monthly _____ increased after he was promoted.",a:"income"},
+  {s:"The strange _____ disappeared into the forest before anyone could take a picture.",a:"creature"},
+  {s:"Solar energy is a clean _____ of power.",a:"source"},
+  {s:"What was the main _____ for canceling the meeting?",a:"reason"},
+  {s:"Every _____ received a discount during the holiday sale.",a:"customer"},
+  {s:"The company introduced a new _____ on remote work.",a:"policy"},
+]},
+{level:0,title:"Noun 6",words:[
+  {w:"coworker",d:"A person you work with at the same company or organization",e:"One of my coworkers helped me finish the project before the deadline.",n:"n."},
+  {w:"demand",d:"A strong need or request for something",e:"There is a growing demand for environmentally friendly products.",n:"n."},
+  {w:"detail",d:"A small piece of information or a particular part of something",e:"Be sure to read every detail in the contract before signing it.",n:"n."},
+  {w:"economy",d:"The system of trade and industry by which the wealth of a country is made and used",e:"A strong economy creates more job opportunities for people.",n:"n."},
+  {w:"temperature",d:"A measurement of how hot or cold something is",e:"The temperature reached 35°C during the afternoon.",n:"n."},
+  {w:"development",d:"The process of growth, progress, or improvement",e:"The new shopping center is an important development for the town.",n:"n."},
+  {w:"neighborhood",d:"The area around where people live",e:"Our neighborhood is quiet and filled with parks and trees.",n:"n."},
+  {w:"reservation",d:"An arrangement to keep a seat, room, or table for future use",e:"I made a reservation at the restaurant for six people.",n:"n."},
+],blanks:[
+  {s:"Our _____ is quiet and filled with parks and trees.",a:"neighborhood"},
+  {s:"The _____ reached 35°C during the afternoon.",a:"temperature"},
+  {s:"One of my _____ helped me finish the project before the deadline.",a:"coworker"},
+  {s:"I made a _____ at the restaurant for six people.",a:"reservation"},
+  {s:"A strong _____ creates more job opportunities for people.",a:"economy"},
+  {s:"There is a growing _____ for environmentally friendly products.",a:"demand"},
+  {s:"Be sure to read every _____ in the contract before signing it.",a:"detail"},
+  {s:"The new shopping center is an important _____ for the town.",a:"development"},
+]},
+{level:0,title:"Noun 7",words:[
+  {w:"rest",d:"A period of relaxation or sleep after work or activity",e:"After hiking all day, we stopped to take a short rest.",n:"n."},
+  {w:"view",d:"An opinion or belief about something",e:"In my view, online learning can be just as effective as classroom learning.",n:"n."},
+  {w:"author",d:"A person who writes books, articles, or other published works",e:"The author signed copies of her latest novel after the event.",n:"n."},
+  {w:"clothing",d:"Clothes that people wear",e:"Warm clothing is essential during the winter months.",n:"n."},
+  {w:"effort",d:"A serious attempt to do or achieve something",e:"Your hard effort will eventually lead to success.",n:"n."},
+  {w:"performance",d:"The way someone carries out a task or entertains an audience",e:"The actor gave an outstanding performance.",n:"n."},
+  {w:"factor",d:"One of the things that influences the result of a situation",e:"Cost is an important factor when choosing a new computer.",n:"n."},
+  {w:"position",d:"The place where someone or something is located, or a job or role in an organization",e:"She applied for a management position at the company.",n:"n."},
+],blanks:[
+  {s:"The actor gave an outstanding _____ that impressed the audience.",a:"performance"},
+  {s:"Your hard _____ will eventually lead to success.",a:"effort"},
+  {s:"She applied for a management _____ at the company.",a:"position"},
+  {s:"After hiking all day, we stopped to take a short _____.",a:"rest"},
+  {s:"The _____ signed copies of her latest novel after the event.",a:"author"},
+  {s:"In my _____, online learning can be just as effective as classroom learning.",a:"view"},
+  {s:"Warm _____ is essential during the winter months.",a:"clothing"},
+  {s:"Cost is an important _____ when choosing a new computer.",a:"factor"},
+]},
+{level:0,title:"Noun 8",words:[
+  {w:"purchase",d:"Something that you buy, or the act of buying something",e:"I kept the receipt for my recent purchase in case I needed a refund.",n:"n."},
+  {w:"agency",d:"A business or organization that provides a particular service",e:"We booked our vacation through a local travel agency.",n:"n."},
+  {w:"appointment",d:"An arrangement to meet someone at a specific time and place",e:"She has a dentist's appointment at three o'clock this afternoon.",n:"n."},
+  {w:"effect",d:"A change or result caused by an action or event",e:"The new law had a positive effect on road safety.",n:"n."},
+  {w:"experience",d:"The knowledge or skills gained from doing or seeing something over time",e:"He has several years of experience working in customer service.",n:"n."},
+  {w:"organization",d:"A group of people working together to achieve a common goal",e:"She volunteers for an international organization that helps children.",n:"n."},
+  {w:"material",d:"A substance or matter used to make or create something",e:"This jacket is made from a lightweight, waterproof material.",n:"n."},
+],blanks:[
+  {s:"She has a dentist's _____ at three o'clock this afternoon.",a:"appointment"},
+  {s:"He has several years of _____ working in customer service.",a:"experience"},
+  {s:"This jacket is made from a lightweight, waterproof _____.",a:"material"},
+  {s:"We booked our vacation through a local travel _____.",a:"agency"},
+  {s:"She volunteers for an international _____ that helps children.",a:"organization"},
+  {s:"The new law had a positive _____ on road safety.",a:"effect"},
+  {s:"I kept the receipt for my recent _____ in case I needed a refund.",a:"purchase"},
+]},
+{level:0,title:"Noun 9",words:[
+  {w:"agent",d:"A person who represents another person or company in business",e:"The travel agent helped us book our flights and hotel.",n:"n."},
+  {w:"career",d:"The job or profession that someone follows for a long period of their life",e:"She has enjoyed a successful career as a graphic designer.",n:"n."},
+  {w:"fee",d:"An amount of money paid for a service",e:"There is a small fee for using the fitness center.",n:"n."},
+  {w:"garbage",d:"Waste or unwanted material that is thrown away",e:"Please put the garbage in the bin before you leave.",n:"n."},
+  {w:"supply",d:"An amount of something that is available for use",e:"The town has a reliable water supply throughout the year.",n:"n."},
+  {w:"transportation",d:"The system or process of moving people or goods from one place to another",e:"Public transportation is convenient and affordable in this city.",n:"n."},
+  {w:"decade",d:"A period of ten years",e:"Over the past decade, technology has changed dramatically.",n:"n."},
+  {w:"invention",d:"A new device, method, or idea that has been created for the first time",e:"The telephone was one of the most important inventions in history.",n:"n."},
+],blanks:[
+  {s:"Over the past _____, technology has changed dramatically.",a:"decade"},
+  {s:"There is a small _____ for using the fitness center.",a:"fee"},
+  {s:"The travel _____ helped us book our flights and hotel.",a:"agent"},
+  {s:"Public _____ is convenient and affordable in this city.",a:"transportation"},
+  {s:"The telephone was one of the most important _____s in history.",a:"invention"},
+  {s:"Please put the _____ in the bin before you leave.",a:"garbage"},
+  {s:"She has enjoyed a successful _____ as a graphic designer.",a:"career"},
+  {s:"The town has a reliable water _____ throughout the year.",a:"supply"},
+]},
+{level:0,title:"Noun 10",words:[
+  {w:"value",d:"The importance, usefulness, or worth of something",e:"This antique has a much higher value than we expected.",n:"n."},
+  {w:"vehicle",d:"A machine used for transporting people or goods, such as a car or truck",e:"Every vehicle must have valid insurance before being driven on public roads.",n:"n."},
+  {w:"fuel",d:"A substance used to produce energy, such as gasoline, diesel, or electricity",e:"Rising fuel prices have increased transportation costs.",n:"n."},
+  {w:"goods",d:"Products that are bought and sold",e:"The company exports its goods to more than twenty countries.",n:"n."},
+  {w:"growth",d:"An increase in size, number, amount, or development",e:"The city has experienced rapid population growth over the past five years.",n:"n."},
+  {w:"industry",d:"A particular type of business or manufacturing activity",e:"The tourism industry creates thousands of jobs each year.",n:"n."},
+  {w:"profit",d:"The money a business earns after paying all its costs",e:"The business made a record profit during the holiday season.",n:"n."},
+  {w:"resident",d:"A person who lives in a particular place",e:"Every resident is encouraged to participate in the community festival.",n:"n."},
+],blanks:[
+  {s:"The tourism _____ creates thousands of jobs each year.",a:"industry"},
+  {s:"Every _____ is encouraged to participate in the community festival.",a:"resident"},
+  {s:"Rising _____ prices have increased transportation costs.",a:"fuel"},
+  {s:"The business made a record _____ during the holiday season.",a:"profit"},
+  {s:"This antique has a much higher _____ than we expected.",a:"value"},
+  {s:"Every _____ must have valid insurance before being driven on public roads.",a:"vehicle"},
+  {s:"The company exports its _____ to more than twenty countries.",a:"goods"},
+  {s:"The city has experienced rapid population _____ over the past five years.",a:"growth"},
+]},
+{level:0,title:"Noun 11",words:[
+  {w:"surface",d:"The outside or top layer of something",e:"The surface of the road was rough after the storm.",n:"n."},
+  {w:"conference",d:"A large formal meeting where people discuss a particular subject",e:"Our company is holding a business conference next month.",n:"n."},
+  {w:"countryside",d:"Land and areas outside cities and towns, often with farms, fields, and villages",e:"My grandparents live in the countryside, surrounded by farms.",n:"n."},
+  {w:"device",d:"A piece of equipment, usually electronic, designed for a particular purpose",e:"This small electronic device can measure your heart rate.",n:"n."},
+  {w:"director",d:"A person who manages or controls an organization, film, company, or activity",e:"The film director decided to change the ending of the movie.",n:"n."},
+  {w:"discovery",d:"Something that is found or learned for the first time",e:"Scientists made an important discovery while studying the new species.",n:"n."},
+  {w:"passenger",d:"A person who is traveling in a vehicle but is not driving it",e:"Every passenger must fasten their seat belt before takeoff.",n:"n."},
+  {w:"purpose",d:"The reason why something is done or created",e:"The main purpose of this meeting is to discuss next year's budget.",n:"n."},
+],blanks:[
+  {s:"Our company is holding a business _____ next month.",a:"conference"},
+  {s:"Every _____ must fasten their seat belt before takeoff.",a:"passenger"},
+  {s:"Scientists made an important _____ while studying the new species.",a:"discovery"},
+  {s:"This small electronic _____ can measure your heart rate.",a:"device"},
+  {s:"The surface of the _____ was rough after the storm ended.",a:"road"},
+  {s:"My grandparents live in the _____, surrounded by farms and mountains.",a:"countryside"},
+  {s:"The film _____ decided to change the ending of the movie.",a:"director"},
+  {s:"The main _____ of this meeting is to discuss next year's budget.",a:"purpose"},
+]},
+{level:0,title:"Noun 12",words:[
+  {w:"responsibility",d:"A duty or task that you are expected to take care of",e:"Taking care of the company's finances is one of her main responsibilities.",n:"n."},
+  {w:"threat",d:"A person, thing, or situation that may cause harm or danger",e:"The government considers the cyberattack a serious threat to national security.",n:"n."},
+  {w:"crime",d:"An illegal activity or action that is against the law",e:"The police are investigating the crime that happened last night.",n:"n."},
+  {w:"resource",d:"Something useful that can be used to achieve a goal or meet a need",e:"Water is an important natural resource that must be protected.",n:"n."},
+  {w:"article",d:"A piece of writing in a newspaper, magazine, or online publication",e:"I read an interesting article about artificial intelligence in the newspaper.",n:"n."},
+  {w:"concern",d:"A feeling of worry about something, especially something that may cause problems",e:"There is growing concern about the effects of climate change.",n:"n."},
+  {w:"crop",d:"A plant or group of plants grown by farmers for food or other useful purposes",e:"The farmers expect this year's rice crop to be smaller because of the drought.",n:"n."},
+  {w:"participant",d:"A person who takes part in an activity, event, competition, or discussion",e:"Each participant will receive a certificate at the end of the event.",n:"n."},
+],blanks:[
+  {s:"Each _____ will receive a certificate at the end of the event.",a:"participant"},
+  {s:"Taking care of the company's finances is one of her main _____.",a:"responsibility"},
+  {s:"I read an interesting _____ about artificial intelligence in the newspaper.",a:"article"},
+  {s:"The police are investigating the _____ that happened last night.",a:"crime"},
+  {s:"The government considers the cyberattack a serious _____ to national security.",a:"threat"},
+  {s:"The farmers expect this year's rice _____ to be smaller because of the drought.",a:"crop"},
+  {s:"Water is an important natural _____ that must be protected.",a:"resource"},
+  {s:"There is growing _____ about the effects of climate change.",a:"concern"},
+]},
+{level:0,title:"Noun 13",words:[
+  {w:"announcement",d:"A public or formal statement that gives people information about something",e:"The company made an important announcement about changes to its vacation policy.",n:"n."},
+  {w:"degree",d:"A qualification awarded by a college or university after completing a course of study",e:"She earned a master's degree in environmental science.",n:"n."},
+  {w:"diet",d:"The food and drink that a person or animal regularly consumes",e:"A healthy diet should include plenty of vegetables and enough protein.",n:"n."},
+  {w:"direction",d:"The way or course that someone or something moves or should move",e:"Could you give me directions to the nearest train station?",n:"n."},
+  {w:"mall",d:"A large shopping center with many stores, restaurants, and other businesses",e:"We spent the afternoon shopping at the new mall downtown.",n:"n."},
+  {w:"official",d:"A person who has a position of authority, especially in an organization or government",e:"The government official gave a speech about the new policy.",n:"n."},
+  {w:"section",d:"One of the parts into which something is divided",e:"Please read the sports section of the newspaper for the latest results.",n:"n."},
+  {w:"content",d:"The information, ideas, or material contained in something",e:"The website provides useful educational content for English learners.",n:"n."},
+],blanks:[
+  {s:"The government _____ gave a speech about the new policy.",a:"official"},
+  {s:"Please read the sports _____ of the newspaper for the latest results.",a:"section"},
+  {s:"The company made an important _____ about changes to its vacation policy.",a:"announcement"},
+  {s:"We spent the afternoon shopping at the new _____ downtown.",a:"mall"},
+  {s:"She earned a master's _____ in environmental science.",a:"degree"},
+  {s:"A healthy _____ should include plenty of vegetables and enough protein.",a:"diet"},
+  {s:"Could you give me _____ to the nearest train station?",a:"direction"},
+  {s:"The website provides useful educational _____ for English learners.",a:"content"},
+]},
+{level:0,title:"Noun 14",words:[
+  {w:"destination",d:"The place that someone or something is going to",e:"Kyoto is a popular tourist destination for visitors from around the world.",n:"n."},
+  {w:"feature",d:"An important or noticeable part, quality, or characteristic of something",e:"One useful feature of this smartphone is its excellent camera.",n:"n."},
+  {w:"gallery",d:"A place where works of art are displayed for people to see",e:"We visited an art gallery to see paintings by local artists.",n:"n."},
+  {w:"insect",d:"A small animal with six legs, such as an ant, bee, or butterfly",e:"My younger brother is afraid of almost every insect.",n:"n."},
+  {w:"mayor",d:"The elected leader of a city or town",e:"The mayor announced a new plan to improve public transportation.",n:"n."},
+  {w:"oxygen",d:"A gas in the air that people and animals need to breathe",e:"Humans need oxygen to survive.",n:"n."},
+  {w:"shortage",d:"A situation in which there is not enough of something that is needed",e:"The country is experiencing a serious water shortage because of the long drought.",n:"n."},
+  {w:"branch",d:"A part of a tree that grows out from the trunk; also a local office of an organization",e:"The bank has opened a new branch near the train station.",n:"n."},
+],blanks:[
+  {s:"Humans need _____ to survive.",a:"oxygen"},
+  {s:"The bank has opened a new _____ near the train station.",a:"branch"},
+  {s:"My younger brother is afraid of almost every _____.",a:"insect"},
+  {s:"One useful _____ of this smartphone is its excellent camera.",a:"feature"},
+  {s:"Kyoto is a popular tourist _____ for visitors from around the world.",a:"destination"},
+  {s:"We visited an art _____ to see paintings by local artists.",a:"gallery"},
+  {s:"The _____ announced a new plan to improve public transportation.",a:"mayor"},
+  {s:"The country is experiencing a serious water _____ because of the long drought.",a:"shortage"},
+]},
+{level:0,title:"Noun 15",words:[
+  {w:"facility",d:"A building, place, or equipment provided for a particular purpose",e:"The school has excellent sports facilities, including a swimming pool and gym.",n:"n."},
+  {w:"population",d:"All the people who live in a particular area, country, or city",e:"The city's population has grown rapidly over the past decade.",n:"n."},
+  {w:"substance",d:"A particular type of material or matter with specific physical or chemical properties",e:"Scientists discovered a dangerous substance in the drinking water.",n:"n."},
+  {w:"ability",d:"The skill or power to do something",e:"She has the ability to communicate effectively with people from different cultures.",n:"n."},
+  {w:"agriculture",d:"The practice of growing crops and raising animals for food and other products",e:"Many people in this region depend on agriculture for their income.",n:"n."},
+  {w:"eyesight",d:"The ability to see clearly",e:"Wearing sunglasses can help protect your eyesight from bright sunlight.",n:"n."},
+  {w:"opportunity",d:"A good or suitable chance to do something or achieve something",e:"Studying abroad can provide students with an excellent opportunity to experience another culture.",n:"n."},
+  {w:"public",d:"Ordinary people or the community in general",e:"The new park is open to the public from 8 a.m. to 8 p.m.",n:"n."},
+],blanks:[
+  {s:"Scientists discovered a dangerous _____ in the drinking water.",a:"substance"},
+  {s:"The new park is open to the _____ from 8 a.m. to 8 p.m.",a:"public"},
+  {s:"The school has excellent sports _____, including a swimming pool and gym.",a:"facility"},
+  {s:"She has the _____ to communicate effectively with people from different cultures.",a:"ability"},
+  {s:"Many people in this region depend on _____ for their income.",a:"agriculture"},
+  {s:"The city's _____ has grown rapidly over the past decade.",a:"population"},
+  {s:"Wearing sunglasses can help protect your _____ from bright sunlight.",a:"eyesight"},
+  {s:"Studying abroad can provide students with an excellent _____ to experience another culture.",a:"opportunity"},
+]},
+{level:0,title:"Noun 16",words:[
+  {w:"relative",d:"A member of your family, such as a parent, cousin, aunt, or uncle",e:"My aunt is my closest relative because she lives nearby.",n:"n."},
+  {w:"theory",d:"An explanation of something that is based on evidence and ideas and can be tested",e:"Scientists developed a new theory to explain how the species evolved.",n:"n."},
+  {w:"attempt",d:"An effort to do or achieve something, especially something difficult",e:"He made an attempt to solve the problem before asking for help.",n:"n."},
+  {w:"campaign",d:"An organized series of activities intended to achieve a particular goal",e:"The company launched an advertising campaign to promote its new product.",n:"n."},
+  {w:"custom",d:"A traditional way of behaving or doing something in a particular society or culture",e:"Taking off your shoes before entering a Japanese home is a common custom.",n:"n."},
+  {w:"fossil",d:"The preserved remains or traces of a plant or animal from a very old period of Earth's history",e:"The museum has an impressive collection of dinosaur fossils.",n:"n."},
+  {w:"ingredient",d:"One of the foods or substances used to make a particular dish or product",e:"Garlic is an important ingredient in many Italian dishes.",n:"n."},
+  {w:"permission",d:"Official or informal approval to do something",e:"You need your manager's permission before taking the day off.",n:"n."},
+],blanks:[
+  {s:"Garlic is an important _____ in many Italian dishes.",a:"ingredient"},
+  {s:"The company launched an advertising _____ to promote its new product.",a:"campaign"},
+  {s:"My aunt is my closest _____ because she lives nearby.",a:"relative"},
+  {s:"You need your manager's _____ before taking the day off.",a:"permission"},
+  {s:"The museum has an impressive collection of dinosaur _____.",a:"fossil"},
+  {s:"He made an _____ to solve the problem before asking for help.",a:"attempt"},
+  {s:"Scientists developed a new _____ to explain how the species evolved.",a:"theory"},
+  {s:"Taking off your shoes before entering a Japanese home is a common _____.",a:"custom"},
+]},
+{level:0,title:"Noun 17",words:[
+  {w:"pollution",d:"Harmful substances or waste that make the air, water, or environment dirty",e:"Air pollution is a serious problem in many large cities.",n:"n."},
+  {w:"security",d:"Protection from danger, crime, attack, or other threats",e:"The company has improved its computer security to protect customer information.",n:"n."},
+  {w:"surgery",d:"Medical treatment in which a doctor operates on someone's body",e:"The doctor said that I might need surgery on my knee.",n:"n."},
+  {w:"target",d:"A person, place, or thing that someone is trying to reach, affect, or achieve",e:"The advertising campaign is aimed at a young female target.",n:"n."},
+  {w:"citizen",d:"A person who is a legal member of a particular country",e:"Every citizen has the right to vote in national elections.",n:"n."},
+  {w:"confidence",d:"A strong belief in your own abilities or in the quality of something",e:"Practicing regularly can help you build your confidence before an important presentation.",n:"n."},
+  {w:"decline",d:"A gradual decrease in the amount, quality, or importance of something",e:"The company has experienced a sharp decline in sales this year.",n:"n."},
+  {w:"disaster",d:"A sudden event that causes great damage, suffering, or loss",e:"Thousands of people lost their homes in the natural disaster.",n:"n."},
+],blanks:[
+  {s:"The doctor said that I might need _____ on my knee.",a:"surgery"},
+  {s:"The company has experienced a sharp _____ in sales this year.",a:"decline"},
+  {s:"Air _____ is a serious problem in many large cities.",a:"pollution"},
+  {s:"The advertising campaign is aimed at a young female _____.",a:"target"},
+  {s:"Every _____ has the right to vote in national elections.",a:"citizen"},
+  {s:"The company has improved its computer _____ to protect customer information.",a:"security"},
+  {s:"Thousands of people lost their homes in the natural _____.",a:"disaster"},
+  {s:"Practicing regularly can help you build your _____ before an important presentation.",a:"confidence"},
+]},
+{level:0,title:"Noun 18",words:[
+  {w:"forecast",d:"A statement about what is expected to happen in the future, especially about the weather",e:"According to the weather forecast, heavy rain is expected tomorrow.",n:"n."},
+  {w:"impact",d:"The effect or influence that something has on a person, situation, or environment",e:"The new law could have a major impact on small businesses.",n:"n."},
+  {w:"laboratory",d:"A place equipped for scientific experiments, research, and testing",e:"Scientists are conducting experiments in the university's laboratory.",n:"n."},
+  {w:"mixture",d:"A combination of two or more different substances or things",e:"Add the water slowly and stir the mixture well.",n:"n."},
+  {w:"species",d:"A group of living organisms that are similar and can reproduce with each other",e:"Scientists discovered a new species of frog in the rainforest.",n:"n."},
+  {w:"task",d:"A piece of work or duty that needs to be completed",e:"My first task this morning is to reply to these emails.",n:"n."},
+  {w:"trade",d:"The buying and selling of goods or services between people, companies, or countries",e:"International trade has increased significantly over the past few decades.",n:"n."},
+  {w:"treatment",d:"Medical care given to a person to cure or manage an illness or injury",e:"The doctor recommended a different treatment for the patient's condition.",n:"n."},
+],blanks:[
+  {s:"International _____ has increased significantly over the past few decades.",a:"trade"},
+  {s:"My first _____ this morning is to reply to these emails.",a:"task"},
+  {s:"The new law could have a major _____ on small businesses.",a:"impact"},
+  {s:"Add the water slowly and stir the _____ well.",a:"mixture"},
+  {s:"Scientists are conducting experiments in the university's _____.",a:"laboratory"},
+  {s:"According to the weather _____, heavy rain is expected tomorrow.",a:"forecast"},
+  {s:"The doctor recommended a different _____ for the patient's condition.",a:"treatment"},
+  {s:"Scientists discovered a new _____ of frog in the rainforest.",a:"species"},
+]},
+{level:0,title:"Noun 19",words:[
+  {w:"attitude",d:"A person's feelings, opinions, or way of thinking about something",e:"Her positive attitude toward work makes her a valuable member of the team.",n:"n."},
+  {w:"cell",d:"The smallest basic unit of a living organism",e:"Scientists examined the cell under a powerful microscope.",n:"n."},
+  {w:"critic",d:"A person who expresses an opinion about the quality of something, especially art, movies, books, or food",e:"The movie received mixed reviews from professional critics.",n:"n."},
+  {w:"emergency",d:"A serious or dangerous situation that requires immediate action",e:"Call this number only in case of an emergency.",n:"n."},
+  {w:"evolution",d:"The gradual development or change of living things over many generations",e:"Darwin's theory of evolution changed the way people understood the natural world.",n:"n."},
+  {w:"instrument",d:"A tool or piece of equipment used for a particular purpose, especially in science or music",e:"The musician carefully cleaned each instrument before the performance.",n:"n."},
+  {w:"tourism",d:"The activity of traveling to places for pleasure and the industry that provides services for travelers",e:"Tourism has become an important part of the country's economy.",n:"n."},
+  {w:"trend",d:"A general direction in which something is developing or changing",e:"There is a growing trend toward working remotely rather than in an office.",n:"n."},
+],blanks:[
+  {s:"The movie received mixed reviews from professional _____.",a:"critic"},
+  {s:"There is a growing _____ toward working remotely rather than in an office.",a:"trend"},
+  {s:"_____ has become an important part of the country's economy.",a:"Tourism"},
+  {s:"Her positive _____ toward work makes her a valuable member of the team.",a:"attitude"},
+  {s:"Scientists examined the _____ under a powerful microscope.",a:"cell"},
+  {s:"The musician carefully cleaned each _____ before the performance.",a:"instrument"},
+  {s:"Darwin's theory of _____ changed the way people understood the natural world.",a:"evolution"},
+  {s:"Call this number only in case of an _____.",a:"emergency"},
+]},
+{level:0,title:"Noun 20",words:[
+  {w:"access",d:"The right or opportunity to use, enter, or obtain something",e:"Students need access to the online library to complete their research.",n:"n."},
+  {w:"aspect",d:"One particular part or feature of something",e:"One important aspect of the job is the opportunity to work from home.",n:"n."},
+  {w:"colleague",d:"A person you work with, especially in a professional environment",e:"I discussed the project with one of my colleagues during lunch.",n:"n."},
+  {w:"dinosaur",d:"An extinct reptile that lived millions of years ago",e:"The museum has a large collection of dinosaur fossils.",n:"n."},
+  {w:"habit",d:"Something that you regularly do, often without thinking about it",e:"Brushing your teeth twice a day is a healthy habit.",n:"n."},
+  {w:"muscle",d:"A part of the body that contracts and relaxes to produce movement",e:"Regular exercise can help strengthen your leg muscles.",n:"n."},
+  {w:"patient",d:"A person who is receiving medical care from a doctor or hospital",e:"The doctor asked the patient to describe her symptoms.",n:"n."},
+  {w:"principal",d:"The head of a school or educational institution",e:"The school principal gave a speech at the graduation ceremony.",n:"n."},
+],blanks:[
+  {s:"Regular exercise can help strengthen your leg _____.",a:"muscle"},
+  {s:"One important _____ of the job is the opportunity to work from home.",a:"aspect"},
+  {s:"Brushing your teeth twice a day is a healthy _____.",a:"habit"},
+  {s:"Students need _____ to the online library to complete their research.",a:"access"},
+  {s:"The museum has a large collection of _____ fossils.",a:"dinosaur"},
+  {s:"The school _____ gave a speech at the graduation ceremony.",a:"principal"},
+  {s:"I discussed the project with one of my _____ during lunch.",a:"colleague"},
+  {s:"The doctor asked the _____ to describe her symptoms.",a:"patient"},
+]},
+];
+
 const SPEAK_QUESTIONS={
   0:{
     "Verb 1":["What things can cause stress in your daily life?","Have you ever had to cancel your plans at the last minute?","What is something in your home you need to repair?","What can people do to reduce waste at home?","How does the weather affect your mood?","If you could raise money for one good cause, what would it be?","What does your bag usually contain?","When a friend has a problem, what help do you usually offer?"],
@@ -1540,33 +2125,94 @@ function setLevel(lv,el){
   renderHome();
 }
 
+
+function unitKey(u){
+  const vi=ALL_UNITS.indexOf(u);
+  if(vi>=0) return vi;
+  const ai=ADJ_UNITS.indexOf(u);
+  if(ai>=0) return 1000+ai;
+  const ni=NOUN_UNITS.indexOf(u);
+  if(ni>=0) return 2000+ni;
+  return -1;
+}
+
+function setPos(pos,el){
+  currentPos=pos;
+  document.querySelectorAll('.pos-tab').forEach(t=>t.classList.remove('active'));
+  if(el)el.classList.add('active');
+  // Show/hide level tabs based on pos
+  const lt=document.querySelector('.level-tabs');
+  const sr=document.querySelector('.search-row');
+  if(pos==='verb'){
+    lt.style.display='flex';
+  } else {
+    lt.style.display='none';
+  }
+  renderHome();
+}
+
 function renderHome(){
   const search=document.getElementById("search").value.toLowerCase();
-  const units=ALL_UNITS.filter(u=>{
-    if(u.level!==currentLevel)return false;
-    if(!search)return true;
-    return u.title.toLowerCase().includes(search)||u.words.some(w=>w.w.includes(search));
-  });
   const grid=document.getElementById("unit-grid");
   grid.innerHTML="";
-  if(units.length===0){grid.innerHTML=`<div class="empty" style="grid-column:1/-1">No units found.</div>`;return;}
-  const lv=LEVELS[currentLevel];
-  units.forEach(u=>{
-    const idx=ALL_UNITS.indexOf(u);
-    const done=mastered[idx];
-    const started=studied[idx];
-    const preview=u.words.slice(0,4).map(x=>x.w).join(", ")+"…";
-    grid.innerHTML+=`<div class="unit-card${done?" done":""}" onclick="openUnit(${idx})">
-      <div class="unit-title" style="color:${lv.color.text}">${u.title}</div>
-      <div class="unit-words">${preview}</div>
-      <span class="unit-badge${done?" mastered":started?" inprog":" todo"}">${done?"✓ mastered":started?"in progress":"not started"}</span>
-    </div>`;
-  });
-  document.getElementById("stat-mastered").textContent=Object.keys(mastered).length;
-  document.getElementById("stat-studied").textContent=Object.keys(studied).length;
-  document.getElementById("stat-total").textContent=Object.keys(studied).length*8;
-  document.getElementById("stat-total-all").textContent=ALL_UNITS.length*8;
-  document.getElementById("home-sub").textContent=`${LEVELS.length} levels · ${ALL_UNITS.length} units · ${ALL_UNITS.length*8} words`;
+
+  if(currentPos==='verb'){
+    const units=ALL_UNITS.filter(u=>{
+      if(u.level!==currentLevel)return false;
+      if(!search)return true;
+      return u.title.toLowerCase().includes(search)||u.words.some(w=>w.w.includes(search));
+    });
+    if(units.length===0){grid.innerHTML=`<div class="empty" style="grid-column:1/-1">No units found.</div>`;}
+    else{
+      const lv=LEVELS[currentLevel];
+      units.forEach(u=>{
+        const idx=unitKey(u);
+        const done=mastered[idx];
+        const started=studied[idx];
+        const preview=u.words.slice(0,4).map(x=>x.w).join(", ")+"…";
+        grid.innerHTML+=`<div class="unit-card${done?" done":""}" onclick="openUnit(${idx})">
+          <div class="unit-title" style="color:${lv.color.text}">${u.title}</div>
+          <div class="unit-words">${preview}</div>
+          <span class="unit-badge${done?" mastered":started?" inprog":" todo"}">${done?"✓ mastered":started?"in progress":"not started"}</span>
+        </div>`;
+      });
+    }
+  } else {
+    const baseUnits=currentPos==='adj'?ADJ_UNITS:NOUN_UNITS;
+    const offset=currentPos==='adj'?1000:2000;
+    const adjColor={text:"#5dcaa5"};
+    const units=baseUnits.filter(u=>{
+      if(!search)return true;
+      return u.title.toLowerCase().includes(search)||u.words.some(w=>w.w.includes(search));
+    });
+    if(units.length===0){grid.innerHTML=`<div class="empty" style="grid-column:1/-1">No units found.</div>`;}
+    else{
+      units.forEach(u=>{
+        const idx=unitKey(u);
+        const done=mastered[idx];
+        const started=studied[idx];
+        const preview=u.words.slice(0,4).map(x=>x.w).join(", ")+"…";
+        grid.innerHTML+=`<div class="unit-card${done?" done":""}" onclick="openUnit(${idx})">
+          <div class="unit-title" style="color:${adjColor.text}">${u.title}</div>
+          <div class="unit-words">${preview}</div>
+          <span class="unit-badge${done?" mastered":started?" inprog":" todo"}">${done?"✓ mastered":started?"in progress":"not started"}</span>
+        </div>`;
+      });
+    }
+  }
+
+  const totalUnits=currentPos==='verb'?ALL_UNITS:currentPos==='adj'?ADJ_UNITS:NOUN_UNITS;
+  const wordCount=totalUnits.reduce((s,u)=>s+u.words.length,0);
+  document.getElementById("stat-mastered").textContent=Object.keys(mastered).filter(k=>mastered[k]).length;
+  document.getElementById("stat-studied").textContent=Object.keys(studied).filter(k=>studied[k]).length;
+  document.getElementById("stat-total").textContent=Object.keys(mastered).filter(k=>mastered[k]).length*8+Object.keys(studied).filter(k=>studied[k]&&!mastered[k]).length*4;
+  document.getElementById("stat-total-all").textContent=wordCount;
+  if(currentPos==='verb'){
+    document.getElementById("home-sub").textContent=`${LEVELS.length} levels · ${ALL_UNITS.length} units · ${ALL_UNITS.length*8} words`;
+  } else {
+    const label=currentPos==='adj'?'Adjectives':'Nouns';
+    document.getElementById("home-sub").textContent=`${label} · ${totalUnits.length} units · ${wordCount} words`;
+  }
   renderProgress();
 }
 
@@ -1574,15 +2220,26 @@ function renderProgress(){
   const el=document.getElementById("progress-log");
   if(!el)return;
   let rows="";
-  LEVELS.forEach(lv=>{
-    const units=ALL_UNITS.filter(u=>u.level===lv.id);
-    const total=units.length;
-    const done=units.filter(u=>mastered[ALL_UNITS.indexOf(u)]).length;
-    const started=units.filter(u=>studied[ALL_UNITS.indexOf(u)]).length;
+  if(currentPos==='verb'){
+    LEVELS.forEach(lv=>{
+      const units=ALL_UNITS.filter(u=>u.level===lv.id);
+      const total=units.length;
+      const done=units.filter(u=>mastered[unitKey(u)]).length;
+      const started=units.filter(u=>studied[unitKey(u)]).length;
+      const pct=total?Math.round(done/total*100):0;
+      const extra=started>done?` · ${started} started`:"";
+      rows+=`<div class="plog-row"><div class="plog-head"><span class="plog-name">${lv.name}</span><span class="plog-count">${done}/${total} mastered${extra}</span></div><div class="plog-bar"><div class="plog-fill" style="width:${pct}%;background:${lv.color.border}"></div></div></div>`;
+    });
+  } else {
+    const baseUnits=currentPos==='adj'?ADJ_UNITS:NOUN_UNITS;
+    const offset=currentPos==='adj'?1000:2000;
+    const total=baseUnits.length;
+    const done=baseUnits.filter((_,i)=>mastered[offset+i]).length;
+    const started=baseUnits.filter((_,i)=>studied[offset+i]).length;
     const pct=total?Math.round(done/total*100):0;
-    const extra=started>done?` · ${started} started`:"";
-    rows+=`<div class="plog-row"><div class="plog-head"><span class="plog-name">${lv.name}</span><span class="plog-count">${done}/${total} mastered${extra}</span></div><div class="plog-bar"><div class="plog-fill" style="width:${pct}%;background:${lv.color.border}"></div></div></div>`;
-  });
+    const label=currentPos==='adj'?'Adjectives':'Nouns';
+    rows+=`<div class="plog-row"><div class="plog-head"><span class="plog-name">${label}</span><span class="plog-count">${done}/${total} mastered · ${started} studied</span></div><div class="plog-bar"><div class="plog-fill" style="width:${pct}%;background:var(--green)"></div></div></div>`;
+  }
   el.innerHTML=`<div class="plog-title-row"><span class="plog-title">Your progress (saved on this device)</span><button class="plog-reset" onclick="resetProgress()">reset</button></div>${rows}`;
 }
 
@@ -1594,11 +2251,16 @@ function showHome(){
 
 function openUnit(idx){
   currentUnit=idx;studied[idx]=true;saveProgress();
-  const u=ALL_UNITS[idx];
-  const lv=LEVELS[u.level];
+  const u=idx>=2000?NOUN_UNITS[idx-2000]:idx>=1000?ADJ_UNITS[idx-1000]:ALL_UNITS[idx];
   document.getElementById("unit-title").textContent=u.title;
   const badge=document.getElementById("unit-level-badge");
-  badge.textContent=lv.short;badge.className=`level-badge ${lv.badgeClass}`;
+  if(u.level!==undefined){
+    const lv=LEVELS[u.level];
+    badge.textContent=lv.short;badge.className=`level-badge ${lv.badgeClass}`;
+  } else {
+    const isAdj=idx>=1000&&idx<2000;
+    badge.textContent=isAdj?'adj.':'n.';badge.className='level-badge lb2';
+  }
   document.getElementById("unit-subtitle").textContent=u.words.map(x=>x.w).join(" · ");
   document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
   document.getElementById("screen-unit").classList.add("active");
@@ -1618,8 +2280,8 @@ function switchModeByName(m){
 }
 
 function renderMode(mode){
-  const u=ALL_UNITS[currentUnit];
-  const c=LEVELS[u.level].color;
+  const u=currentUnit>=2000?NOUN_UNITS[currentUnit-2000]:currentUnit>=1000?ADJ_UNITS[currentUnit-1000]:ALL_UNITS[currentUnit];
+  const c=u.level!==undefined?LEVELS[u.level].color:{bg:"#0a2d1e",text:"#5dcaa5",border:"#1d9e75"};
   const el=document.getElementById("mode-content");
   if(mode==="learn")renderLearn(u,c,el);
   else if(mode==="match")renderMatch(u,c,el);
@@ -1640,7 +2302,7 @@ function renderLearn(u,c,el){
 }
 
 function renderSpeak(u,c,el){
-  const qs=SPEAK_QUESTIONS[u.level]?.[u.title];
+  const qs=u.level!==undefined?(SPEAK_QUESTIONS[u.level]?.[u.title]):null;
   if(!qs||!qs.length){
     el.innerHTML=`<div class="empty">No speaking questions available for this unit yet.</div>`;return;
   }
@@ -1707,10 +2369,12 @@ function renderFill(u,c,el){
 }
 function renderFillQ(el,c){
   if(!el)el=document.getElementById("mode-content");
-  if(!c)c=LEVELS[ALL_UNITS[currentUnit].level].color;
+  const _cu=currentUnit>=2000?NOUN_UNITS[currentUnit-2000]:currentUnit>=1000?ADJ_UNITS[currentUnit-1000]:ALL_UNITS[currentUnit];
+  if(!c)c=(_cu.level!==undefined)?LEVELS[_cu.level].color:{bg:"#1a2d1e",text:"#5dcaa5",border:"#1d9e75"};
   const s=fillState;
   const q=s.blanks[s.idx];
-  const opts=generateOpts(q.a,ALL_UNITS[currentUnit].words.map(x=>x.w));
+  const _cuw=currentUnit>=2000?NOUN_UNITS[currentUnit-2000]:currentUnit>=1000?ADJ_UNITS[currentUnit-1000]:ALL_UNITS[currentUnit];
+  const opts=generateOpts(q.a,_cuw.words.map(x=>x.w));
   const dots=s.blanks.map((_,i)=>`<div class="q-dot${i<s.idx?" done":""}"></div>`).join("");
   el.innerHTML=`<div class="q-progress">${dots}</div>
   <div style="font-size:12px;color:var(--text3);margin-bottom:.75rem;letter-spacing:.4px;text-transform:uppercase">Question ${s.idx+1} of ${s.blanks.length}</div>
@@ -1747,7 +2411,8 @@ function renderWrite(u,c,el){
 }
 function renderWriteQ(el,c){
   if(!el)el=document.getElementById("mode-content");
-  if(!c)c=LEVELS[ALL_UNITS[currentUnit].level].color;
+  const _cu=currentUnit>=2000?NOUN_UNITS[currentUnit-2000]:currentUnit>=1000?ADJ_UNITS[currentUnit-1000]:ALL_UNITS[currentUnit];
+  if(!c)c=(_cu.level!==undefined)?LEVELS[_cu.level].color:{bg:"#1a2d1e",text:"#5dcaa5",border:"#1d9e75"};
   const s=writeState;
   const wd=s.words[s.idx];
   el.innerHTML=`<div style="font-size:12px;color:var(--text3);margin-bottom:.75rem;letter-spacing:.4px;text-transform:uppercase">Word ${s.idx+1} of ${s.words.length}</div>
